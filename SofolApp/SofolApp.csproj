@@ -58,6 +58,9 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\face_id.png" />
+	  <None Remove="Resources\Images\mail.png" />
+	  <None Remove="Resources\Images\messenger.png" />
+	  <None Remove="Resources\Images\phone.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -71,8 +74,13 @@
 	  <Folder Include="MVVM\Data\" />
 	  <Folder Include="MVVM\Services\" />
 	  <Folder Include="MVVM\Repositoy\" />
-	  <Folder Include="MVVM\Views\" />
 	  <Folder Include="MVVM\ViewModels\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="MVVM\Views\RegisterPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>
