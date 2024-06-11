@@ -28,5 +28,13 @@
 	</array>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/appicon.appiconset</string>
+
+<key>NSCameraUsageDescription</key>
+<string>Se necesita acceso a la camara para tomar fotos y videos.</string>
+
+<key>NSPhotoLibraryUsageDescription</key>
+<string>Se necesita acceso a la galeria de fotos para seleccionar imagenes y videos desde la biblioteca.</string>
+
+
 </dict>
 </plist>

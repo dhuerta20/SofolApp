@@ -1,4 +1,7 @@
-﻿namespace SofolApp
+﻿using Microsoft.Maui.Controls;
+using SofolApp.MVVM.Views;
+
+namespace SofolApp
 {
     public partial class App : Application
     {
@@ -6,7 +9,8 @@
         {
             InitializeComponent();
 
-            MainPage = new AppShell();
+            // Inicializa la página principal
+            MainPage = new NavigationPage(new RegisterPage());
         }
     }
 }

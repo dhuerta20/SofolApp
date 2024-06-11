@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SofolApp.MVVM.Views.RegisterPage"
+             Title="RegisterPage"
+             BackgroundColor="{AppThemeBinding Dark=#1e2229, Light=White}">
+
+    <ScrollView>
+        <FlexLayout Direction="Column" AlignItems="Center" JustifyContent="Start" Margin="0,50,0,0" Padding="20">
+            <ImageButton Source="reconocimiento_facial_real.png" HeightRequest="120" WidthRequest="120" Aspect="AspectFit"/>
+            <Label Text="REGISTRA TU ROSTRO"
+                   FontSize="24" TextColor="{AppThemeBinding Dark=White,Light=Gray}"
+                   FontAttributes="Bold" 
+                   Margin="0,15,0,30"
+                   LineBreakMode="WordWrap"/>
+
+            <Button BackgroundColor="#5dd684" 
+                    Text="IDENTIFICACION" 
+                    TextColor="{AppThemeBinding Dark=White,Light=White}"
+                    FontAttributes="Bold" FontSize="24"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,20"
+                    Clicked="idPhotoClicked"/>
+            <Image x:Name="idPhoto" HeightRequest="200" IsVisible="False" Margin="5"/>
+
+            <Button BackgroundColor="#5dd684"
+                    Text="COMPROBANTE DE DOMICILIO"
+                    TextColor="{AppThemeBinding Dark=White,Light=White}"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    LineBreakMode="WordWrap"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,20"
+                    Clicked="proofAddressClicked"/>
+            <Image x:Name="imgProofAddress" HeightRequest="200" IsVisible="False" Margin="5"/>
+
+            <Button BackgroundColor="#5dd684"
+                    Text="COMPROBANTE DE INGRESOS"
+                    TextColor="{AppThemeBinding Dark=White,Light=White}"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    LineBreakMode="WordWrap"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,20"
+                    Clicked="proofIncomeClicked"/>
+            <Image x:Name="imgProofIncome" HeightRequest="200" IsVisible="False" Margin="5"/>
+
+            <Button BackgroundColor="#5dd684"
+                    Text="ESTATUS"
+                    TextColor="{AppThemeBinding Dark=White,Light=White}"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,40"
+                    />
+
+            <Button x:Name="ShowFormButton"
+                    Text="FORMULARIO DE REGISTRO"
+                    BackgroundColor="#5dd684"
+                    TextColor="{AppThemeBinding Dark=White,Light=White}"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,20"
+                    LineBreakMode="WordWrap"
+                    Clicked="ShowFormButtonClicked" />
+
+            <VerticalStackLayout x:Name="FormLayout"
+                                 IsVisible="False"
+                                 BackgroundColor="#EDEBF6"
+                                 Padding="20"
+                                 WidthRequest="300"
+                                 Margin="0,30,0,0">
+                <!-- Primer campo del formulario -->
+                <Grid Margin="0,30,0,0" ColumnDefinitions=".2*, .8*">
+                    <Frame BackgroundColor="{AppThemeBinding Light=#D9D9D9, Dark=DarkGray}"
+                           CornerRadius="10"
+                           HeightRequest="60"
+                           WidthRequest="60"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                    <Image HorizontalOptions="Center">
+                        <Image.Source>
+                            <FontImageSource
+                                FontFamily="FAS"
+                                Glyph="&#xf007;"
+                                Size="44"
+                                Color="#5dd684" />
+                        </Image.Source>
+                    </Image>
+                    <Entry Grid.Column="1"
+                           Placeholder="Nombre"
+                           VerticalOptions="Center" 
+                           Margin="15,0,0,0"/>
+                </Grid>
+
+                <!-- Segundo campo del formulario -->
+                <Grid Margin="0,30,0,0" ColumnDefinitions=".2*, .8*">
+                    <Frame BackgroundColor="#D9D9D9"
+                           CornerRadius="10"
+                           HeightRequest="60"
+                           WidthRequest="60"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                    <Image HorizontalOptions="Center">
+                        <Image.Source>
+                            <FontImageSource
+                                FontFamily="FAS"
+                                Glyph="&#xf0e0;"
+                                Size="44"
+                                Color="#5dd684" />
+                        </Image.Source>
+                    </Image>
+                    <Entry Grid.Column="1"
+                           Placeholder="Correo electrónico"
+                           VerticalOptions="Center" 
+                           Margin="15,0,0,0"/>
+                </Grid>
+
+                <!-- Tercer campo del formulario -->
+                <Grid Margin="0,30,0,0" ColumnDefinitions=".2*, .8*">
+                    <Frame BackgroundColor="#D9D9D9"
+                           CornerRadius="10"
+                           HeightRequest="60"
+                           WidthRequest="60"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                    <Image HorizontalOptions="Center">
+                        <Image.Source>
+                            <FontImageSource
+                                FontFamily="FAS"
+                                Glyph="&#xf084;"
+                                Size="44"
+                                Color="#5dd684" />
+                        </Image.Source>
+                    </Image>
+                    <Entry Grid.Column="1"
+                           Placeholder="Contraseña"
+                           IsPassword="True"
+                           VerticalOptions="Center"
+                           Margin="15,0,0,0"/>
+                </Grid>
+
+                <Button Margin="0,20,0,0"
+                        BackgroundColor="#5dd684"
+                        HeightRequest="60"
+                        Text="Registrar"
+                        TextColor="#FBF6FD"
+                        FontSize="24" />
+            </VerticalStackLayout>
+
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>
