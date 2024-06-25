@@ -5,6 +5,7 @@ public partial class RegisterPage : ContentPage
     public RegisterPage()
     {
         InitializeComponent();
+        NavigationPage.SetHasNavigationBar(this, false);
     }
 
     private async void idPhotoClicked(object sender, EventArgs e)
@@ -39,10 +40,10 @@ public partial class RegisterPage : ContentPage
             imgProofIncome.IsVisible = true;
         }
     }
+     
 
-    private void ShowFormButtonClicked(object sender, EventArgs e)
+    private async void EndOfRegister(object sender, EventArgs e)
     {
-        FormLayout.IsVisible = true;
-        ShowFormButton.IsVisible = false;
+        await Navigation.PushAsync(new CreditPage());
     }
 }

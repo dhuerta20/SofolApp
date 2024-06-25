@@ -7,6 +7,6 @@
        TitleColor="White"
        FlyoutBackgroundColor="#1e2229">
 
-    <ShellContent Route="register" ContentTemplate="{DataTemplate local:RegisterForm}" />
+    <ShellContent Route="register" ContentTemplate="{DataTemplate local:LoginForm}" />
     <ShellContent Route="credit" ContentTemplate="{DataTemplate local:CreditPage}" />
 </Shell>

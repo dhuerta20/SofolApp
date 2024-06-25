@@ -7,6 +7,7 @@ namespace SofolApp.MVVM.Views
         public CreditPage()
         {
             InitializeComponent();
+            NavigationPage.SetHasNavigationBar(this, false);
         }
     }
 }

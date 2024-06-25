@@ -33,7 +33,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
 		<PackageReference Include="FirebaseDatabase.net" Version="4.2.0" />
+		<PackageReference Include="Google.Cloud.Firestore" Version="3.7.0" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
@@ -43,7 +45,7 @@
 		<MauiXaml Update="MVVM\Views\CreditPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="MVVM\Views\RegisterForm.xaml">
+		<MauiXaml Update="MVVM\Views\LoginForm.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="MVVM\Views\RegisterForm_RegisterPage.xaml">
@@ -59,7 +61,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="MVVM\Models\" />
+		<PackageReference Include="Google.Cloud.Firestore" Version="1.1.0-beta01" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="NewFolder\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="MVVM\Views\LoginForm.xaml.cs">
+	    <DependentUpon>LoginForm.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+	
 </Project>

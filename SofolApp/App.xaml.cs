@@ -1,5 +1,6 @@
 ﻿using Microsoft.Maui.Controls;
 using SofolApp.MVVM.Views;
+using System.Collections.Specialized;
 
 namespace SofolApp
 {
@@ -10,7 +11,7 @@ namespace SofolApp
             InitializeComponent();
 
             // Inicializa la página principal
-            MainPage = new NavigationPage(new RegisterPage());
+            MainPage = new NavigationPage(new LoginForm());
         }
     }
 }

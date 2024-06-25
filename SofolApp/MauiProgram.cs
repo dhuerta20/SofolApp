@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Google.Cloud.Firestore;
 
 namespace SofolApp
 {
