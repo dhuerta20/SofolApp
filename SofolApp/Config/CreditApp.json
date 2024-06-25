@@ -1,13 +1,13 @@
 {
   "type": "service_account",
   "project_id": "creditapptest-c8a1d",
-  "private_key_id": "95f74ed583f44d7f69c59346464a1bd7aa7dbcb3",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC4PcKCZr62BT8V\na04dp3w7svNo4ylkEDrdIc3KeNPCu/m1obLePn94UZRO+wY2cibk6zcmk83kE/Sf\nGK9exUK7oeG9MTKP7dlUL2GuxXO4fmvjjc+Zet0SdT196RIniQaD8rTpw4msGQuU\nNSZXlzvfSAUl/cH2mN8dhFE/NBu09gvQwmGrqGxq8a3g/M+zv7vud3qX0pEkXxNE\nm7zoTcs+SA5ddxbfmQltzDpHGfps5uZ70+kgz/7dDU8JtUGZIPghE+0jbs0OAull\nfz5oUA+1vn8yCYG9wzm3CbbX6XX5WQUwTJ45p+BTqjx0VVrUQZtnFbvmplSZisFI\nZIi537R9AgMBAAECggEAHaSuNY3zdFTexAL6VBIdDnvp5v/ZqoRj/C1Sr5eGNshI\n0pz8Kv7yQnkZvCVuZ/cw49cmjfntABvn2Ws+2Cgz5v2SVP7j7D1wILfo5xZU2qPY\nlwm7k62tgSlE5gvIhHzrA/LagdwYvAxhjQyKKUCnfPLZBTZRbWxGRbkC24D2TkSc\nEFLsdYCCXoP/CRFx0Ref8lY/UhMDrW63WJWEb+HYyIYq56lGknGxDzAdWxItuMpk\nHcwX7X12zD0xY2S2TJju2psi7OwTlm/3CwIswl2TXBvqbsvTS09u8XkWKeC1x4dx\nG7+LS+UGIKSStwS/r0/eiaWz8eUTZk8WGerNjrIjQQKBgQDt12QUEOvouhd4OavQ\nYBIjAzYHk8oDw3asgUUMPYBGd9D/ax/qmi3uuy4m72dNbRRfvDmWQbxIjsIAXYfO\nSH371RmwkZGm/odwwsVXeFZK8DjNFg4dgUKmYC8MnzHU2I5CqWSxiqXSlP8HOVbC\n2gG4YOG1LhX090CGW79hxzWhYQKBgQDGTsEuSZytR06JYxVZVj2pkxwFVPGtHHuR\neRZmuxYkd6Kp22GYPhR65weTJmBRRw0sGguvRYuQ4FOxOi1vAqAoh8yCE5HAv2+v\nSUS0lW9E265yCMvKzs72lxr2SRup0FdgA55fghkUtWPC1Hs1P9REDRSJDir7MssW\nkWLfp8k8nQKBgArz4k3yQYrkFvSYY0sjQXKPUUukCKeHts1W3qEjq+aS2fMJMd0R\n4I+f2w479BvirA+EkXpT6KHGwTRXGkvrlrGkLJyu93AjRIVy0remeQLWcScwntHJ\nBBK5VzFTm23b0yFKv7JVWjGKXvwsLcynUXD2NS6swqIXSMdnLjcIf3XBAoGAQEj1\nbMjmJnHwLq9VE2HWmWsb8UqJEcIi+JSVQ3Ywhl/V9lQsvgqZ3wGXvgb5wD9VMM+8\nq/PSe4OM/e3LHqpuOtVS4XPwktg8H0mUISo0KNFCKqtZTQRfqSZw0hf/BLyKJpDl\nvTZSZRksHtN8oVVwvSK0Xn2eR1I+7bDxqWkd3i0CgYAnXlz/+Jgmd/8VgzEo41l6\nvvHDIqWV2GHLBHSCV/4N/EGikZTuv7t+xpcYwC6ZWX2CzWW8NE+T9gODsMzkTsQS\nzRxNkQGbblR1QZCOkKe4Amu9ACtI01/GUb5DWQ4FbPwKYmZfBpfUtM4O0iVBeoN0\nNl22qcWfGzZBXTqickiNQA==\n-----END PRIVATE KEY-----\n",
-  "client_email": "firebase-adminsdk-kvapr@creditapptest-c8a1d.iam.gserviceaccount.com",
-  "client_id": "105224908852680705726",
+  "private_key_id": "REDACTED",
+  "private_key": "REDACTED",
+  "client_email": "REDACTED",
+  "client_id": "REDACTED",
   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
   "token_uri": "https://oauth2.googleapis.com/token",
   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-kvapr%40creditapptest-c8a1d.iam.gserviceaccount.com",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/REDACTED",
   "universe_domain": "googleapis.com"
 }
