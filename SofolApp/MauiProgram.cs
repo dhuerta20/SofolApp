@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Google.Cloud.Firestore;
+using CommunityToolkit.Maui;
 
 namespace SofolApp
 {
@@ -19,6 +20,7 @@ namespace SofolApp
 
                 });
 
+            builder.UseMauiApp<App>().UseMauiCommunityToolkit();
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif

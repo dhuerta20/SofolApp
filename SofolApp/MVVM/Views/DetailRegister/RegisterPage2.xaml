@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SofolApp.MVVM.Views.RegisterPage2"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Sofol_Utils.Behaviors;assembly=Sofol_Utils"
+    xmlns:vistas="clr-namespace:SofolApp.MVVM.Views.DetailRegister"
+    Title=""
+    Background="#5dd684"
+    NavigationPage.HasNavigationBar="False">
+
+    <ScrollView>
+        <StackLayout x:Name="stRegister" Orientation="Vertical">
+            <Grid x:Name="grRegister" RowDefinitions=".3*,.7*">
+                <Image Aspect="AspectFill" Source="creditofeliz.jpg" />
+                <Path
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    Aspect="UniformToFill"
+                    Fill="White"
+                    HorizontalOptions="Start"
+                    Stroke="White">
+                    <Path.Data>
+                        <PathGeometry>
+                            <PathGeometry.Figures>
+                                <PathFigureCollection>
+                                    <PathFigure IsClosed="True" StartPoint="50,100">
+                                        <PathFigure.Segments>
+                                            <PathSegmentCollection>
+                                                <LineSegment Point="0,50" />
+                                                <LineSegment Point="100,0" />
+                                            </PathSegmentCollection>
+                                        </PathFigure.Segments>
+                                    </PathFigure>
+                                </PathFigureCollection>
+                            </PathGeometry.Figures>
+                        </PathGeometry>
+                    </Path.Data>
+                </Path>
+
+                <Frame
+                    x:Name="frmPage1"
+                    Grid.Row="1"
+                    Margin="15,15,15,15"
+                    BackgroundColor="LightGreen"
+                    IsVisible="False"
+                    Opacity="0.6"
+                    VerticalOptions="CenterAndExpand">
+                    <StackLayout Orientation="Vertical" Spacing="10">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            Text="Registro"
+                            TextColor="Black" />
+
+                        <Frame Padding="10" BackgroundColor="White">
+                            <StackLayout Orientation="Vertical">
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entName"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Introduce tu nombre">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+
+                        <Frame Padding="10" BackgroundColor="White">
+                            <StackLayout Orientation="Vertical">
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entMiddleName"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Introduce apellido paterno">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Padding="10" BackgroundColor="White">
+                            <StackLayout Orientation="Vertical">
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entLastName"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Introduce apellido materno">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Padding="10" BackgroundColor="White">
+                            <StackLayout Orientation="Vertical">
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entCURP"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Introduce CURP">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="20" />
+                                            <local:CurpValidatorBehavior Pattern="^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Padding="10" BackgroundColor="White">
+                            <StackLayout Orientation="Vertical">
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entRFC"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Introduce RFC">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="13" />
+                                            <local:RFCValidatorBehavior Pattern="^([A-Z]{4}\d{6}[A-Z\d]{3})$" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Padding="10" BackgroundColor="White">
+                            <StackLayout Orientation="Vertical">
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entPhone"
+                                        HorizontalOptions="FillAndExpand"
+                                        Keyboard="Telephone"
+                                        MaxLength="12"
+                                        Placeholder="Introduce número de móvil">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="12" />
+                                            <local:PhoneNumberValidatorBehavior Pattern="\A[0-9]{10}\z" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <Frame
+                                Padding="10,2,10,2"
+                                BackgroundColor="White"
+                                HorizontalOptions="FillAndExpand">
+                                <Entry
+                                    x:Name="entEdad"
+                                    HorizontalOptions="FillAndExpand"
+                                    Keyboard="Numeric"
+                                    MaxLength="3"
+                                    Placeholder="Edad">
+                                    <Entry.Behaviors />
+                                </Entry>
+                            </Frame>
+
+                            <Frame
+                                Grid.Column="1"
+                                Padding="10,2,10,2"
+                                BackgroundColor="White"
+                                HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal" Spacing="5">
+                                    <RadioButton x:Name="rMale" Content="Hombre" />
+                                    <RadioButton x:Name="rFemale" Content="Mujer" />
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+
+                <Frame
+                    x:Name="frmPage2"
+                    Grid.Row="1"
+                    Margin="15,15,15,15"
+                    BackgroundColor="LightGreen"
+                    IsVisible="False"
+                    Opacity="0.6"
+                    VerticalOptions="CenterAndExpand">
+                    <StackLayout Orientation="Vertical" Spacing="10">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            Text="Dirección"
+                            TextColor="Black" />
+
+                        <Frame Padding="10" BackgroundColor="White">
+                            <StackLayout Orientation="Vertical">
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entStreet"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Introduce Calle">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+
+                        <Frame Padding="10" BackgroundColor="White">
+                            <StackLayout Orientation="Vertical">
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entNumber"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Introduce número del domicilio">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Padding="10" BackgroundColor="White">
+                            <StackLayout Orientation="Vertical">
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entNeighborhood"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Introduce Colonia">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Padding="10" BackgroundColor="White">
+                            <StackLayout Orientation="Vertical">
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entCity"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Introduce Ciudad">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="20" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Padding="10" BackgroundColor="White">
+                            <StackLayout Orientation="Vertical">
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entState"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Introduce Provincia/Estado">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+                    </StackLayout>
+                </Frame>
+
+                <Frame
+                    x:Name="frmPage3"
+                    Grid.Row="1"
+                    Margin="15,15,15,15"
+                    BackgroundColor="LightGreen"
+                    IsVisible="False"
+                    Opacity="0.6"
+                    VerticalOptions="CenterAndExpand">
+                    <StackLayout Orientation="Vertical" Spacing="10">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            Text="Referencias Familiares"
+                            TextColor="Black" />
+
+                        <Frame Background="LightGray">
+                            <StackLayout Orientation="Vertical">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Text="Referencia 1"
+                                    TextColor="Black" />
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entReferenceFullName1"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Nombre Completo"
+                                        PlaceholderColor="Gray">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entReferencePhone1"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Móvil"
+                                        PlaceholderColor="Gray">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Picker Title="Seleccione parentesco">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                                <x:String>Padre</x:String>
+                                                <x:String>Madre</x:String>
+                                                <x:String>Hermano</x:String>
+                                                <x:String>Hermana</x:String>
+                                                <x:String>Abuelo</x:String>
+                                                <x:String>Abuela</x:String>
+                                                <x:String>Tío</x:String>
+                                                <x:String>Tía</x:String>
+                                                <x:String>Primo</x:String>
+                                                <x:String>Prima</x:String>
+                                                <x:String>Amigo</x:String>
+                                                <x:String>Amiga</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Picker Title="Seleccione ocupación">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                                <x:String>Empleado</x:String>
+                                                <x:String>Emprendedor</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Background="LightGray">
+                            <StackLayout Orientation="Vertical">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Text="Referencia 2"
+                                    TextColor="Black" />
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entReferenceFullName2"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Nombre Completo"
+                                        PlaceholderColor="Gray">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entReferencePhone2"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Móvil"
+                                        PlaceholderColor="Gray">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Picker Title="Seleccione parentesco">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                                <x:String>Padre</x:String>
+                                                <x:String>Madre</x:String>
+                                                <x:String>Hermano</x:String>
+                                                <x:String>Hermana</x:String>
+                                                <x:String>Abuelo</x:String>
+                                                <x:String>Abuela</x:String>
+                                                <x:String>Tío</x:String>
+                                                <x:String>Tía</x:String>
+                                                <x:String>Primo</x:String>
+                                                <x:String>Prima</x:String>
+                                                <x:String>Amigo</x:String>
+                                                <x:String>Amiga</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Picker Title="Seleccione ocupación">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                                <x:String>Empleado</x:String>
+                                                <x:String>Emprendedor</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                    </StackLayout>
+                </Frame>
+
+                <Frame
+                    x:Name="frmPage4"
+                    Grid.Row="1"
+                    Margin="15,15,15,15"
+                    BackgroundColor="LightGreen"
+                    IsVisible="True"
+                    Opacity="0.6"
+                    VerticalOptions="CenterAndExpand">
+                    <StackLayout Orientation="Vertical" Spacing="10">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="24"
+                            Text="Otras referencias"
+                            TextColor="Black" />
+
+                        <Frame Background="LightGray">
+                            <StackLayout Orientation="Vertical">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Text="Referencia 1"
+                                    TextColor="Black" />
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entReferenceFullName3"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Nombre Completo"
+                                        PlaceholderColor="Gray">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entReferencePhone3"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Móvil"
+                                        PlaceholderColor="Gray">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Picker Title="Seleccione parentesco">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                                <x:String>Padre</x:String>
+                                                <x:String>Madre</x:String>
+                                                <x:String>Hermano</x:String>
+                                                <x:String>Hermana</x:String>
+                                                <x:String>Abuelo</x:String>
+                                                <x:String>Abuela</x:String>
+                                                <x:String>Tío</x:String>
+                                                <x:String>Tía</x:String>
+                                                <x:String>Primo</x:String>
+                                                <x:String>Prima</x:String>
+                                                <x:String>Amigo</x:String>
+                                                <x:String>Amiga</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Picker Title="Seleccione ocupación">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                                <x:String>Empleado</x:String>
+                                                <x:String>Emprendedor</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                        <Frame Background="LightGray">
+                            <StackLayout Orientation="Vertical">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Text="Referencia 2"
+                                    TextColor="Black" />
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entReferenceFullName4"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Nombre Completo"
+                                        PlaceholderColor="Gray">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Entry
+                                        x:Name="entReferencePhone4"
+                                        HorizontalOptions="FillAndExpand"
+                                        MaxLength="50"
+                                        Placeholder="Móvil"
+                                        PlaceholderColor="Gray">
+                                        <Entry.Behaviors>
+                                            <local:MaxLengthValidatorBehavior MaxLength="50" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Picker Title="Seleccione parentesco">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                                <x:String>Padre</x:String>
+                                                <x:String>Madre</x:String>
+                                                <x:String>Hermano</x:String>
+                                                <x:String>Hermana</x:String>
+                                                <x:String>Abuelo</x:String>
+                                                <x:String>Abuela</x:String>
+                                                <x:String>Tío</x:String>
+                                                <x:String>Tía</x:String>
+                                                <x:String>Primo</x:String>
+                                                <x:String>Prima</x:String>
+                                                <x:String>Amigo</x:String>
+                                                <x:String>Amiga</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </Frame>
+
+                                <Frame
+                                    Padding="10,2,10,2"
+                                    BackgroundColor="Transparent"
+                                    HorizontalOptions="FillAndExpand">
+                                    <Picker Title="Seleccione ocupación">
+                                        <Picker.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                                <x:String>Empleado</x:String>
+                                                <x:String>Emprendedor</x:String>
+                                            </x:Array>
+                                        </Picker.ItemsSource>
+                                    </Picker>
+                                </Frame>
+                            </StackLayout>
+                        </Frame>
+
+                    </StackLayout>
+                </Frame>
+
+            </Grid>
+
+            <BoxView BackgroundColor="Transparent" HeightRequest="100" />
+
+            <Button
+                x:Name="btnNext"
+                Margin="10,0,10,0"
+                BackgroundColor="LightGreen"
+                BorderWidth="1"
+                Clicked="btnNext_Clicked"
+                CornerRadius="10"
+                FontAttributes="Bold"
+                FontSize="20"
+                Text="Siguiente"
+                TextColor="Black" />
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

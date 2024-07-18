@@ -19,7 +19,7 @@ namespace SofolApp.MVVM.Views
        async void OnCreateAccountButtonClicked(object sender, EventArgs e)
         {
              //Navega a la página RegisterPage si el usuario necesita crear una cuenta
-            await Navigation.PushAsync(new RegisterForm_RegisterPage());
+            await Navigation.PushAsync(new RegisterPage2());
         }
     }
 }

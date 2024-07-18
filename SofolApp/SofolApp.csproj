@@ -33,17 +33,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\agenda.png" />
+	  <None Remove="Resources\Images\briefcase.png" />
+	  <None Remove="Resources\Images\right_arrow.png" />
+	  <None Remove="Resources\Images\user.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />
 		<PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
 		<PackageReference Include="FirebaseDatabase.net" Version="4.2.0" />
 		<PackageReference Include="Google.Cloud.Firestore" Version="3.7.0" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.0-preview.6.24327.7" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="9.0.0-preview.6.24327.7" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0-preview.6.24327.7" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<MauiXaml Update="MVVM\Views\CreditPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="MVVM\Views\DetailRegister\ScanIDPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="MVVM\Views\LoginForm.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -54,6 +65,9 @@
 		<MauiXaml Update="MVVM\Views\RegisterPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="MVVM\Views\DetailRegister\RegisterPage2.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -61,11 +75,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Google.Cloud.Firestore" Version="1.1.0-beta01" />
+		<PackageReference Include="Google.Cloud.Firestore" Version="3.8.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="NewFolder\" />
+	  <ProjectReference Include="..\Sofol_Utils\Sofol_Utils.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
