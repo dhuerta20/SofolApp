@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SofolApp.MVVM.Views.SignUpImg"
+             Title="LoginPage"
+             BackgroundColor="{AppThemeBinding Dark=#353e43, Light=White}">
+    <ScrollView>
+        <FlexLayout Direction="Column" AlignItems="Center" JustifyContent="Start" Margin="0,50,0,0" Padding="20">
+            <Image x:Name="facePhoto" Source="reconocimiento_facial_real.png" HeightRequest="120" WidthRequest="120" Aspect="AspectFit"/>
+            <Button Text="REGISTRA TU ROSTRO"
+                    BackgroundColor="#5dd684"
+                    FontSize="24" TextColor="White"
+                    FontAttributes="Bold" 
+                    Margin="0,15,0,30"
+                    LineBreakMode="WordWrap"
+                    Clicked="OnFacePhotoButtonClicked"/>
+            <Label x:Name="lblFacePhoto" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center"/>
+
+            <Button BackgroundColor="#5dd684" 
+                    Text="IDENTIFICACION" 
+                    TextColor="White"
+                    FontAttributes="Bold" FontSize="24"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,20"
+                    Clicked="OnIDPhotoButtonClicked"/>
+            <Image x:Name="idPhoto" HeightRequest="200" IsVisible="False" Margin="5"/>
+            <Label x:Name="lblIDPhoto" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center"/>
+
+            <Button BackgroundColor="#5dd684"
+                    Text="COMPROBANTE DE DOMICILIO"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    LineBreakMode="WordWrap"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,20"
+                    Clicked="OnAddressProofButtonClicked"/>
+            <Image x:Name="imgProofAddress" HeightRequest="200" IsVisible="False" Margin="5"/>
+            <Label x:Name="lblAddressProof" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center"/>
+
+            <Button BackgroundColor="#5dd684"
+                    Text="COMPROBANTE DE INGRESOS"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    LineBreakMode="WordWrap"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,20"
+                    Clicked="OnIncomeProofButtonClicked"/>
+            <Image x:Name="imgProofIncome" HeightRequest="200" IsVisible="False" Margin="5"/>
+            <Label x:Name="lblIncomeProof" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center"/>
+
+            <Button BackgroundColor="#5dd684"
+                    Text="NÓMINA"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    LineBreakMode="WordWrap"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,20"
+                    Clicked="OnPayrollButtonClicked"/>
+            <Image x:Name="imgPayroll" HeightRequest="200" IsVisible="False" Margin="5"/>
+            <Label x:Name="lblPayroll" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center"/>
+
+            <Button BackgroundColor="#5dd684"
+                    Text="ESTADO DE CUENTA"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    LineBreakMode="WordWrap"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,20"
+                    Clicked="OnAccountStatusButtonClicked"/>
+            <Label x:Name="lblAccountStatus" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center" Margin="0,0,0,20"/>
+
+            <Button BackgroundColor="#5dd684"
+                    Text="REFERENCIAS"
+                    TextColor="White"
+                    FontSize="24"
+                    FontAttributes="Bold"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,20"
+                    Clicked="SignUpReferencesButton"/>
+
+            <Button x:Name="SiguientePagina"
+                    Text="FINALIZAR"
+                    BackgroundColor="#5dd684"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="24"
+                    WidthRequest="300"
+                    HeightRequest="80"
+                    Margin="0,0,0,20"
+                    LineBreakMode="WordWrap"
+                    Clicked="OnEndOfRegisterButtonClicked"/>
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,5 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
-using Google.Cloud.Firestore;
+using Firebase.Auth;
+using Firebase.Auth.Providers;
+using SofolApp.MVVM.Views;
+using SofolApp.MVVM.ViewModels;
+using Firebase.Auth.Repository;
+using CommunityToolkit.Maui;
 
 namespace SofolApp
 {
@@ -7,23 +12,30 @@ namespace SofolApp
     {
         public static MauiApp CreateMauiApp()
         {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                    fonts.AddFont("Free-Solid-900.otf", "FAS");
-
-
-                });
+            try
+            {
+                var builder = MauiApp.CreateBuilder();
+                builder
+                    .UseMauiApp<App>()
+                    .UseMauiCommunityToolkit() 
+                    .ConfigureFonts(fonts =>
+                    {
+                        fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                        fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                        fonts.AddFont("Free-Solid-900.otf", "FAS");
+                    });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
-            return builder.Build();
+                return builder.Build();
+            }
+            catch(Exception ex) {
+                Console.WriteLine($"Error en CreateMauiApp: {ex}");
+                throw;
+            }
+
         }
     }
 }

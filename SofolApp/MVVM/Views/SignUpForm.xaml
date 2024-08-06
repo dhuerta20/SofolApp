@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="SofolApp.MVVM.Views.SignUpForm"
+             Title="RegisterForm"
+             BackgroundColor="{AppThemeBinding Dark=#1e2229, Light=White}">
+
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="{AppThemeBinding Dark=#353e43, Light=White}" 
+                                   StatusBarStyle="{AppThemeBinding Dark=LightContent, Light=DarkContent}"/>
+    </ContentPage.Behaviors>
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Image Source="creditofeliz.jpg" Aspect="AspectFill" HeightRequest="200"/>
+                    <Grid BackgroundColor="#1e2229" Opacity=".5"/>
+                    <Image Source="proxcredit_logo_final.jpg"
+                           Aspect="AspectFit"
+                           HeightRequest="40"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Start"/>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <RoundRectangle Margin="-5,-30,-5,-2"
+                                    CornerRadius="30,30,0,0"
+                                    Fill="{AppThemeBinding Dark=#353e43, Light=White}"/>
+                    <VerticalStackLayout Margin="30,0,30,0">
+                        <Label Text="Bienvenido!"
+                               FontAttributes="Bold"
+                               FontSize="24"
+                               TextColor="{AppThemeBinding  Dark=White, Light=#2D2D2D}"/>
+                        <Label Text="Regístrese para continuar"
+                               TextColor="#A3A3A4"
+                               FontSize="24"/>
+
+                        <!-- Primer campo del formulario -->
+                        <!-- Campo para el nombre -->
+                        <Grid Margin="0,30,0,0" ColumnDefinitions=".2*, .8*">
+                            <RoundRectangle BackgroundColor="{AppThemeBinding Dark=#8c969c, Light=#EDEBF6}"
+                                            CornerRadius="10"
+                                            HeightRequest="60"
+                                            WidthRequest="60"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"/>
+                            <Image HorizontalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource 
+                                        FontFamily="FAS"
+                                        Glyph="&#xf007;"
+                                        Size="44"
+                                        Color="#5dd684"/>
+                                </Image.Source>
+                            </Image>
+                            <Entry Grid.Column="1"
+                                   x:Name="firstNameEntry"
+                                   Placeholder="Nombre"
+                                   VerticalOptions="Center"                                   
+                                   />
+                        </Grid>
+
+                        <!-- Campo para los apellidos -->
+                        <Grid Margin="0,30,0,0" ColumnDefinitions=".2*, .8*">
+                            <RoundRectangle BackgroundColor="{AppThemeBinding Dark=#8c969c, Light=#EDEBF6}"
+                                            CornerRadius="10"
+                                            HeightRequest="60"
+                                            WidthRequest="60"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"/>      
+                            <Image HorizontalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource 
+                                            FontFamily="FAS"
+                                            Glyph="&#xf007;"
+                                            Size="44"
+                                            Color="#5dd684"/>       
+                                </Image.Source>
+                            </Image>
+                            <Entry Grid.Column="1"
+                                   x:Name="lastNameEntry"
+                                   Placeholder="Apellidos"
+                                   VerticalOptions="Center"/>           
+                        </Grid>
+                        <!-- Segundo campo del formulario -->
+                        <Grid Margin="0,30,0,0" ColumnDefinitions=".2*, .8*">
+                            <RoundRectangle BackgroundColor="{AppThemeBinding Dark=#8c969c, Light=#EDEBF6}"
+                                            CornerRadius="10"
+                                            HeightRequest="60"
+                                            WidthRequest="60"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"/>
+                            <Image HorizontalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource 
+                                        FontFamily="FAS"
+                                        Glyph="&#xf0e0;"
+                                        Size="44"
+                                        Color="#5dd684"/>
+                                </Image.Source>
+                            </Image>
+                            <Entry Grid.Column="1"
+                                   x:Name="emailEntry"
+                                   Placeholder="Correo electrónico"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+
+                        <!-- Tercer campo para número de teléfono -->
+                        <Grid Margin="0,30,0,0" ColumnDefinitions=".2*, .8*">
+                            <RoundRectangle BackgroundColor="{AppThemeBinding Dark=#8c969c, Light=#EDEBF6}"
+                                            CornerRadius="10"
+                                            HeightRequest="60"
+                                            WidthRequest="60"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"/>
+                            <Image HorizontalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource 
+                                        FontFamily="FAS"
+                                        Glyph="&#xf095;"
+                                        Size="44"
+                                        Color="#5dd684"/>
+                                </Image.Source>
+                            </Image>
+                            <Entry Grid.Column="1"
+                                   x:Name="phoneEntry"
+                                   Placeholder="Número de teléfono"
+                                   Keyboard="Telephone"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+
+                        <!-- Cuarto campo del formulario -->
+                        <Grid Margin="0,30,0,0" ColumnDefinitions=".2*, .8*">
+                            <RoundRectangle BackgroundColor="{AppThemeBinding Dark=#8c969c, Light=#EDEBF6}"
+                                            CornerRadius="10"
+                                            HeightRequest="60"
+                                            WidthRequest="60"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"/>
+                            <Image HorizontalOptions="Center">
+                                <Image.Source>
+                                    <FontImageSource 
+                                        FontFamily="FAS"
+                                        Glyph="&#xf084;"
+                                        Size="44"
+                                        Color="#5dd684"/>
+                                </Image.Source>
+                            </Image>
+                            <Entry Grid.Column="1"
+                                   x:Name="passwordEntry"
+                                   Placeholder="Contraseña"
+                                   IsPassword="True" 
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                        
+                        <Button Margin="0,20,0,20"
+                                BackgroundColor="#5dd684"
+                                HeightRequest="60"
+                                Text="Siguiente página"
+                                TextColor="#FBF6FD"
+                                FontSize="24"
+                                Clicked="SignUpClicked"/>
+
+                       
+                    </VerticalStackLayout>
+                </Grid>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

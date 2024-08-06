@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="SofolApp.MVVM.Views.PersonalDataPage"
+             Title="Datos Personales"
+             BackgroundColor="{AppThemeBinding Dark=#353e43, Light=#F5F5F5}">
+    <Grid>
+        <RoundRectangle Fill="{AppThemeBinding Dark=#353e43, Light=White}"
+                        CornerRadius="0" />
+        <ScrollView Margin="0,35,0,0">
+            <StackLayout Padding="20" Spacing="20">
+                <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
+                    <StackLayout>
+                        <Image x:Name="facePhoto" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Button Text="Actualizar foto de perfil" 
+                                Clicked="OnUpdateFacePhotoClicked"
+                                BackgroundColor="#5dd684"
+                                TextColor="White"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                Margin="0,5"
+                                LineBreakMode="WordWrap"/>
+                    </StackLayout>
+                </Frame>
+
+                <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
+                    <StackLayout>
+                        <Image x:Name="idPhoto" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Button Text="Actualizar foto de ID" 
+                                Clicked="OnUpdateIdPhotoClicked"
+                                BackgroundColor="#5dd684"
+                                TextColor="White"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                Margin="0,5"
+                                LineBreakMode="WordWrap"/>
+                    </StackLayout>
+                </Frame>
+
+                <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
+                    <StackLayout>
+                        <Image x:Name="imgProofAddress" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Button Text="Actualizar comprobante de domicilio" 
+                                Clicked="OnUpdateAddressPhotoClicked"
+                                BackgroundColor="#5dd684"
+                                TextColor="White"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                Margin="0,5"
+                                LineBreakMode="WordWrap"/>
+                    </StackLayout>
+                </Frame>
+
+                <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
+                    <StackLayout>
+                        <Image x:Name="imgProofIncome" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Button Text="Actualizar comprobante de ingresos" 
+                                Clicked="OnUpdateIncomePhotoClicked"
+                                BackgroundColor="#5dd684"
+                                TextColor="White"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                Margin="0,5"
+                                LineBreakMode="WordWrap"/>
+                    </StackLayout>
+                </Frame>
+
+                <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
+                    <StackLayout>
+                        <Image x:Name="imgProofPayroll" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Button Text="Actualizar comprobante de nómina" 
+                                Clicked="OnUpdateProofPayroll"
+                                BackgroundColor="#5dd684"
+                                TextColor="White"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                Margin="0,5"
+                                LineBreakMode="WordWrap"/>
+                    </StackLayout>
+                </Frame>
+
+                <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
+                    <StackLayout>
+                        <Image x:Name="imgProofAccStatus" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Button Text="Actualizar comprobante de Cuenta" 
+                                Clicked="OnUpdateProofAccStatus"
+                                BackgroundColor="#5dd684"
+                                TextColor="White"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                Margin="0,5"
+                                LineBreakMode="WordWrap"/>
+                    </StackLayout>
+                </Frame>
+
+                <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
+                    <StackLayout>
+                        <Entry x:Name="firstNameEntry" Placeholder="Nombre" TextColor="{AppThemeBinding Dark=Black, Light=Black}"/>
+                        <Entry x:Name="lastNameEntry" Placeholder="Apellido" TextColor="{AppThemeBinding Dark=Black, Light=Black}"/>
+                        <Entry x:Name="emailEntry" Placeholder="Email" IsEnabled="False" />
+                        <Entry x:Name="phoneNumberEntry" Placeholder="Número de teléfono" TextColor="{AppThemeBinding Dark=Black, Light=Black}"/>
+                        <Button Text="Guardar cambios" 
+                                Clicked="OnSaveChangesClicked"
+                                BackgroundColor="#5dd684"
+                                TextColor="White"
+                                FontSize="20"
+                                FontAttributes="Bold"
+                                Margin="0,5"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace SofolApp.MVVM.Models
 {
-    
     class User 
     {
-        public int UserID {  get; set; }
+        public string Id {  get; set; }
 
         public string Name { get; set; }
 
@@ -30,7 +29,17 @@ namespace SofolApp.MVVM.Models
 
         public string Ocupation { get; set; }
 
-        public Image FacePic { get; set; }
+        public string IdPhotoUrl { get; set; }
+
+        public string ProofOfAddressUrl { get; set; }
+
+        public string ProofOfIncomeUrl { get; set; }
+
+        public string FacePhotoUrl { get; set; }
+
+        public bool IsValid { get; set; }
+
+        public bool IsAdmin { get; set; }
         
     }
 }

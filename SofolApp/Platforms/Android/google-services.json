@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "34598851022",
+    "firebase_url": "https://creditapptest-c8a1d-default-rtdb.firebaseio.com",
+    "project_id": "creditapptest-c8a1d",
+    "storage_bucket": "creditapptest-c8a1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34598851022:android:47b6048612d1fa91981b9f",
+        "android_client_info": {
+          "package_name": "com.companyname.sofolapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNk0vQxFQkQj-NtZbs9Z_i3njorllaEEo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

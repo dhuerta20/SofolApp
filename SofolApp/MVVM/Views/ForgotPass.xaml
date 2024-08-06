@@ -1,0 +1,24 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="SofolApp.MVVM.Views.ForgotPass">
+    <ContentPage.Behaviors>
+        <toolkit:StatusBarBehavior StatusBarColor="{AppThemeBinding Dark=#353e43, Light=White}" StatusBarStyle="{AppThemeBinding Dark=LightContent, Light=DarkContent}"/>
+    </ContentPage.Behaviors>
+    <StackLayout Padding="20" VerticalOptions="CenterAndExpand">
+        <Label Text="Ingresa tu correo electrónico para recibir instrucciones de restablecimiento de contraseña."
+               HorizontalOptions="Center"
+               HorizontalTextAlignment="Center"
+               Margin="0,0,0,20"/>
+        <Entry x:Name="emailEntry"
+               Placeholder="Correo electrónico"
+               Keyboard="Email"
+               ReturnType="Send"
+               Completed="SendResetEmailClicked"/>
+        <Button x:Name="sendButton"
+                Text="Enviar correo de restablecimiento"
+                Clicked="SendResetEmailClicked"
+                Margin="0,20,0,0"/>
+        <ActivityIndicator x:Name="activityIndicator" IsVisible="False" IsRunning="False"/>
+    </StackLayout>
+</ContentPage>

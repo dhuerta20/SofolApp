@@ -2,11 +2,67 @@
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:SofolApp.MVVM.Views"
+       xmlns:mct="Community"
        x:Class="SofolApp.AppShell"
        BackgroundColor="#1e2229"
        TitleColor="White"
-       FlyoutBackgroundColor="#1e2229">
+       FlyoutBackgroundColor="#1e2229"
+       FlyoutBehavior="Disabled"
+       Shell.NavBarIsVisible="False">
 
-    <ShellContent Route="register" ContentTemplate="{DataTemplate local:LoginForm}" />
-    <ShellContent Route="credit" ContentTemplate="{DataTemplate local:CreditPage}" />
+    <Shell.TitleView>
+        <Label Text="Proxcredit" />
+    </Shell.TitleView>
+    
+    
+    <ShellContent
+        Title="Formulario de registro"
+        ContentTemplate="{DataTemplate local:SignInForm}"
+        Route="SignInForm" />
+
+    <ShellContent
+        Title="Imagenes de registro"
+        ContentTemplate="{DataTemplate local:SignUpImg}"
+        Route="SignUpImg" />
+
+    <ShellContent 
+        Title="Referencias del usuario"
+        ContentTemplate="{DataTemplate local:SignUpReferences}"
+        Route="SignUpReferences"
+        />
+
+    <ShellContent
+        Title="Inicio de sesion"
+        ContentTemplate="{DataTemplate local:SignUpForm}"
+        Route="SignUpForm" />
+
+    <ShellContent
+        Title="Página principal"
+        ContentTemplate="{DataTemplate local:CreditPage}"
+        Route="CreditApp" />
+
+    <ShellContent
+        Title="Página de confirmacion de identidad"
+        ContentTemplate="{DataTemplate local:IdConfirmPage}"
+        Route="IdConfirm"
+        />
+
+    <ShellContent
+        Title="Página para ver datos personales"
+        ContentTemplate="{DataTemplate local:PersonalDataPage}"
+        Route="PersonalData"
+        />
+
+    <ShellContent 
+        Title="Página de referencias llamada estatus"
+        ContentTemplate="{DataTemplate local:ReferencesPage}"
+        Route="Status"
+        />
+
+    <ShellContent 
+    Title="Página de reseteo de contraseña"
+    ContentTemplate="{DataTemplate local:ForgotPass}"
+    Route="ForgotPass"
+    />
+
 </Shell>

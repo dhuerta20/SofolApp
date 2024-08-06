@@ -6,7 +6,16 @@ namespace SofolApp
     {
         public AppShell()
         {
-            InitializeComponent();
+            // Breakpoint aquí
+            try
+            {
+                InitializeComponent();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en AppShell constructor: {ex}");
+                throw;
+            }
         }
     }
 }
