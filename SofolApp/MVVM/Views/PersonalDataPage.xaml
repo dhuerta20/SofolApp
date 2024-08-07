@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:SofolApp.MVVM.ViewModels"
              x:Class="SofolApp.MVVM.Views.PersonalDataPage"
              Title="Datos Personales"
              BackgroundColor="{AppThemeBinding Dark=#353e43, Light=#F5F5F5}">
+
     <Grid>
         <RoundRectangle Fill="{AppThemeBinding Dark=#353e43, Light=White}"
                         CornerRadius="0" />
         <ScrollView Margin="0,35,0,0">
             <StackLayout Padding="20" Spacing="20">
+
+                <!-- Face Photo -->
                 <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
                     <StackLayout>
-                        <Image x:Name="facePhoto" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Image Source="{Binding FacePhotoSource}" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
                         <Button Text="Actualizar foto de perfil" 
-                                Clicked="OnUpdateFacePhotoClicked"
+                                Command="{Binding UpdatePhotoCommand}"
+                                CommandParameter="face"
                                 BackgroundColor="#5dd684"
                                 TextColor="White"
                                 FontSize="20"
@@ -23,11 +28,13 @@
                     </StackLayout>
                 </Frame>
 
+                <!-- ID Photo -->
                 <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
                     <StackLayout>
-                        <Image x:Name="idPhoto" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Image Source="{Binding IdPhotoSource}" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
                         <Button Text="Actualizar foto de ID" 
-                                Clicked="OnUpdateIdPhotoClicked"
+                                Command="{Binding UpdatePhotoCommand}"
+                                CommandParameter="id"
                                 BackgroundColor="#5dd684"
                                 TextColor="White"
                                 FontSize="20"
@@ -37,11 +44,13 @@
                     </StackLayout>
                 </Frame>
 
+                <!-- Address Photo -->
                 <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
                     <StackLayout>
-                        <Image x:Name="imgProofAddress" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Image Source="{Binding AddressPhotoSource}" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
                         <Button Text="Actualizar comprobante de domicilio" 
-                                Clicked="OnUpdateAddressPhotoClicked"
+                                Command="{Binding UpdatePhotoCommand}"
+                                CommandParameter="address"
                                 BackgroundColor="#5dd684"
                                 TextColor="White"
                                 FontSize="20"
@@ -51,11 +60,13 @@
                     </StackLayout>
                 </Frame>
 
+                <!-- Income Photo -->
                 <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
                     <StackLayout>
-                        <Image x:Name="imgProofIncome" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Image Source="{Binding IncomePhotoSource}" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
                         <Button Text="Actualizar comprobante de ingresos" 
-                                Clicked="OnUpdateIncomePhotoClicked"
+                                Command="{Binding UpdatePhotoCommand}"
+                                CommandParameter="income"
                                 BackgroundColor="#5dd684"
                                 TextColor="White"
                                 FontSize="20"
@@ -65,11 +76,13 @@
                     </StackLayout>
                 </Frame>
 
+                <!-- Payroll Photo -->
                 <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
                     <StackLayout>
-                        <Image x:Name="imgProofPayroll" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Image Source="{Binding PayrollPhotoSource}" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
                         <Button Text="Actualizar comprobante de nómina" 
-                                Clicked="OnUpdateProofPayroll"
+                                Command="{Binding UpdatePhotoCommand}"
+                                CommandParameter="payroll"
                                 BackgroundColor="#5dd684"
                                 TextColor="White"
                                 FontSize="20"
@@ -79,11 +92,13 @@
                     </StackLayout>
                 </Frame>
 
+                <!-- Account Status Photo -->
                 <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
                     <StackLayout>
-                        <Image x:Name="imgProofAccStatus" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Image Source="{Binding AccountStatusPhotoSource}" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
                         <Button Text="Actualizar comprobante de Cuenta" 
-                                Clicked="OnUpdateProofAccStatus"
+                                Command="{Binding UpdatePhotoCommand}"
+                                CommandParameter="accountStatus"
                                 BackgroundColor="#5dd684"
                                 TextColor="White"
                                 FontSize="20"
@@ -93,14 +108,15 @@
                     </StackLayout>
                 </Frame>
 
+                <!-- User Info -->
                 <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
                     <StackLayout>
-                        <Entry x:Name="firstNameEntry" Placeholder="Nombre" TextColor="{AppThemeBinding Dark=Black, Light=Black}"/>
-                        <Entry x:Name="lastNameEntry" Placeholder="Apellido" TextColor="{AppThemeBinding Dark=Black, Light=Black}"/>
-                        <Entry x:Name="emailEntry" Placeholder="Email" IsEnabled="False" />
-                        <Entry x:Name="phoneNumberEntry" Placeholder="Número de teléfono" TextColor="{AppThemeBinding Dark=Black, Light=Black}"/>
+                        <Entry Text="{Binding FirstName}" Placeholder="Nombre" TextColor="{AppThemeBinding Dark=Black, Light=Black}"/>
+                        <Entry Text="{Binding LastName}" Placeholder="Apellido" TextColor="{AppThemeBinding Dark=Black, Light=Black}"/>
+                        <Entry Text="{Binding Email}" Placeholder="Email" IsEnabled="False" />
+                        <Entry Text="{Binding PhoneNumber}" Placeholder="Número de teléfono" TextColor="{AppThemeBinding Dark=Black, Light=Black}"/>
                         <Button Text="Guardar cambios" 
-                                Clicked="OnSaveChangesClicked"
+                                Command="{Binding SaveChangesCommand}"
                                 BackgroundColor="#5dd684"
                                 TextColor="White"
                                 FontSize="20"

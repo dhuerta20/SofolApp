@@ -3,6 +3,8 @@ using Firebase.Auth.Providers;
 using Firebase.Database;
 using Firebase.Database.Query;
 using Firebase.Storage;
+using SofolApp.MVVM.Models;
+using SofolApp.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SofolApp.MVVM.ViewModels
 {
-    public class FirebaseConnection
+    public class FirebaseConnection : IFirebaseConnection
     {
         private const string ApiKey = "AIzaSyBUqYQowXYaMJYpnLM4wu5b4YNk7Iw8LDk";
         private const string AuthDomain = "creditapptest-c8a1d.firebaseapp.com";
@@ -19,7 +21,7 @@ namespace SofolApp.MVVM.ViewModels
         private const string StorageBucket = "creditapptest-c8a1d.appspot.com";
 
         // Firebase Authentication
-        public FirebaseAuthClient ConnectToFirebase()
+        private FirebaseAuthClient ConnectToFirebase()
         {
             var config = new FirebaseAuthConfig
             {
@@ -85,7 +87,7 @@ namespace SofolApp.MVVM.ViewModels
                 await SecureStorage.SetAsync("userId", userCredential.User.Uid);
                 await SecureStorage.SetAsync("userToken", await userCredential.User.GetIdTokenAsync());
 
-                var userData = new User
+                var userData = new Users
                 {
                     userId = userCredential.User.Uid,
                     FirstName = firstName,
@@ -115,19 +117,19 @@ namespace SofolApp.MVVM.ViewModels
         }
 
         // Database Operations
-        public async Task CreateUserDataAsync(string userId, User userData)
+        private async Task CreateUserDataAsync(string userId, Users userData)
         {
             var client = GetDatabaseClient();
             await client.Child("users").Child(userId).PutAsync(userData);
         }
 
-        public async Task<User> ReadUserDataAsync(string userId)
+        public async Task<Users> ReadUserDataAsync(string userId)
         {
             var client = GetDatabaseClient();
-            return await client.Child("users").Child(userId).OnceSingleAsync<User>();
+            return await client.Child("users").Child(userId).OnceSingleAsync<Users>();
         }
 
-        public async Task UpdateUserDataAsync(string userId, User userData)
+        public async Task UpdateUserDataAsync(string userId, Users userData)
         {
             var client = GetDatabaseClient();
             await client.Child("users").Child(userId).PutAsync(userData);
@@ -139,7 +141,7 @@ namespace SofolApp.MVVM.ViewModels
             var users = await client.Child("users")
                 .OrderBy("Email")
                 .EqualTo(email)
-                .OnceAsync<User>();
+                .OnceAsync<Users>();
 
             return users.Any();
         }
@@ -176,7 +178,7 @@ namespace SofolApp.MVVM.ViewModels
             });
 
             var pdfUrl = await storage
-                .Child("user_images")
+                .Child("user_pdfs")
                 .Child(userId)
                 .Child(sanitizedFileName)
                 .PutAsync(pdfStream);
@@ -248,21 +250,5 @@ namespace SofolApp.MVVM.ViewModels
                 throw new Exception("Error inesperado al enviar correo de restablecimiento de contraseña", ex);
             }
         }
-    }
-
-    public class User
-    {
-        public string userId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-        public string IsValid { get; set; }
-        public bool IsAdmin { get; set; }
-        public Dictionary<string, string> Images { get; set; } = new Dictionary<string, string>();
-        public string FirstReference { get; set; }
-        public string SecondReference { get; set; }
-        public string ThirdReference { get; set; }
-        public string AdminNotes { get; set; }
     }
 }

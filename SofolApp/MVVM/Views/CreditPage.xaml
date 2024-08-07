@@ -8,9 +8,9 @@
     <ContentPage.Behaviors>
         <toolkit:StatusBarBehavior StatusBarColor="{AppThemeBinding Dark=#353e43, Light=White}" StatusBarStyle="{AppThemeBinding Dark=White, Light=Black}"/>
     </ContentPage.Behaviors>
-    
-    
-    
+
+
+
     <Grid RowSpacing="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="70" />
@@ -26,7 +26,7 @@
                         BackgroundColor="Transparent"
                         TextColor="Black"
                         FontSize="14"
-                        Clicked="OnSignOutClicked"/>
+                        Command="{Binding OnSignOutCommand}"/>
             </Grid>
         </Grid>
 
@@ -43,9 +43,9 @@
                     <Frame CornerRadius="60" IsClippedToBounds="True" Padding="0" 
                            BorderColor="LightGray" HasShadow="True" 
                            HeightRequest="120" WidthRequest="120" Margin="0,10,0,10">
-                        <Image x:Name="ProfileImage" Aspect="AspectFill" HeightRequest="120" WidthRequest="120"/>
+                        <Image Source="{Binding ProfileImage}" Aspect="AspectFill" HeightRequest="120" WidthRequest="120"/>
                     </Frame>
-                    <Label x:Name="UserNameLabel" HorizontalOptions="Center" FontSize="24" FontAttributes="Bold" Margin="0,5,0,5"/>
+                    <Label Text="{Binding UserName}" HorizontalOptions="Center" FontSize="24" FontAttributes="Bold" Margin="0,5,0,5"/>
                 </FlexLayout>
 
                 <!-- RoundRectangle y contenido inferior -->
@@ -53,7 +53,7 @@
                     <RoundRectangle Fill="{AppThemeBinding Dark=#353e43, Light=White}" CornerRadius="40,35,0,0" VerticalOptions="Fill" Margin="-1,-1,-1,-1"/>
                     <StackLayout Padding="20" Spacing="15">
                         <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="15" Padding="10">
-                            <Label Text="Informacion General" TextColor="{AppThemeBinding Dark=White, Light=Black}" FontSize="22" FontAttributes="Bold" Grid.Row="0"
+                            <Label Text="Información General" TextColor="{AppThemeBinding Dark=White, Light=Black}" FontSize="22" FontAttributes="Bold" Grid.Row="0"
                                    HorizontalOptions="Center" VerticalOptions="Start"/>
 
                             <!-- CONFIRMACION DE IDENTIDAD -->
@@ -62,8 +62,8 @@
                                     <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="LightGray" Padding="5" WidthRequest="50" HeightRequest="50">
                                         <Image Source="confirmacion_de_identidad.png" Aspect="AspectFit"/>
                                     </Frame>
-                                    <Button Grid.Column="1" x:Name="IdentityConfirmationButton" Text="Confirmacion de info" 
-                                            Clicked="OnIdentityConfirmClicked"
+                                    <Button Grid.Column="1" Text="Confirmación de info" 
+                                            Command="{Binding OnIdentityConfirmCommand}"
                                             BackgroundColor="Transparent" 
                                             FontSize="18" TextColor="{AppThemeBinding Dark=White, Light=Black}"                                   
                                             FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="WordWrap"/>
@@ -76,10 +76,9 @@
                                     <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="LightGray" Padding="5" WidthRequest="50" HeightRequest="50">
                                         <Image Source="informacion_personal.png" Aspect="AspectFit"/>
                                     </Frame>
-                                    <Button Grid.Column="1" Text="Datos personales" Clicked="OnPersonalDataClicked"
+                                    <Button Grid.Column="1" Text="Datos personales" Command="{Binding OnPersonalDataCommand}"
                                             FontSize="18" TextColor="{AppThemeBinding Dark=White, Light=Black}"
-                                            BackgroundColor="Transparent" VerticalOptions="Center" 
-                                            HorizontalOptions="Start" FontAttributes="Bold"/>
+                                            BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Start" FontAttributes="Bold" LineBreakMode="WordWrap"/>
                                 </Grid>
                             </Frame>
 
@@ -89,35 +88,41 @@
                                     <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="LightGray" Padding="5" WidthRequest="50" HeightRequest="50">
                                         <Image Source="estatus.png" Aspect="AspectFit"/>
                                     </Frame>
-                                    <Button Grid.Column="1" x:Name="StatusButton" Text="Estatus" Clicked="OnStatusClicked"
-                                            FontSize="18" BackgroundColor="Transparent"
-                                            TextColor="{AppThemeBinding Dark=White, Light=Black}"
-                                            VerticalOptions="Center" HorizontalOptions="Start" FontAttributes="Bold"/>
+                                    <Button Grid.Column="1" Text="Estatus" Command="{Binding OnStatusCommand}"
+                                            FontSize="18" TextColor="{AppThemeBinding Dark=White, Light=Black}"
+                                            BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Start" FontAttributes="Bold" LineBreakMode="WordWrap"/>
                                 </Grid>
                             </Frame>
 
-                            <!-- Nueva sección "Contáctanos!" -->
-                            <Label Text="Contáctanos!" TextColor="{AppThemeBinding Dark=White, Light=Black}" 
-                                   FontSize="22" FontAttributes="Bold" Grid.Row="4"
-                                   HorizontalOptions="Center" Margin="0,20,0,10"/>
+                            <!-- CONTÁCTANOS -->
+                            <Label Grid.Row="4"
+                                   Text="Contactanos"
+                                   FontSize="18"
+                                   TextColor="{AppThemeBinding Dark=White, Light=Black}"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   Margin="20"/>
+
+
+                            <!-- Íconos de contacto -->
+                            <HorizontalStackLayout Grid.Row="5" HorizontalOptions="Center" Spacing="30" Padding="0">
+                                <ImageButton Source="whatsapproxcredit.png" 
+                                             HeightRequest="50" WidthRequest="50" 
+                                             HorizontalOptions="Start"
+                                             Command="{Binding OnWhatsAppCommand}"
+                                             BackgroundColor="Transparent"/>
+
+                                <ImageButton Source="phoneproxcredit.png" 
+                                             HeightRequest="50" WidthRequest="50" 
+                                             Command="{Binding OnPhoneCommand}"
+                                             BackgroundColor="Transparent"/>
+
+                                <ImageButton Source="gmailproxcredit.png" 
+                                             HeightRequest="50" WidthRequest="50" 
+                                             Command="{Binding OnEmailCommand}"
+                                             BackgroundColor="Transparent"/>
+                            </HorizontalStackLayout>
                         </Grid>
-
-                        <!-- Íconos de contacto -->
-                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="30" Padding="0">
-                            <ImageButton Source="whatsapproxcredit.png" 
-                                         HeightRequest="50" WidthRequest="50" 
-                                         HorizontalOptions="Start"
-                                         Clicked="OnWhatsAppTapped"
-                                         BackgroundColor="Transparent"/>
-
-                            <ImageButton Source="phoneproxcredit.png" 
-                                         HeightRequest="50" WidthRequest="50" 
-                                         Clicked="OnPhoneTapped" BackgroundColor="Transparent"/>
-
-                            <ImageButton Source="gmailproxcredit.png" 
-                                         HeightRequest="50" WidthRequest="50" 
-                                         Clicked="OnEmailTapped" BackgroundColor="Transparent"/>
-                        </HorizontalStackLayout>
                     </StackLayout>
                 </Grid>
             </Grid>

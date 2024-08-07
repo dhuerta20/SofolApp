@@ -10,24 +10,22 @@
             <StackLayout Grid.Row="0" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Padding="20">
                 <Frame CornerRadius="60" IsClippedToBounds="True" Padding="0"
                        BorderColor="White" HasShadow="True" HeightRequest="120" WidthRequest="120" Margin="0,0,0,20">
-                    <Image x:Name="ProfileImage" Aspect="AspectFill" HeightRequest="120" WidthRequest="120"/>
+                    <Image Source="{Binding ProfileImage}" Aspect="AspectFill" HeightRequest="120" WidthRequest="120"/>
                 </Frame>
-                <Label x:Name="UserNameLabel" HorizontalOptions="Center" FontSize="28" FontAttributes="Bold"/>
+                <Label Text="{Binding UserName}" HorizontalOptions="Center" FontSize="28" FontAttributes="Bold"/>
             </StackLayout>
 
             <!-- Parte inferior con la información adicional dentro de un Frame (3/5 de la pantalla) -->
             <Frame Grid.Row="1" BorderColor="Transparent" BackgroundColor="{AppThemeBinding Dark=#353e43, Light=White}" Margin="0,0,0,-20"
                    VerticalOptions="FillAndExpand" CornerRadius="35" Padding="20">
                 <StackLayout>
-
-                    <!-- Contenido específico de IdConfirmPage -->
                     <StackLayout Padding="20">
-                        <Image x:Name="StatusImage" HeightRequest="100" WidthRequest="100" />
-                        <Label x:Name="StatusLabel" FontSize="Large" HorizontalOptions="Center" Margin="0,20,0,0"/>
+                        <Image Source="{Binding StatusImage}" HeightRequest="100" WidthRequest="100" />
+                        <Label Text="{Binding StatusLabel}" FontSize="Large" HorizontalOptions="Center" Margin="0,20,0,0" TextColor="{Binding StatusColor}"/>
                         <Label Text="Notas del administrador:" FontAttributes="Bold" Margin="0,15,0,0"/>
                         <Frame BorderColor="Gray" Padding="10" Margin="0,20,0,0" HeightRequest="100">
                             <StackLayout>
-                                <Label x:Name="AdminNotesLabel" />
+                                <Label Text="{Binding AdminNotes}" />
                             </StackLayout>
                         </Frame>
                     </StackLayout>

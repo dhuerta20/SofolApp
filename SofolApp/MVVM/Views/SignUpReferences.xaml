@@ -1,30 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="SofolApp.MVVM.Views.SignUpReferences"
              Title="Add References"
              BackgroundColor="{AppThemeBinding Dark=#1e2229, Light=White}">
+    <ContentPage.Resources>
+        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+    </ContentPage.Resources>
+
     <ScrollView>
         <VerticalStackLayout Padding="20">
             <Label Text="Agrega hasta tres referencias (los correos de otros usuarios)" 
-                   TextColor="{AppThemeBinding Dark=Gray, Light=White}"
+                   TextColor="{AppThemeBinding Dark=Gray, Light=Black}"
                    FontSize="16"
                    Margin="0,0,0,20"/>
             <VerticalStackLayout x:Name="ReferencesContainer">
                 <!-- Reference fields will be added here dynamically -->
             </VerticalStackLayout>
-            <Button Text="Agrega una referencia" TextColor="{AppThemeBinding Dark=Gray, Light=White}"
+            <Button Text="Agrega una referencia" 
+                    TextColor="{AppThemeBinding Dark=Gray, Light=White}"
                     BackgroundColor="#5dd684"
-                    Clicked="OnAddReferenceClicked"
-                    Margin="0,20,0,0"
-                    x:Name="AddReferenceButton"/>
-            <Button Text="Guarda las referencias" TextColor="{AppThemeBinding Dark=Gray, Light=White}"
-                    BackgroundColor="#5dd684"
-                    Clicked="OnSaveReferencesClicked"
+                    Command="{Binding AddReferenceCommand}"
+                    IsEnabled="{Binding ReferenceEmails.Count, Converter={StaticResource InvertedBoolConverter}, ConverterParameter=3}"
                     Margin="0,20,0,0"/>
-
-            <Button Text="Regresar" TextColor="{AppThemeBinding Dark=Gray, Light=White}"
+            <Button Text="Guarda las referencias" 
+                    TextColor="{AppThemeBinding Dark=Gray, Light=White}"
                     BackgroundColor="#5dd684"
-                    Clicked="ReturnToRegister"
+                    Command="{Binding SaveReferencesCommand}"
+                    Margin="0,20,0,0"/>
+            <Button Text="Regresar" 
+                    TextColor="{AppThemeBinding Dark=Gray, Light=White}"
+                    BackgroundColor="#5dd684"
+                    Command="{Binding ReturnToRegisterCommand}"
                     Margin="0,20,0,0"/>
         </VerticalStackLayout>
     </ScrollView>

@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:SofolApp.MVVM.ViewModels"
              x:Class="SofolApp.MVVM.Views.SignUpImg"
+             x:DataType="viewmodels:SignUpImgVM"
              Title="LoginPage"
              BackgroundColor="{AppThemeBinding Dark=#353e43, Light=White}">
+
+    <ContentPage.BindingContext>
+        <viewmodels:SignUpImgVM />
+    </ContentPage.BindingContext>
+
     <ScrollView>
         <FlexLayout Direction="Column" AlignItems="Center" JustifyContent="Start" Margin="0,50,0,0" Padding="20">
-            <Image x:Name="facePhoto" Source="reconocimiento_facial_real.png" HeightRequest="120" WidthRequest="120" Aspect="AspectFit"/>
+            <Image Source="reconocimiento_facial_real.png" HeightRequest="120" WidthRequest="120" Aspect="AspectFit"/>
             <Button Text="REGISTRA TU ROSTRO"
                     BackgroundColor="#5dd684"
                     FontSize="24" TextColor="White"
                     FontAttributes="Bold" 
                     Margin="0,15,0,30"
                     LineBreakMode="WordWrap"
-                    Clicked="OnFacePhotoButtonClicked"/>
-            <Label x:Name="lblFacePhoto" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center"/>
+                    Command="{Binding UploadImageCommand}"
+                    CommandParameter="face"/>
+            <Label Text="{Binding UploadItems[0].Label}" TextColor="{Binding UploadItems[0].TextColor}" HorizontalOptions="Center"/>
 
             <Button BackgroundColor="#5dd684" 
                     Text="IDENTIFICACION" 
@@ -23,9 +31,9 @@
                     WidthRequest="300"
                     HeightRequest="80"
                     Margin="0,0,0,20"
-                    Clicked="OnIDPhotoButtonClicked"/>
-            <Image x:Name="idPhoto" HeightRequest="200" IsVisible="False" Margin="5"/>
-            <Label x:Name="lblIDPhoto" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center"/>
+                    Command="{Binding UploadImageCommand}"
+                    CommandParameter="id"/>
+            <Label Text="{Binding UploadItems[1].Label}" TextColor="{Binding UploadItems[1].TextColor}" HorizontalOptions="Center"/>
 
             <Button BackgroundColor="#5dd684"
                     Text="COMPROBANTE DE DOMICILIO"
@@ -36,9 +44,9 @@
                     WidthRequest="300"
                     HeightRequest="80"
                     Margin="0,0,0,20"
-                    Clicked="OnAddressProofButtonClicked"/>
-            <Image x:Name="imgProofAddress" HeightRequest="200" IsVisible="False" Margin="5"/>
-            <Label x:Name="lblAddressProof" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center"/>
+                    Command="{Binding UploadImageCommand}"
+                    CommandParameter="address"/>
+            <Label Text="{Binding UploadItems[2].Label}" TextColor="{Binding UploadItems[2].TextColor}" HorizontalOptions="Center"/>
 
             <Button BackgroundColor="#5dd684"
                     Text="COMPROBANTE DE INGRESOS"
@@ -49,9 +57,9 @@
                     WidthRequest="300"
                     HeightRequest="80"
                     Margin="0,0,0,20"
-                    Clicked="OnIncomeProofButtonClicked"/>
-            <Image x:Name="imgProofIncome" HeightRequest="200" IsVisible="False" Margin="5"/>
-            <Label x:Name="lblIncomeProof" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center"/>
+                    Command="{Binding UploadImageCommand}"
+                    CommandParameter="income"/>
+            <Label Text="{Binding UploadItems[3].Label}" TextColor="{Binding UploadItems[3].TextColor}" HorizontalOptions="Center"/>
 
             <Button BackgroundColor="#5dd684"
                     Text="NÓMINA"
@@ -62,9 +70,9 @@
                     WidthRequest="300"
                     HeightRequest="80"
                     Margin="0,0,0,20"
-                    Clicked="OnPayrollButtonClicked"/>
-            <Image x:Name="imgPayroll" HeightRequest="200" IsVisible="False" Margin="5"/>
-            <Label x:Name="lblPayroll" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center"/>
+                    Command="{Binding UploadImageCommand}"
+                    CommandParameter="payroll"/>
+            <Label Text="{Binding UploadItems[4].Label}" TextColor="{Binding UploadItems[4].TextColor}" HorizontalOptions="Center"/>
 
             <Button BackgroundColor="#5dd684"
                     Text="ESTADO DE CUENTA"
@@ -75,8 +83,8 @@
                     WidthRequest="300"
                     HeightRequest="80"
                     Margin="0,0,0,20"
-                    Clicked="OnAccountStatusButtonClicked"/>
-            <Label x:Name="lblAccountStatus" Text="Ningún archivo seleccionado" TextColor="{AppThemeBinding Dark=White, Light=Black}" HorizontalOptions="Center" Margin="0,0,0,20"/>
+                    Command="{Binding UploadAccountStatusCommand}"/>
+            <Label Text="{Binding UploadItems[5].Label}" TextColor="{Binding UploadItems[5].TextColor}" HorizontalOptions="Center" Margin="0,0,0,20"/>
 
             <Button BackgroundColor="#5dd684"
                     Text="REFERENCIAS"
@@ -86,10 +94,9 @@
                     WidthRequest="300"
                     HeightRequest="80"
                     Margin="0,0,0,20"
-                    Clicked="SignUpReferencesButton"/>
+                    Command="{Binding NavigateToReferencesCommand}"/>
 
-            <Button x:Name="SiguientePagina"
-                    Text="FINALIZAR"
+            <Button Text="FINALIZAR"
                     BackgroundColor="#5dd684"
                     TextColor="White"
                     FontAttributes="Bold"
@@ -98,7 +105,7 @@
                     HeightRequest="80"
                     Margin="0,0,0,20"
                     LineBreakMode="WordWrap"
-                    Clicked="OnEndOfRegisterButtonClicked"/>
+                    Command="{Binding EndRegisterCommand}"/>
         </FlexLayout>
     </ScrollView>
 </ContentPage>

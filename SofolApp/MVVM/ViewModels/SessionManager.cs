@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace SofolApp.MVVM.ViewModels
 {
-    public static class SessionManager
+    public class SessionManager
     {
         private const string SessionCountKey = "SessionCount";
         private const int MaxSessionCount = 15;
@@ -35,7 +35,7 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
-                string countStr = await SecureStorage.GetAsync(SessionCountKey);
+                string countStr = await SecureStorage.GetAsync(SessionCountKey) ?? "0";
                 return int.TryParse(countStr, out int count) ? count : 0;
             }
             catch (Exception ex)

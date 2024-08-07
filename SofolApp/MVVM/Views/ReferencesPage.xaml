@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:SofolApp.MVVM.Views"
-             x:Class="SofolApp.MVVM.Views.ReferencesPage">
+             xmlns:viewModels="clr-namespace:SofolApp.MVVM.ViewModels"
+             x:Class="SofolApp.MVVM.Views.ReferencesPage"
+             x:Name="ReferencesPageContent">
 
     <VerticalStackLayout Padding="10">
         <Label Text="Referencias" 
@@ -10,12 +11,29 @@
                HorizontalOptions="Center"
                VerticalOptions="Start" />
 
-        <StackLayout x:Name="ReferencesStackLayout"
-                     VerticalOptions="FillAndExpand"
-                     Padding="10,0" />
+        <CollectionView ItemsSource="{Binding References}"
+                        VerticalOptions="FillAndExpand"
+                        >
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Entry Text="{Binding .}" IsReadOnly="True"/>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Entry Placeholder="Ingrese el correo de referencia"
+               Text="{Binding NewReferenceEmail}"
+               IsVisible="{Binding CanAddReference}" />
+        <Button Text="Agregar Referencia"
+                Command="{Binding AddReferenceCommand}"
+                CommandParameter="{Binding NewReferenceEmail}"
+                BackgroundColor="#5dd684"
+                TextColor="White"
+                Margin="0,10,0,0"
+                VerticalOptions="End" />
 
         <Button Text="Atrás"
-                Clicked="OnBackButtonClicked"
+                Command="{Binding GoBackCommand}"
                 BackgroundColor="#5dd684"
                 TextColor="White"
                 Margin="0,10,0,0"
