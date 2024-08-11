@@ -41,6 +41,9 @@
 <key>NSPhotoLibraryUsageDescription</key>
 <string>Se necesita acceso a la galeria de fotos para seleccionar imagenes y videos desde la biblioteca.</string>
 
+	<Key>UIViewControllerBasedStatusBarAppearance</Key>
+	<false/>
+
 
 </dict>
 </plist>
