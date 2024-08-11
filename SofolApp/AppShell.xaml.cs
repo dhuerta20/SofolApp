@@ -6,7 +6,6 @@ namespace SofolApp
     {
         public AppShell()
         {
-            // Breakpoint aquí
             try
             {
                 InitializeComponent();

@@ -21,7 +21,7 @@ namespace SofolApp.MVVM.ViewModels
         private const string StorageBucket = "creditapptest-c8a1d.appspot.com";
 
         // Firebase Authentication
-        private FirebaseAuthClient ConnectToFirebase()
+        public FirebaseAuthClient ConnectToFirebase()
         {
             var config = new FirebaseAuthConfig
             {
@@ -37,13 +37,13 @@ namespace SofolApp.MVVM.ViewModels
             return new FirebaseAuthClient(config);
         }
 
-        // Firebase Realtime Database
+        // ---------------------------Firebase Realtime Database------------------------------
         public static FirebaseClient GetDatabaseClient()
         {
             return new FirebaseClient(DatabaseUrl);
         }
 
-        // Authentication Methods
+        // ----------------------------------Authentication Methods---------------------------
         public async Task<UserCredential> SignInAsync(string email, string password)
         {
             try
@@ -94,13 +94,13 @@ namespace SofolApp.MVVM.ViewModels
                     LastName = lastName,
                     Email = email,
                     PhoneNumber = phoneNumber,
-                    IsValid = "pending",
+                    IsValid = "pending", // Set to "pending" by default
                     IsAdmin = false,
                     Images = new Dictionary<string, string>(),
                     FirstReference = "",
                     SecondReference = "",
                     ThirdReference = "",
-                    AdminNotes = ""
+                    AdminNotes = "" // Initialize AdminNotes as an empty string
                 };
                 await CreateUserDataAsync(userCredential.User.Uid, userData);
 
@@ -116,8 +116,8 @@ namespace SofolApp.MVVM.ViewModels
             }
         }
 
-        // Database Operations
-        private async Task CreateUserDataAsync(string userId, Users userData)
+        // -------------------------------Database Operations------------------------
+        public async Task CreateUserDataAsync(string userId, Users userData)
         {
             var client = GetDatabaseClient();
             await client.Child("users").Child(userId).PutAsync(userData);
@@ -146,9 +146,11 @@ namespace SofolApp.MVVM.ViewModels
             return users.Any();
         }
 
-        // Image Upload
+        // --------------------------Image Upload-------------------------
+
         private string SanitizeFileName(string fileName)
         {
+            // Replace invalid characters with underscores
             return System.Text.RegularExpressions.Regex.Replace(fileName, @"[^\w\-]", "_");
         }
 
@@ -159,16 +161,22 @@ namespace SofolApp.MVVM.ViewModels
             {
                 AuthTokenAsyncFactory = () => SecureStorage.GetAsync("userToken")
             });
-
             var imageUrl = await storage
                 .Child("user_images")
                 .Child(userId)
                 .Child(sanitizedFileName)
                 .PutAsync(imageStream);
 
+            var user = await ReadUserDataAsync(userId);
+            if (user.Images == null)
+            {
+                user.Images = new Dictionary<string, string>();
+            }
+            user.Images[sanitizedFileName] = imageUrl;
+            await UpdateUserDataAsync(userId, user);
+
             return imageUrl;
         }
-
         public async Task<string> UploadPdfAsync(string userId, Stream pdfStream, string fileName)
         {
             var sanitizedFileName = SanitizeFileName(fileName);
@@ -186,7 +194,8 @@ namespace SofolApp.MVVM.ViewModels
             return pdfUrl;
         }
 
-        // References
+        //--------------------REFERENCES-------------------------
+
         public async Task AddReferenceAsync(string userId, string referenceEmail)
         {
             var user = await ReadUserDataAsync(userId);
@@ -216,9 +225,9 @@ namespace SofolApp.MVVM.ViewModels
             var user = await ReadUserDataAsync(userId);
             var references = new List<string>
             {
-                user.FirstReference,
-                user.SecondReference,
-                user.ThirdReference
+                user.FirstReference ?? "",
+                user.SecondReference ?? "",
+                user.ThirdReference ?? ""
             };
             return references.Where(r => !string.IsNullOrEmpty(r)).ToList();
         }

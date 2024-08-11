@@ -19,7 +19,7 @@
         Title="Formulario de registro"
         ContentTemplate="{DataTemplate local:SignInForm}"
         Route="SignInForm" />
-
+    
     <ShellContent
         Title="Imagenes de registro"
         ContentTemplate="{DataTemplate local:SignUpImg}"

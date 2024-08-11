@@ -124,7 +124,7 @@ namespace SofolApp.MVVM.ViewModels
         {
             if (CurrentUser.Images.TryGetValue(imageType, out var url) && !string.IsNullOrEmpty(url))
             {
-                return ImageSource.FromUri(new Uri(url));
+               return ImageSource.FromUri(new Uri(url));
             }
             return null;
         }

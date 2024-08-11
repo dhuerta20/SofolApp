@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Controls;
+﻿// App.xaml.cs
+using Microsoft.Maui.Controls;
 using SofolApp.MVVM.Views;
 using SofolApp.MVVM.ViewModels;
 using System;
@@ -8,12 +9,10 @@ namespace SofolApp
 {
     public partial class App : Application
     {
-
         private readonly FirebaseConnection _firebaseConnection;
 
         public App()
         {
-            // Breakpoint aquí
             try
             {
                 InitializeComponent();
@@ -41,11 +40,9 @@ namespace SofolApp
 
         protected override async void OnStart()
         {
-            // Breakpoint aquí
             try
             {
                 base.OnStart();
-                await HandleAutoLogin();
             }
             catch (Exception ex)
             {
@@ -53,7 +50,7 @@ namespace SofolApp
             }
         }
 
-        private async Task HandleAutoLogin()
+        /*private async Task HandleAutoLogin()
         {
             try
             {
@@ -90,10 +87,9 @@ namespace SofolApp
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error during auto-login: {ex.Message}");
-                await _firebaseConnection.SignOutAsync();
+                Console.WriteLine($"Error durante el auto-login: {ex.Message}");
                 await Shell.Current.GoToAsync("//SignInForm");
             }
-        }
+        }*/
     }
 }

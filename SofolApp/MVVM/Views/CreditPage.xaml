@@ -6,10 +6,8 @@
              BackgroundColor="{AppThemeBinding Dark=#45b07c, Light=#58ce74}">
 
     <ContentPage.Behaviors>
-        <toolkit:StatusBarBehavior StatusBarColor="{AppThemeBinding Dark=#353e43, Light=White}" StatusBarStyle="{AppThemeBinding Dark=White, Light=Black}"/>
+        <toolkit:StatusBarBehavior StatusBarColor="{AppThemeBinding Dark=#353e43, Light=#353e43}" />
     </ContentPage.Behaviors>
-
-
 
     <Grid RowSpacing="0">
         <Grid.RowDefinitions>
@@ -24,7 +22,7 @@
                 <Image Grid.Column="0" Source="proxcredit_logo_final.png" HeightRequest="40" HorizontalOptions="Start" />
                 <Button Grid.Column="2" Text="Cerrar sesión"
                         BackgroundColor="Transparent"
-                        TextColor="Black"
+                        TextColor="#000000"
                         FontSize="14"
                         Command="{Binding OnSignOutCommand}"/>
             </Grid>
@@ -52,12 +50,12 @@
                 <Grid Grid.Row="1">
                     <RoundRectangle Fill="{AppThemeBinding Dark=#353e43, Light=White}" CornerRadius="40,35,0,0" VerticalOptions="Fill" Margin="-1,-1,-1,-1"/>
                     <StackLayout Padding="20" Spacing="15">
-                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="15" Padding="10">
-                            <Label Text="Información General" TextColor="{AppThemeBinding Dark=White, Light=Black}" FontSize="22" FontAttributes="Bold" Grid.Row="0"
+                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="15" Padding="10">
+                            <Label Text="Información General" TextColor="{AppThemeBinding Dark=White, Light=#000000}" FontSize="22" FontAttributes="Bold" Grid.Row="0"
                                    HorizontalOptions="Center" VerticalOptions="Start"/>
 
                             <!-- CONFIRMACION DE IDENTIDAD -->
-                            <Frame Grid.Row="1" CornerRadius="30" HasShadow="True" BackgroundColor="{AppThemeBinding Dark=#616a70, Light=White}" Padding="0" HorizontalOptions="Fill" BorderColor="Transparent">
+                            <Frame Grid.Row="1" CornerRadius="30" HasShadow="True" BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}" Padding="0" HorizontalOptions="Fill" BorderColor="Transparent">
                                 <Grid ColumnDefinitions="Auto,*" Padding="10,5">
                                     <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="LightGray" Padding="5" WidthRequest="50" HeightRequest="50">
                                         <Image Source="confirmacion_de_identidad.png" Aspect="AspectFit"/>
@@ -65,32 +63,42 @@
                                     <Button Grid.Column="1" Text="Confirmación de info" 
                                             Command="{Binding OnIdentityConfirmCommand}"
                                             BackgroundColor="Transparent" 
-                                            FontSize="18" TextColor="{AppThemeBinding Dark=White, Light=Black}"                                   
+                                            FontSize="18" TextColor="{AppThemeBinding Dark=White, Light=#000000}"                                   
                                             FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="WordWrap"/>
                                 </Grid>
                             </Frame>
 
                             <!-- DATOS PERSONALES -->
-                            <Frame Grid.Row="2" CornerRadius="30" HasShadow="True" BackgroundColor="{AppThemeBinding Dark=#616a70, Light=White}" Padding="0" HorizontalOptions="Fill" BorderColor="Transparent">
+                            <Frame Grid.Row="2" CornerRadius="30" HasShadow="True" BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}" Padding="0" HorizontalOptions="Fill" BorderColor="Transparent">
                                 <Grid ColumnDefinitions="Auto,*" Padding="10,5">
                                     <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="LightGray" Padding="5" WidthRequest="50" HeightRequest="50">
                                         <Image Source="informacion_personal.png" Aspect="AspectFit"/>
                                     </Frame>
-                                    <Button Grid.Column="1" Text="Datos personales" Command="{Binding OnPersonalDataCommand}"
-                                            FontSize="18" TextColor="{AppThemeBinding Dark=White, Light=Black}"
-                                            BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Start" FontAttributes="Bold" LineBreakMode="WordWrap"/>
+                                    <Button Grid.Column="1" 
+                                            Text="Datos personales" 
+                                            Command="{Binding OnPersonalDataCommand}"
+                                            FontSize="18" 
+                                            TextColor="{AppThemeBinding Dark=White, Light=#000000}"
+                                            BackgroundColor="Transparent" 
+                                            VerticalOptions="Center" HorizontalOptions="StartAndExpand" 
+                                            FontAttributes="Bold" LineBreakMode="WordWrap"/>
                                 </Grid>
                             </Frame>
 
                             <!-- ESTATUS -->
-                            <Frame Grid.Row="3" CornerRadius="30" HasShadow="True" BackgroundColor="{AppThemeBinding Dark=#616a70, Light=White}" Padding="0" HorizontalOptions="Fill" BorderColor="Transparent">
+                            <Frame Grid.Row="3" CornerRadius="30" HasShadow="True" BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}" Padding="0" HorizontalOptions="Fill" BorderColor="Transparent">
                                 <Grid ColumnDefinitions="Auto,*" Padding="10,5">
                                     <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="LightGray" Padding="5" WidthRequest="50" HeightRequest="50">
                                         <Image Source="estatus.png" Aspect="AspectFit"/>
                                     </Frame>
-                                    <Button Grid.Column="1" Text="Estatus" Command="{Binding OnStatusCommand}"
-                                            FontSize="18" TextColor="{AppThemeBinding Dark=White, Light=Black}"
-                                            BackgroundColor="Transparent" VerticalOptions="Center" HorizontalOptions="Start" FontAttributes="Bold" LineBreakMode="WordWrap"/>
+                                    <Button Grid.Column="1" 
+                                            Text="Estatus" 
+                                            Command="{Binding OnStatusCommand}"
+                                            FontSize="18"
+                                            TextColor="{AppThemeBinding Dark=White, Light=#000000}"
+                                            BackgroundColor="Transparent" 
+                                            VerticalOptions="Center" HorizontalOptions="Start" 
+                                            FontAttributes="Bold" LineBreakMode="WordWrap"/>
                                 </Grid>
                             </Frame>
 
@@ -98,11 +106,10 @@
                             <Label Grid.Row="4"
                                    Text="Contactanos"
                                    FontSize="18"
-                                   TextColor="{AppThemeBinding Dark=White, Light=Black}"
+                                   TextColor="{AppThemeBinding Dark=White, Light=#000000}"
                                    HorizontalOptions="Center"
                                    VerticalOptions="Center"
                                    Margin="20"/>
-
 
                             <!-- Íconos de contacto -->
                             <HorizontalStackLayout Grid.Row="5" HorizontalOptions="Center" Spacing="30" Padding="0">

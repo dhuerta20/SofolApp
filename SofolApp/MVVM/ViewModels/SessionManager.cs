@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Threading.Tasks;
 
 namespace SofolApp.MVVM.ViewModels
@@ -74,3 +74,4 @@ namespace SofolApp.MVVM.ViewModels
         }
     }
 }
+*/

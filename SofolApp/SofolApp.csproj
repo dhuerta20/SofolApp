@@ -65,10 +65,11 @@
     <PackageReference Include="FirebaseDatabase.net" Version="4.2.0" />
     <PackageReference Include="FirebaseStorage.net" Version="1.0.3" />
     <PackageReference Include="Google.Cloud.Firestore" Version="3.7.0" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.21" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.21" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.80" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.80" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
     <PackageReference Include="Refit" Version="7.1.2" />
+    <PackageReference Include="Sentry.Maui" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -108,9 +109,6 @@
   <ItemGroup>
     <Compile Update="MVVM\Views\SignUpImg.xaml.cs">
       <DependentUpon>SignUpImg.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="MVVM\Views\SignInForm.xaml.cs">
-      <DependentUpon>SignInForm.xaml</DependentUpon>
     </Compile>
     <Compile Update="MVVM\Views\SignUpForm.xaml.cs">
       <DependentUpon>SignUpForm.xaml</DependentUpon>

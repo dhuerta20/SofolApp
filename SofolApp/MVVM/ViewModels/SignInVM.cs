@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Windows.Input;
 using System.Text.RegularExpressions;
-using SofolApp.Services;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SofolApp.Services;
+using Sentry;
 
 namespace SofolApp.MVVM.ViewModels
 {
@@ -42,6 +44,11 @@ namespace SofolApp.MVVM.ViewModels
             }
             try
             {
+                SentrySdk.AddBreadcrumb("Attempting to sign in", "info");
+                SentrySdk.ConfigureScope(scope =>
+                {
+                    scope.SetTag("email", Email);
+                });
                 var credentials = await _firebaseConnection.SignInAsync(Email, Password);
                 var currentUser = credentials.User;
                 if (currentUser != null)
@@ -50,9 +57,11 @@ namespace SofolApp.MVVM.ViewModels
                     await SecureStorage.SetAsync("userEmail", userEmail);
                 }
                 await Shell.Current.GoToAsync("//CreditApp");
+                Console.WriteLine("Navigation to CreditApp completed");
             }
             catch (Exception ex)
             {
+                SentrySdk.CaptureException(ex); // Captura la excepción en Sentry
                 await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
             }
         }

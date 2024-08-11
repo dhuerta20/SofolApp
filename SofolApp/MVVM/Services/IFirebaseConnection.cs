@@ -15,8 +15,8 @@ namespace SofolApp.Services
         Task UpdateUserDataAsync(string userId, Users userData);
         Task<bool> CheckIfUserExistsAsync(string email);
         Task<string> UploadImageAsync(string userId, Stream imageStream, string fileName);
-        Task<string> UploadPdfAsync(string userId, Stream pdfStream, string fileName); // Añadido aquí
-        Task AddReferenceAsync(string userId, string referenceEmail); // Añadido aquí
+        Task<string> UploadPdfAsync(string userId, Stream pdfStream, string fileName); 
+        Task AddReferenceAsync(string userId, string referenceEmail); 
         Task<List<string>> GetReferencesAsync(string userId);
         Task UpdateReferencesAsync(string userId, string firstReference, string secondReference, string thirdReference);
         Task ResetPasswordAsync(string email);

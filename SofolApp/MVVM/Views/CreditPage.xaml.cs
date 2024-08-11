@@ -1,5 +1,7 @@
 using Microsoft.Maui.Controls;
 using SofolApp.MVVM.ViewModels;
+using System;
+using Sentry;
 
 namespace SofolApp.MVVM.Views
 {
@@ -7,16 +9,17 @@ namespace SofolApp.MVVM.Views
     {
         public CreditPage(CreditPageVM viewModel)
         {
-            InitializeComponent();
-            BindingContext = viewModel;         
-        }
- 
-        protected override async void OnAppearing()
-        {
-            base.OnAppearing();
-            if (BindingContext is CreditPageVM viewModel)
+            try
             {
-                await viewModel.LoadUserData();
+                InitializeComponent();
+                BindingContext = viewModel;
+                SentrySdk.AddBreadcrumb("CreditPage initialized", "info");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error en la inicialización de CreditPage: {ex}");
+                SentrySdk.CaptureException(ex);
+                // Aquí puedes agregar más logging si es necesario
             }
         }
     }
