@@ -76,9 +76,6 @@
     <MauiXaml Update="MVVM\Views\CreditPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
-    <MauiXaml Update="MVVM\Views\ForgotPass.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
     <MauiXaml Update="MVVM\Views\IdConfirmPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>

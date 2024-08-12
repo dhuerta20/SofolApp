@@ -24,7 +24,7 @@ namespace SofolApp
             Routing.RegisterRoute("IdConfirm", typeof(IdConfirmPage));
             Routing.RegisterRoute("PersonalData", typeof(PersonalDataPage));
             Routing.RegisterRoute("Status", typeof(ReferencesPage));
-            Routing.RegisterRoute("ForgotPass", typeof(ForgotPass));
+            //Routing.RegisterRoute("ForgotPass", typeof(ForgotPass));
         }
     }
 }

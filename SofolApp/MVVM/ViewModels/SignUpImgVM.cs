@@ -3,14 +3,13 @@ using CommunityToolkit.Mvvm.Input;
 using SofolApp.MVVM.Models;
 using SofolApp.Services;
 using Microsoft.Maui.Storage;
-using SofolApp.MVVM.ViewModels;
 using System.Collections.ObjectModel;
 
 namespace SofolApp.MVVM.ViewModels
 {
     public partial class SignUpImgVM : ObservableObject
     {
-        private readonly FirebaseConnection _firebaseConnection;
+        private readonly IFirebaseConnection _firebaseConnection;
         private string _userId;
 
         [ObservableProperty]
@@ -19,9 +18,9 @@ namespace SofolApp.MVVM.ViewModels
         [ObservableProperty]
         private ObservableCollection<UploadItem> _uploadItems;
 
-        public SignUpImgVM()
+        public SignUpImgVM(IFirebaseConnection firebaseConnection)
         {
-            _firebaseConnection = new FirebaseConnection();
+            _firebaseConnection = firebaseConnection;
             UploadFlags = new UploadFlags();
             UploadItems = new ObservableCollection<UploadItem>
             {
@@ -38,6 +37,11 @@ namespace SofolApp.MVVM.ViewModels
         private async Task Initialize()
         {
             _userId = await SecureStorage.GetAsync("userId");
+            if (string.IsNullOrEmpty(_userId))
+            {
+                await Shell.Current.DisplayAlert("Error", "User is not authenticated.", "OK");
+                await Shell.Current.GoToAsync("//Login");
+            }
         }
 
         [RelayCommand]
@@ -51,11 +55,11 @@ namespace SofolApp.MVVM.ViewModels
                     FileTypes = FilePickerFileType.Images
                 });
 
-                if (filePickerResult != null && !string.IsNullOrEmpty(_userId))
+                if (filePickerResult != null)
                 {
                     using (var stream = await filePickerResult.OpenReadAsync())
                     {
-                        string downloadUrl = await _firebaseConnection.UploadImageAsync(_userId, stream, $"{imageType}_{filePickerResult.FileName}");
+                        string downloadUrl = await _firebaseConnection.UploadImageAsync(_userId, stream, imageType, filePickerResult.FileName);
                         UpdateUploadFlags(imageType, true);
 
                         var user = await _firebaseConnection.ReadUserDataAsync(_userId);
@@ -68,10 +72,6 @@ namespace SofolApp.MVVM.ViewModels
 
                         await Shell.Current.DisplayAlert("Success", $"{imageType} photo uploaded successfully.", "OK");
                     }
-                }
-                else
-                {
-                    await Shell.Current.DisplayAlert("Error", "User is not authenticated or no image was selected.", "OK");
                 }
             }
             catch (Exception ex)
@@ -95,14 +95,14 @@ namespace SofolApp.MVVM.ViewModels
                         { DevicePlatform.WinUI, new[] { ".pdf" } },
                         { DevicePlatform.macOS, new[] { "pdf" } }
                     }),
-                    PickerTitle = "Seleccione su estado de cuenta en PDF"
+                    PickerTitle = "Select your account statement PDF"
                 });
 
                 if (fileResult != null)
                 {
                     using (var stream = await fileResult.OpenReadAsync())
                     {
-                        string downloadUrl = await _firebaseConnection.UploadPdfAsync(_userId, stream, $"accountStatus_{fileResult.FileName}");
+                        string downloadUrl = await _firebaseConnection.UploadImageAsync(_userId, stream, "accountStatus", fileResult.FileName);
                         UpdateUploadFlags("accountStatus", true);
 
                         var user = await _firebaseConnection.ReadUserDataAsync(_userId);
@@ -113,14 +113,14 @@ namespace SofolApp.MVVM.ViewModels
                         user.Images["accountStatus"] = downloadUrl;
                         await _firebaseConnection.UpdateUserDataAsync(_userId, user);
 
-                        await Shell.Current.DisplayAlert("Éxito", "Estado de cuenta en PDF subido correctamente.", "OK");
+                        await Shell.Current.DisplayAlert("Success", "Account statement PDF uploaded successfully.", "OK");
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error uploading account status PDF: {ex.Message}");
-                await Shell.Current.DisplayAlert("Error", $"No se pudo subir el estado de cuenta en PDF: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"Failed to upload account statement PDF: {ex.Message}", "OK");
             }
         }
 
@@ -133,7 +133,7 @@ namespace SofolApp.MVVM.ViewModels
             }
             else
             {
-                await Shell.Current.DisplayAlert("Error", "Por favor, sube todas las imágenes y archivos PDF antes de continuar.", "OK");
+                await Shell.Current.DisplayAlert("Error", "Please upload all images and PDF files before continuing.", "OK");
             }
         }
 
@@ -146,7 +146,7 @@ namespace SofolApp.MVVM.ViewModels
             }
             else
             {
-                await Shell.Current.DisplayAlert("Error", "Por favor, sube todas las imágenes y archivos PDF antes de continuar.", "OK");
+                await Shell.Current.DisplayAlert("Error", "Please upload all images and PDF files before continuing.", "OK");
             }
         }
 
@@ -155,8 +155,8 @@ namespace SofolApp.MVVM.ViewModels
             var item = UploadItems.FirstOrDefault(i => i.Type == imageType);
             if (item != null)
             {
-                item.Label = "Image uploaded successfully";
-                item.TextColor = Colors.Green;
+                item.Label = isUploaded ? $"{char.ToUpper(imageType[0]) + imageType.Substring(1)} uploaded successfully" : $"{char.ToUpper(imageType[0]) + imageType.Substring(1)} not uploaded";
+                item.TextColor = isUploaded ? Colors.Green : Colors.Red;
             }
 
             switch (imageType)
@@ -191,6 +191,7 @@ namespace SofolApp.MVVM.ViewModels
         [ObservableProperty]
         private Color _textColor;
     }
+
     public partial class UploadFlags : ObservableObject
     {
         [ObservableProperty]

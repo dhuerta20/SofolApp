@@ -20,6 +20,13 @@ namespace SofolApp.MVVM.ViewModels
         private const string DatabaseUrl = "https://creditapptest-c8a1d-default-rtdb.firebaseio.com/";
         private const string StorageBucket = "creditapptest-c8a1d.appspot.com";
 
+        private FirebaseAuthClient authClient;
+
+        public FirebaseConnection()
+        {
+            authClient = ConnectToFirebase();
+        }
+
         // Firebase Authentication
         public FirebaseAuthClient ConnectToFirebase()
         {
@@ -37,19 +44,18 @@ namespace SofolApp.MVVM.ViewModels
             return new FirebaseAuthClient(config);
         }
 
-        // ---------------------------Firebase Realtime Database------------------------------
+        // Firebase Realtime Database
         public static FirebaseClient GetDatabaseClient()
         {
             return new FirebaseClient(DatabaseUrl);
         }
 
-        // ----------------------------------Authentication Methods---------------------------
+        // Authentication Methods
         public async Task<UserCredential> SignInAsync(string email, string password)
         {
             try
             {
-                var client = ConnectToFirebase();
-                var userCredential = await client.SignInWithEmailAndPasswordAsync(email, password);
+                var userCredential = await authClient.SignInWithEmailAndPasswordAsync(email, password);
                 await SecureStorage.SetAsync("userId", userCredential.User.Uid);
                 await SecureStorage.SetAsync("userToken", await userCredential.User.GetIdTokenAsync());
                 return userCredential;
@@ -68,7 +74,6 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
-                // Clear user data from SecureStorage
                 SecureStorage.Remove("userId");
                 SecureStorage.Remove("userToken");
             }
@@ -82,8 +87,7 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
-                var client = ConnectToFirebase();
-                var userCredential = await client.CreateUserWithEmailAndPasswordAsync(email, password, $"{firstName} {lastName}");
+                var userCredential = await authClient.CreateUserWithEmailAndPasswordAsync(email, password, $"{firstName} {lastName}");
                 await SecureStorage.SetAsync("userId", userCredential.User.Uid);
                 await SecureStorage.SetAsync("userToken", await userCredential.User.GetIdTokenAsync());
 
@@ -94,13 +98,13 @@ namespace SofolApp.MVVM.ViewModels
                     LastName = lastName,
                     Email = email,
                     PhoneNumber = phoneNumber,
-                    IsValid = "pending", // Set to "pending" by default
+                    IsValid = "pending",
                     IsAdmin = false,
                     Images = new Dictionary<string, string>(),
                     FirstReference = "",
                     SecondReference = "",
                     ThirdReference = "",
-                    AdminNotes = "" // Initialize AdminNotes as an empty string
+                    AdminNotes = ""
                 };
                 await CreateUserDataAsync(userCredential.User.Uid, userData);
 
@@ -116,7 +120,7 @@ namespace SofolApp.MVVM.ViewModels
             }
         }
 
-        // -------------------------------Database Operations------------------------
+        // Database Operations
         public async Task CreateUserDataAsync(string userId, Users userData)
         {
             var client = GetDatabaseClient();
@@ -146,56 +150,51 @@ namespace SofolApp.MVVM.ViewModels
             return users.Any();
         }
 
-        // --------------------------Image Upload-------------------------
-
-        private string SanitizeFileName(string fileName)
+        // Image Upload
+        public async Task<string> UploadImageAsync(string userId, Stream imageStream, string imageType, string fileName)
         {
-            // Replace invalid characters with underscores
-            return System.Text.RegularExpressions.Regex.Replace(fileName, @"[^\w\-]", "_");
-        }
-
-        public async Task<string> UploadImageAsync(string userId, Stream imageStream, string fileName)
-        {
-            var sanitizedFileName = SanitizeFileName(fileName);
-            var storage = new FirebaseStorage(StorageBucket, new FirebaseStorageOptions
+            try
             {
-                AuthTokenAsyncFactory = () => SecureStorage.GetAsync("userToken")
-            });
-            var imageUrl = await storage
-                .Child("user_images")
-                .Child(userId)
-                .Child(sanitizedFileName)
-                .PutAsync(imageStream);
+                var sanitizedFileName = SanitizeFileName(fileName);
+                var storage = new FirebaseStorage(StorageBucket, new FirebaseStorageOptions
+                {
+                    AuthTokenAsyncFactory = () => SecureStorage.GetAsync("userToken")
+                });
 
-            var user = await ReadUserDataAsync(userId);
-            if (user.Images == null)
-            {
-                user.Images = new Dictionary<string, string>();
+                string uniqueFileName = $"{imageType}_{DateTime.UtcNow:yyyyMMddHHmmss}_{Path.GetFileName(sanitizedFileName)}";
+
+                var imageUrl = await storage
+                    .Child("user_images")
+                    .Child(userId)
+                    .Child(uniqueFileName)
+                    .PutAsync(imageStream);
+
+                var user = await ReadUserDataAsync(userId);
+                if (user.Images == null)
+                {
+                    user.Images = new Dictionary<string, string>();
+                }
+
+                var keysToRemove = user.Images.Keys.Where(k => k.StartsWith(imageType)).ToList();
+                foreach (var key in keysToRemove)
+                {
+                    user.Images.Remove(key);
+                }
+
+                user.Images[uniqueFileName] = imageUrl;
+
+                await UpdateUserDataAsync(userId, user);
+
+                return imageUrl;
             }
-            user.Images[sanitizedFileName] = imageUrl;
-            await UpdateUserDataAsync(userId, user);
-
-            return imageUrl;
-        }
-        public async Task<string> UploadPdfAsync(string userId, Stream pdfStream, string fileName)
-        {
-            var sanitizedFileName = SanitizeFileName(fileName);
-            var storage = new FirebaseStorage(StorageBucket, new FirebaseStorageOptions
+            catch (Exception ex)
             {
-                AuthTokenAsyncFactory = () => SecureStorage.GetAsync("userToken")
-            });
-
-            var pdfUrl = await storage
-                .Child("user_pdfs")
-                .Child(userId)
-                .Child(sanitizedFileName)
-                .PutAsync(pdfStream);
-
-            return pdfUrl;
+                Console.WriteLine($"Error uploading image: {ex.Message}");
+                throw;
+            }
         }
 
-        //--------------------REFERENCES-------------------------
-
+        // References
         public async Task AddReferenceAsync(string userId, string referenceEmail)
         {
             var user = await ReadUserDataAsync(userId);
@@ -246,8 +245,7 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
-                var client = ConnectToFirebase();
-                await client.ResetEmailPasswordAsync(email);
+                await authClient.ResetEmailPasswordAsync(email);
                 Console.WriteLine("Correo de restablecimiento de contraseña enviado.");
             }
             catch (FirebaseAuthException ex)
@@ -258,6 +256,12 @@ namespace SofolApp.MVVM.ViewModels
             {
                 throw new Exception("Error inesperado al enviar correo de restablecimiento de contraseña", ex);
             }
+        }
+
+        // Helper Methods
+        private string SanitizeFileName(string fileName)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(fileName, @"[^\w\-]", "_");
         }
     }
 }
