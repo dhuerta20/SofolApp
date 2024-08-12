@@ -223,7 +223,7 @@
                                 Spacing="30">
                                 <ImageButton
                                     BackgroundColor="Transparent"
-                                    Command="{Binding OnWhatsAppCommand}"
+                                    Command="{Binding IWhatsAppCommand}"
                                     HeightRequest="50"
                                     HorizontalOptions="Start"
                                     Source="whatsapproxcredit.png"
@@ -231,14 +231,14 @@
 
                                 <ImageButton
                                     BackgroundColor="Transparent"
-                                    Command="{Binding OnPhoneCommand}"
+                                    Command="{Binding PhoneCallCommand}"
                                     HeightRequest="50"
                                     Source="phoneproxcredit.png"
                                     WidthRequest="50" />
 
                                 <ImageButton
                                     BackgroundColor="Transparent"
-                                    Command="{Binding OnEmailCommand}"
+                                    Command="{Binding SendEmailCommand}"
                                     HeightRequest="50"
                                     Source="gmailproxcredit.png"
                                     WidthRequest="50" />
