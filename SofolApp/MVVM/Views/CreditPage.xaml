@@ -1,9 +1,11 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Class="SofolApp.MVVM.Views.CreditPage"
-             Title="CreditApp"
-             BackgroundColor="{AppThemeBinding Dark=#45b07c, Light=#58ce74}">
+<ContentPage
+    x:Class="SofolApp.MVVM.Views.CreditPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="CreditApp"
+    BackgroundColor="{AppThemeBinding Dark=#45b07c,
+                                      Light=#58ce74}">
 
     <ContentPage.Behaviors>
         <toolkit:StatusBarBehavior StatusBarColor="{AppThemeBinding Dark=#353e43, Light=#353e43}" />
@@ -15,20 +17,29 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Barra superior simplificada -->
-        <Grid Grid.Row="0" Padding="10,5" Margin="10,10,10,0">
-            <RoundRectangle Fill="#ecf0f1" CornerRadius="20"/>
+        <!--  Barra superior simplificada  -->
+        <Grid
+            Grid.Row="0"
+            Margin="10,10,10,0"
+            Padding="10,5">
+            <RoundRectangle CornerRadius="20" Fill="#ecf0f1" />
             <Grid ColumnDefinitions="Auto,*,Auto" VerticalOptions="Center">
-                <Image Grid.Column="0" Source="proxcredit_logo_final.png" HeightRequest="40" HorizontalOptions="Start" />
-                <Button Grid.Column="2" Text="Cerrar sesión"
-                        BackgroundColor="Transparent"
-                        TextColor="#000000"
-                        FontSize="14"
-                        Command="{Binding OnSignOutCommand}"/>
+                <Image
+                    Grid.Column="0"
+                    HeightRequest="40"
+                    HorizontalOptions="Start"
+                    Source="proxcredit_logo_final.png" />
+                <Button
+                    Grid.Column="2"
+                    BackgroundColor="Transparent"
+                    Command="{Binding LogOutCommand}"
+                    FontSize="14"
+                    Text="Cerrar sesión"
+                    TextColor="#000000" />
             </Grid>
         </Grid>
 
-        <!-- ScrollView para todo el contenido principal -->
+        <!--  ScrollView para todo el contenido principal  -->
         <ScrollView Grid.Row="1">
             <Grid RowSpacing="0">
                 <Grid.RowDefinitions>
@@ -36,98 +47,201 @@
                     <RowDefinition Height="4*" />
                 </Grid.RowDefinitions>
 
-                <!-- Contenido de la parte superior (fuera del RoundRectangle) -->
-                <FlexLayout Grid.Row="0" JustifyContent="Start" AlignItems="Center" Direction="Column">
-                    <Frame CornerRadius="60" IsClippedToBounds="True" Padding="0" 
-                           BorderColor="LightGray" HasShadow="True" 
-                           HeightRequest="120" WidthRequest="120" Margin="0,10,0,10">
-                        <Image Source="{Binding ProfileImage}" Aspect="AspectFill" HeightRequest="120" WidthRequest="120"/>
+                <!--  Contenido de la parte superior (fuera del RoundRectangle)  -->
+                <FlexLayout
+                    Grid.Row="0"
+                    AlignItems="Center"
+                    Direction="Column"
+                    JustifyContent="Start">
+                    <Frame
+                        Margin="0,10,0,10"
+                        Padding="0"
+                        BorderColor="LightGray"
+                        CornerRadius="60"
+                        HasShadow="True"
+                        HeightRequest="120"
+                        IsClippedToBounds="True"
+                        WidthRequest="120">
+                        <Image
+                            Aspect="AspectFill"
+                            HeightRequest="120"
+                            Source="{Binding ProfileImage}"
+                            WidthRequest="120" />
                     </Frame>
-                    <Label Text="{Binding UserName}" HorizontalOptions="Center" FontSize="24" FontAttributes="Bold" Margin="0,5,0,5"/>
+                    <Label
+                        Margin="0,5,0,5"
+                        FontAttributes="Bold"
+                        FontSize="24"
+                        HorizontalOptions="Center"
+                        Text="{Binding UserName}" />
                 </FlexLayout>
 
-                <!-- RoundRectangle y contenido inferior -->
+                <!--  RoundRectangle y contenido inferior  -->
                 <Grid Grid.Row="1">
-                    <RoundRectangle Fill="{AppThemeBinding Dark=#353e43, Light=White}" CornerRadius="40,35,0,0" VerticalOptions="Fill" Margin="-1,-1,-1,-1"/>
+                    <RoundRectangle
+                        Margin="-1,-1,-1,-1"
+                        CornerRadius="40,35,0,0"
+                        Fill="{AppThemeBinding Dark=#353e43,
+                                               Light=White}"
+                        VerticalOptions="Fill" />
                     <StackLayout Padding="20" Spacing="15">
-                        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="15" Padding="10">
-                            <Label Text="Información General" TextColor="{AppThemeBinding Dark=White, Light=#000000}" FontSize="22" FontAttributes="Bold" Grid.Row="0"
-                                   HorizontalOptions="Center" VerticalOptions="Start"/>
+                        <Grid
+                            Padding="10"
+                            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
+                            RowSpacing="15">
+                            <Label
+                                Grid.Row="0"
+                                FontAttributes="Bold"
+                                FontSize="22"
+                                HorizontalOptions="Center"
+                                Text="Información General"
+                                TextColor="{AppThemeBinding Dark=White,
+                                                            Light=#000000}"
+                                VerticalOptions="Start" />
 
-                            <!-- CONFIRMACION DE IDENTIDAD -->
-                            <Frame Grid.Row="1" CornerRadius="30" HasShadow="True" BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}" Padding="0" HorizontalOptions="Fill" BorderColor="Transparent">
-                                <Grid ColumnDefinitions="Auto,*" Padding="10,5">
-                                    <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="LightGray" Padding="5" WidthRequest="50" HeightRequest="50">
-                                        <Image Source="confirmacion_de_identidad.png" Aspect="AspectFit"/>
+                            <!--  CONFIRMACION DE IDENTIDAD  -->
+                            <Frame
+                                Grid.Row="1"
+                                Padding="0"
+                                BackgroundColor="{AppThemeBinding Dark=#616a70,
+                                                                  Light=#58ce74}"
+                                BorderColor="Transparent"
+                                CornerRadius="30"
+                                HasShadow="True"
+                                HorizontalOptions="Fill">
+                                <Grid Padding="10,5" ColumnDefinitions="Auto,*">
+                                    <Frame
+                                        Grid.Column="0"
+                                        Padding="5"
+                                        BackgroundColor="LightGray"
+                                        CornerRadius="10"
+                                        HeightRequest="50"
+                                        WidthRequest="50">
+                                        <Image Aspect="AspectFit" Source="confirmacion_de_identidad.png" />
                                     </Frame>
-                                    <Button Grid.Column="1" Text="Confirmación de info" 
-                                            Command="{Binding OnIdentityConfirmCommand}"
-                                            BackgroundColor="Transparent" 
-                                            FontSize="18" TextColor="{AppThemeBinding Dark=White, Light=#000000}"                                   
-                                            FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Start" LineBreakMode="WordWrap"/>
+                                    <Button
+                                        Grid.Column="1"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding IdentityConfirmationCommand}"
+                                        FontAttributes="Bold"
+                                        FontSize="18"
+                                        HorizontalOptions="Start"
+                                        LineBreakMode="WordWrap"
+                                        Text="Confirmación de info"
+                                        TextColor="{AppThemeBinding Dark=White,
+                                                                    Light=#000000}"
+                                        VerticalOptions="Center" />
                                 </Grid>
                             </Frame>
 
-                            <!-- DATOS PERSONALES -->
-                            <Frame Grid.Row="2" CornerRadius="30" HasShadow="True" BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}" Padding="0" HorizontalOptions="Fill" BorderColor="Transparent">
-                                <Grid ColumnDefinitions="Auto,*" Padding="10,5">
-                                    <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="LightGray" Padding="5" WidthRequest="50" HeightRequest="50">
-                                        <Image Source="informacion_personal.png" Aspect="AspectFit"/>
+                            <!--  DATOS PERSONALES  -->
+                            <Frame
+                                Grid.Row="2"
+                                Padding="0"
+                                BackgroundColor="{AppThemeBinding Dark=#616a70,
+                                                                  Light=#58ce74}"
+                                BorderColor="Transparent"
+                                CornerRadius="30"
+                                HasShadow="True"
+                                HorizontalOptions="Fill">
+                                <Grid Padding="10,5" ColumnDefinitions="Auto,*">
+                                    <Frame
+                                        Grid.Column="0"
+                                        Padding="5"
+                                        BackgroundColor="LightGray"
+                                        CornerRadius="10"
+                                        HeightRequest="50"
+                                        WidthRequest="50">
+                                        <Image Aspect="AspectFit" Source="informacion_personal.png" />
                                     </Frame>
-                                    <Button Grid.Column="1" 
-                                            Text="Datos personales" 
-                                            Command="{Binding OnPersonalDataCommand}"
-                                            FontSize="18" 
-                                            TextColor="{AppThemeBinding Dark=White, Light=#000000}"
-                                            BackgroundColor="Transparent" 
-                                            VerticalOptions="Center" HorizontalOptions="StartAndExpand" 
-                                            FontAttributes="Bold" LineBreakMode="WordWrap"/>
+                                    <Button
+                                        Grid.Column="1"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding PersonalProfileDataCommand}"
+                                        FontAttributes="Bold"
+                                        FontSize="18"
+                                        HorizontalOptions="StartAndExpand"
+                                        LineBreakMode="WordWrap"
+                                        Text="Datos personales"
+                                        TextColor="{AppThemeBinding Dark=White,
+                                                                    Light=#000000}"
+                                        VerticalOptions="Center" />
                                 </Grid>
                             </Frame>
 
-                            <!-- ESTATUS -->
-                            <Frame Grid.Row="3" CornerRadius="30" HasShadow="True" BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}" Padding="0" HorizontalOptions="Fill" BorderColor="Transparent">
-                                <Grid ColumnDefinitions="Auto,*" Padding="10,5">
-                                    <Frame Grid.Column="0" CornerRadius="10" BackgroundColor="LightGray" Padding="5" WidthRequest="50" HeightRequest="50">
-                                        <Image Source="estatus.png" Aspect="AspectFit"/>
+                            <!--  ESTATUS  -->
+                            <Frame
+                                Grid.Row="3"
+                                Padding="0"
+                                BackgroundColor="{AppThemeBinding Dark=#616a70,
+                                                                  Light=#58ce74}"
+                                BorderColor="Transparent"
+                                CornerRadius="30"
+                                HasShadow="True"
+                                HorizontalOptions="Fill">
+                                <Grid Padding="10,5" ColumnDefinitions="Auto,*">
+                                    <Frame
+                                        Grid.Column="0"
+                                        Padding="5"
+                                        BackgroundColor="LightGray"
+                                        CornerRadius="10"
+                                        HeightRequest="50"
+                                        WidthRequest="50">
+                                        <Image Aspect="AspectFit" Source="estatus.png" />
                                     </Frame>
-                                    <Button Grid.Column="1" 
-                                            Text="Estatus" 
-                                            Command="{Binding OnStatusCommand}"
-                                            FontSize="18"
-                                            TextColor="{AppThemeBinding Dark=White, Light=#000000}"
-                                            BackgroundColor="Transparent" 
-                                            VerticalOptions="Center" HorizontalOptions="Start" 
-                                            FontAttributes="Bold" LineBreakMode="WordWrap"/>
+                                    <Button
+                                        Grid.Column="1"
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding StatusRequestCommand}"
+                                        FontAttributes="Bold"
+                                        FontSize="18"
+                                        HorizontalOptions="Start"
+                                        LineBreakMode="WordWrap"
+                                        Text="Estatus"
+                                        TextColor="{AppThemeBinding Dark=White,
+                                                                    Light=#000000}"
+                                        VerticalOptions="Center" />
                                 </Grid>
                             </Frame>
 
-                            <!-- CONTÁCTANOS -->
-                            <Label Grid.Row="4"
-                                   Text="Contactanos"
-                                   FontSize="18"
-                                   TextColor="{AppThemeBinding Dark=White, Light=#000000}"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"
-                                   Margin="20"/>
+                            <!--  CONTÁCTANOS  -->
+                            <Label
+                                Grid.Row="4"
+                                Margin="20"
+                                FontSize="18"
+                                HorizontalOptions="Center"
+                                Text="Contactanos"
+                                TextColor="{AppThemeBinding Dark=White,
+                                                            Light=#000000}"
+                                VerticalOptions="Center" />
 
-                            <!-- Íconos de contacto -->
-                            <HorizontalStackLayout Grid.Row="5" HorizontalOptions="Center" Spacing="30" Padding="0">
-                                <ImageButton Source="whatsapproxcredit.png" 
-                                             HeightRequest="50" WidthRequest="50" 
-                                             HorizontalOptions="Start"
-                                             Command="{Binding OnWhatsAppCommand}"
-                                             BackgroundColor="Transparent"/>
+                            <!--  Íconos de contacto  -->
+                            <HorizontalStackLayout
+                                Grid.Row="5"
+                                Padding="0"
+                                HorizontalOptions="Center"
+                                Spacing="30">
+                                <ImageButton
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding OnWhatsAppCommand}"
+                                    HeightRequest="50"
+                                    HorizontalOptions="Start"
+                                    Source="whatsapproxcredit.png"
+                                    WidthRequest="50" />
 
-                                <ImageButton Source="phoneproxcredit.png" 
-                                             HeightRequest="50" WidthRequest="50" 
-                                             Command="{Binding OnPhoneCommand}"
-                                             BackgroundColor="Transparent"/>
+                                <ImageButton
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding OnPhoneCommand}"
+                                    HeightRequest="50"
+                                    Source="phoneproxcredit.png"
+                                    WidthRequest="50" />
 
-                                <ImageButton Source="gmailproxcredit.png" 
-                                             HeightRequest="50" WidthRequest="50" 
-                                             Command="{Binding OnEmailCommand}"
-                                             BackgroundColor="Transparent"/>
+                                <ImageButton
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding OnEmailCommand}"
+                                    HeightRequest="50"
+                                    Source="gmailproxcredit.png"
+                                    WidthRequest="50" />
                             </HorizontalStackLayout>
                         </Grid>
                     </StackLayout>

@@ -9,7 +9,7 @@ namespace SofolApp
             try
             {
                 InitializeComponent();
-            }
+                }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error en AppShell constructor: {ex}");

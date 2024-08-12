@@ -5,11 +5,40 @@ using SofolApp.Services;
 using System;
 using System.Threading.Tasks;
 using Sentry;
+using System.Windows.Input;
 
 namespace SofolApp.MVVM.ViewModels
 {
     public partial class CreditPageVM : ObservableObject
     {
+
+        #region Commands
+
+
+        public ICommand LogOutCommand => new Command(async () =>
+        {
+            await OnSignOut();
+        });
+
+
+        public ICommand IdentityConfirmationCommand => new Command(async () =>
+        {
+            await OnIdentityConfirm();
+        });
+
+        public ICommand PersonalProfileDataCommand => new Command(async () =>
+        {
+            await OnPersonalData();
+        });
+
+
+        public ICommand StatusRequestCommand => new Command(async () =>
+        {
+            await OnStatus();
+        });
+
+        #endregion
+
         private readonly IFirebaseConnection _firebaseConnection;
 
         [ObservableProperty]
