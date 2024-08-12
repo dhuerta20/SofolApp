@@ -11,6 +11,14 @@ namespace SofolApp.MVVM.ViewModels
 {
     public partial class SignInVM : ObservableObject
     {
+
+        #region Commands
+
+        public ICommand CreateAccountPageCommand => new Command(() => Shell.Current.GoToAsync("//SignUpForm"));
+
+        #endregion
+
+
         private readonly IFirebaseConnection _firebaseConnection;
 
         [ObservableProperty]
