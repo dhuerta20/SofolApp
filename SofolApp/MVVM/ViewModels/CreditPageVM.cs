@@ -37,6 +37,22 @@ namespace SofolApp.MVVM.ViewModels
             await OnStatus();
         });
 
+        public ICommand IWhatsAppCommand => new Command(async () =>
+        {
+            await OnWhatsApp();
+        });
+
+
+        public ICommand PhoneCallCommand => new Command(async () =>
+        {
+            await OnPhone();
+        });
+
+        public ICommand SendEmailCommand => new Command(async () =>
+        {
+            await OnEmail();
+        });
+
         #endregion
 
         private readonly IFirebaseConnection _firebaseConnection;
