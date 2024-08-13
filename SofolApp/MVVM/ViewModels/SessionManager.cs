@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace SofolApp.MVVM.ViewModels
@@ -25,7 +25,6 @@ namespace SofolApp.MVVM.ViewModels
             }
             catch (Exception ex)
             {
-                // Manejar el error aquí (e.g., registrar el error o notificar al usuario)
                 Console.WriteLine($"Error al verificar el conteo de sesiones: {ex.Message}");
                 return false;
             }
@@ -40,7 +39,6 @@ namespace SofolApp.MVVM.ViewModels
             }
             catch (Exception ex)
             {
-                // Manejar el error aquí (e.g., registrar el error o notificar al usuario)
                 Console.WriteLine($"Error al obtener el conteo de sesiones: {ex.Message}");
                 return 0;
             }
@@ -54,7 +52,6 @@ namespace SofolApp.MVVM.ViewModels
             }
             catch (Exception ex)
             {
-                // Manejar el error aquí (e.g., registrar el error o notificar al usuario)
                 Console.WriteLine($"Error al restablecer el conteo de sesiones: {ex.Message}");
             }
         }
@@ -68,10 +65,8 @@ namespace SofolApp.MVVM.ViewModels
             }
             catch (Exception ex)
             {
-                // Manejar el error aquí (e.g., registrar el error o notificar al usuario)
                 Console.WriteLine($"Error al incrementar el conteo de sesiones: {ex.Message}");
             }
         }
     }
 }
-*/

@@ -4,8 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     Title="CreditApp"
-    BackgroundColor="{AppThemeBinding Dark=#45b07c,
-                                      Light=#58ce74}">
+    BackgroundColor="{AppThemeBinding Dark=#45b07c, Light=#58ce74}">
 
     <ContentPage.Behaviors>
         <toolkit:StatusBarBehavior StatusBarColor="{AppThemeBinding Dark=#353e43, Light=#353e43}" />
@@ -17,7 +16,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!--  Barra superior simplificada  -->
+        <!-- Barra superior simplificada -->
         <Grid
             Grid.Row="0"
             Margin="10,10,10,0"
@@ -39,7 +38,7 @@
             </Grid>
         </Grid>
 
-        <!--  ScrollView para todo el contenido principal  -->
+        <!-- ScrollView para todo el contenido principal -->
         <ScrollView Grid.Row="1">
             <Grid RowSpacing="0">
                 <Grid.RowDefinitions>
@@ -47,7 +46,7 @@
                     <RowDefinition Height="4*" />
                 </Grid.RowDefinitions>
 
-                <!--  Contenido de la parte superior (fuera del RoundRectangle)  -->
+                <!-- Contenido de la parte superior (fuera del RoundRectangle) -->
                 <FlexLayout
                     Grid.Row="0"
                     AlignItems="Center"
@@ -76,16 +75,15 @@
                         Text="{Binding UserName}" />
                 </FlexLayout>
 
-                <!--  RoundRectangle y contenido inferior  -->
+                <!-- RoundRectangle y contenido inferior -->
                 <Grid Grid.Row="1">
                     <RoundRectangle
                         Margin="-1,-1,-1,-1"
                         CornerRadius="40,35,0,0"
-                        Fill="{AppThemeBinding Dark=#353e43,
-                                               Light=White}"
+                        Fill="{AppThemeBinding Dark=#353e43, Light=White}"
                         VerticalOptions="Fill" />
                     <StackLayout Padding="20" Spacing="15">
-                        <Grid
+                        <Grid                             
                             Padding="10"
                             RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
                             RowSpacing="15">
@@ -95,16 +93,14 @@
                                 FontSize="22"
                                 HorizontalOptions="Center"
                                 Text="Información General"
-                                TextColor="{AppThemeBinding Dark=White,
-                                                            Light=#000000}"
+                                TextColor="{AppThemeBinding Dark=White, Light=#000000}"
                                 VerticalOptions="Start" />
 
-                            <!--  CONFIRMACION DE IDENTIDAD  -->
+                            <!-- CONFIRMACION DE IDENTIDAD -->
                             <Frame
                                 Grid.Row="1"
                                 Padding="0"
-                                BackgroundColor="{AppThemeBinding Dark=#616a70,
-                                                                  Light=#58ce74}"
+                                BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}"
                                 BorderColor="Transparent"
                                 CornerRadius="30"
                                 HasShadow="True"
@@ -125,21 +121,19 @@
                                         Command="{Binding IdentityConfirmationCommand}"
                                         FontAttributes="Bold"
                                         FontSize="18"
-                                        HorizontalOptions="Start"
+                                        HorizontalOptions="StartAndExpand"
                                         LineBreakMode="WordWrap"
                                         Text="Confirmación de info"
-                                        TextColor="{AppThemeBinding Dark=White,
-                                                                    Light=#000000}"
+                                        TextColor="{AppThemeBinding Dark=White, Light=#000000}"
                                         VerticalOptions="Center" />
                                 </Grid>
                             </Frame>
 
-                            <!--  DATOS PERSONALES  -->
+                            <!-- DATOS PERSONALES -->
                             <Frame
                                 Grid.Row="2"
                                 Padding="0"
-                                BackgroundColor="{AppThemeBinding Dark=#616a70,
-                                                                  Light=#58ce74}"
+                                BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}"
                                 BorderColor="Transparent"
                                 CornerRadius="30"
                                 HasShadow="True"
@@ -163,18 +157,16 @@
                                         HorizontalOptions="StartAndExpand"
                                         LineBreakMode="WordWrap"
                                         Text="Datos personales"
-                                        TextColor="{AppThemeBinding Dark=White,
-                                                                    Light=#000000}"
+                                        TextColor="{AppThemeBinding Dark=White, Light=#000000}"
                                         VerticalOptions="Center" />
                                 </Grid>
                             </Frame>
 
-                            <!--  ESTATUS  -->
+                            <!-- ESTATUS -->
                             <Frame
                                 Grid.Row="3"
                                 Padding="0"
-                                BackgroundColor="{AppThemeBinding Dark=#616a70,
-                                                                  Light=#58ce74}"
+                                BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}"
                                 BorderColor="Transparent"
                                 CornerRadius="30"
                                 HasShadow="True"
@@ -198,30 +190,28 @@
                                         HorizontalOptions="Start"
                                         LineBreakMode="WordWrap"
                                         Text="Estatus"
-                                        TextColor="{AppThemeBinding Dark=White,
-                                                                    Light=#000000}"
+                                        TextColor="{AppThemeBinding Dark=White, Light=#000000}"
                                         VerticalOptions="Center" />
                                 </Grid>
                             </Frame>
 
-                            <!--  CONTÁCTANOS  -->
+                            <!-- CONTÁCTANOS -->
                             <Label
                                 Grid.Row="4"
                                 Margin="20"
                                 FontSize="18"
                                 HorizontalOptions="Center"
-                                Text="Contactanos"
-                                TextColor="{AppThemeBinding Dark=White,
-                                                            Light=#000000}"
+                                Text="Contáctanos"
+                                TextColor="{AppThemeBinding Dark=White, Light=#000000}"
                                 VerticalOptions="Center" />
 
-                            <!--  Íconos de contacto  -->
+                            <!-- Íconos de contacto -->
                             <HorizontalStackLayout
                                 Grid.Row="5"
                                 Padding="0"
                                 HorizontalOptions="Center"
                                 Spacing="30">
-                                <ImageButton
+                            <!--    <ImageButton
                                     BackgroundColor="Transparent"
                                     Command="{Binding IWhatsAppCommand}"
                                     HeightRequest="50"
@@ -235,7 +225,7 @@
                                     HeightRequest="50"
                                     Source="phoneproxcredit.png"
                                     WidthRequest="50" />
-
+                                -->
                                 <ImageButton
                                     BackgroundColor="Transparent"
                                     Command="{Binding SendEmailCommand}"

@@ -50,7 +50,7 @@ namespace SofolApp.MVVM.ViewModels
             await LoadUserData();
         }
 
-        [RelayCommand]
+        [RelayCommand]        
         private async Task UpdatePhoto(string imageType)
         {
             try
@@ -63,8 +63,12 @@ namespace SofolApp.MVVM.ViewModels
                     {
                         if (CurrentUser.Images == null)
                             CurrentUser.Images = new Dictionary<string, string>();
+
+                        // Actualizar la URL de la imagen existente
                         CurrentUser.Images[imageType] = url;
+
                         await LoadUserImages();
+                        await _firebaseConnection.UpdateUserDataAsync(_userId, CurrentUser);
                     }
                 }
             }
@@ -73,6 +77,7 @@ namespace SofolApp.MVVM.ViewModels
                 await Shell.Current.DisplayAlert("Error", $"Failed to update photo: {ex.Message}", "OK");
             }
         }
+
 
         [RelayCommand]
         private async Task SaveChanges()
@@ -124,7 +129,7 @@ namespace SofolApp.MVVM.ViewModels
         {
             if (CurrentUser.Images.TryGetValue(imageType, out var url) && !string.IsNullOrEmpty(url))
             {
-               return ImageSource.FromUri(new Uri(url));
+                return ImageSource.FromUri(new Uri(url));
             }
             return null;
         }
@@ -137,8 +142,7 @@ namespace SofolApp.MVVM.ViewModels
                 {
                     using (var stream = await photo.OpenReadAsync())
                     {
-                        var fileName = $"{imageType}_{Guid.NewGuid()}{Path.GetExtension(photo.FileName)}";
-                        return await _firebaseConnection.UploadImageAsync(_userId, stream, fileName);
+                        return await _firebaseConnection.UploadImageAsync(_userId, stream, imageType);
                     }
                 }
             }
@@ -148,5 +152,6 @@ namespace SofolApp.MVVM.ViewModels
             }
             return null;
         }
+
     }
 }

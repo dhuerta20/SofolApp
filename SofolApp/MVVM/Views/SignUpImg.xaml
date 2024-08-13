@@ -7,84 +7,165 @@
              Title="LoginPage"
              BackgroundColor="{AppThemeBinding Dark=#353e43, Light=White}">
 
-    <ContentPage.BindingContext>
-        <viewmodels:SignUpImgVM />
-    </ContentPage.BindingContext>
-
     <ScrollView>
         <FlexLayout Direction="Column" AlignItems="Center" JustifyContent="Start" Margin="0,50,0,0" Padding="20">
             <Image Source="reconocimiento_facial_real.png" HeightRequest="120" WidthRequest="120" Aspect="AspectFit"/>
-            <Button Text="REGISTRA TU ROSTRO"
-                    BackgroundColor="#5dd684"
-                    FontSize="24" TextColor="White"
-                    FontAttributes="Bold" 
-                    Margin="0,15,0,30"
-                    LineBreakMode="WordWrap"
-                    Command="{Binding UploadImageCommand}"
-                    CommandParameter="face"/>
-            <Label Text="{Binding UploadItems[0].Label}" TextColor="{Binding UploadItems[0].TextColor}" HorizontalOptions="Center"/>
 
-            <Button BackgroundColor="#5dd684" 
-                    Text="IDENTIFICACION" 
-                    TextColor="White"
-                    FontAttributes="Bold" FontSize="24"
-                    WidthRequest="300"
-                    HeightRequest="80"
-                    Margin="0,0,0,20"
-                    Command="{Binding UploadImageCommand}"
-                    CommandParameter="id"/>
-            <Label Text="{Binding UploadItems[1].Label}" TextColor="{Binding UploadItems[1].TextColor}" HorizontalOptions="Center"/>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,15,0,30">
+                <Image Grid.Column="0" WidthRequest="30" HeightRequest="30" VerticalOptions="Center">
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.FaceUploaded}" 
+                                     Value="True">
+                            <Setter Property="Source" Value="checked.png" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.FaceUploaded}" 
+                                     Value="False">
+                            <Setter Property="Source" Value="not_checked.png" />
+                        </DataTrigger>
+                    </Image.Triggers>
+                </Image>
+                <Button Grid.Column="1" Text="REGISTRA TU ROSTRO"
+                        BackgroundColor="#5dd684"
+                        FontSize="24" TextColor="White"
+                        FontAttributes="Bold" 
+                        LineBreakMode="WordWrap"
+                        Command="{Binding UploadImageCommand}"
+                        CommandParameter="face"/>
+            </Grid>
 
-            <Button BackgroundColor="#5dd684"
-                    Text="COMPROBANTE DE DOMICILIO"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    FontSize="24"
-                    LineBreakMode="WordWrap"
-                    WidthRequest="300"
-                    HeightRequest="80"
-                    Margin="0,0,0,20"
-                    Command="{Binding UploadImageCommand}"
-                    CommandParameter="address"/>
-            <Label Text="{Binding UploadItems[2].Label}" TextColor="{Binding UploadItems[2].TextColor}" HorizontalOptions="Center"/>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,0,0,20">
+                <Image Grid.Column="0" WidthRequest="30" HeightRequest="30" VerticalOptions="Center">
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.IdUploaded}" 
+                                     Value="True">
+                            <Setter Property="Source" Value="checked.png" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.IdUploaded}" 
+                                     Value="False">
+                            <Setter Property="Source" Value="not_checked.png" />
+                        </DataTrigger>
+                    </Image.Triggers>
+                </Image>
+                <Button Grid.Column="1" BackgroundColor="#5dd684" 
+                        Text="IDENTIFICACION" 
+                        TextColor="White"
+                        FontAttributes="Bold" FontSize="24"
+                        WidthRequest="300"
+                        HeightRequest="80"
+                        Command="{Binding UploadImageCommand}"
+                        CommandParameter="id"/>
+            </Grid>
 
-            <Button BackgroundColor="#5dd684"
-                    Text="COMPROBANTE DE INGRESOS"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    FontSize="24"
-                    LineBreakMode="WordWrap"
-                    WidthRequest="300"
-                    HeightRequest="80"
-                    Margin="0,0,0,20"
-                    Command="{Binding UploadImageCommand}"
-                    CommandParameter="income"/>
-            <Label Text="{Binding UploadItems[3].Label}" TextColor="{Binding UploadItems[3].TextColor}" HorizontalOptions="Center"/>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,0,0,20">
+                <Image Grid.Column="0" WidthRequest="30" HeightRequest="30" VerticalOptions="Center">
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.AddressUploaded}" 
+                                     Value="True">
+                            <Setter Property="Source" Value="checked.png" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.AddressUploaded}" 
+                                     Value="False">
+                            <Setter Property="Source" Value="not_checked.png" />
+                        </DataTrigger>
+                    </Image.Triggers>
+                </Image>
+                <Button Grid.Column="1" BackgroundColor="#5dd684"
+                        Text="COMPROBANTE DE DOMICILIO"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="24"
+                        LineBreakMode="WordWrap"
+                        WidthRequest="300"
+                        HeightRequest="80"
+                        Command="{Binding UploadImageCommand}"
+                        CommandParameter="address"/>
+            </Grid>
 
-            <Button BackgroundColor="#5dd684"
-                    Text="NÓMINA"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    FontSize="24"
-                    LineBreakMode="WordWrap"
-                    WidthRequest="300"
-                    HeightRequest="80"
-                    Margin="0,0,0,20"
-                    Command="{Binding UploadImageCommand}"
-                    CommandParameter="payroll"/>
-            <Label Text="{Binding UploadItems[4].Label}" TextColor="{Binding UploadItems[4].TextColor}" HorizontalOptions="Center"/>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,0,0,20">
+                <Image Grid.Column="0" WidthRequest="30" HeightRequest="30" VerticalOptions="Center">
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.IncomeUploaded}" 
+                                     Value="True">
+                            <Setter Property="Source" Value="checked.png" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.IncomeUploaded}" 
+                                     Value="False">
+                            <Setter Property="Source" Value="not_checked.png" />
+                        </DataTrigger>
+                    </Image.Triggers>
+                </Image>
+                <Button Grid.Column="1" BackgroundColor="#5dd684"
+                        Text="COMPROBANTE DE INGRESOS"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="24"
+                        LineBreakMode="WordWrap"
+                        WidthRequest="300"
+                        HeightRequest="80"
+                        Command="{Binding UploadImageCommand}"
+                        CommandParameter="income"/>
+            </Grid>
 
-            <Button BackgroundColor="#5dd684"
-                    Text="ESTADO DE CUENTA"
-                    TextColor="White"
-                    FontAttributes="Bold"
-                    FontSize="24"
-                    LineBreakMode="WordWrap"
-                    WidthRequest="300"
-                    HeightRequest="80"
-                    Margin="0,0,0,20"
-                    Command="{Binding UploadAccountStatusCommand}"/>
-            <Label Text="{Binding UploadItems[5].Label}" TextColor="{Binding UploadItems[5].TextColor}" HorizontalOptions="Center" Margin="0,0,0,20"/>
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,0,0,20">
+                <Image Grid.Column="0" WidthRequest="30" HeightRequest="30" VerticalOptions="Center">
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.PayrollUploaded}" 
+                                     Value="True">
+                            <Setter Property="Source" Value="checked.png" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.PayrollUploaded}" 
+                                     Value="False">
+                            <Setter Property="Source" Value="not_checked.png" />
+                        </DataTrigger>
+                    </Image.Triggers>
+                </Image>
+                <Button Grid.Column="1" BackgroundColor="#5dd684"
+                        Text="NÓMINA"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="24"
+                        LineBreakMode="WordWrap"
+                        WidthRequest="300"
+                        HeightRequest="80"
+                        Command="{Binding UploadImageCommand}"
+                        CommandParameter="payroll"/>
+            </Grid>
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" Margin="0,0,0,20">
+                <Image Grid.Column="0" WidthRequest="30" HeightRequest="30" VerticalOptions="Center">
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.AccountStatusUploaded}" 
+                                     Value="True">
+                            <Setter Property="Source" Value="checked.png" />
+                        </DataTrigger>
+                        <DataTrigger TargetType="Image" 
+                                     Binding="{Binding UploadFlags.AccountStatusUploaded}" 
+                                     Value="False">
+                            <Setter Property="Source" Value="not_checked.png" />
+                        </DataTrigger>
+                    </Image.Triggers>
+                </Image>
+                <Button Grid.Column="1" BackgroundColor="#5dd684"
+                        Text="ESTADO DE CUENTA"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="24"
+                        LineBreakMode="WordWrap"
+                        WidthRequest="300"
+                        HeightRequest="80"
+                        Command="{Binding UploadAccountStatusCommand}"/>
+            </Grid>
 
             <Button BackgroundColor="#5dd684"
                     Text="REFERENCIAS"

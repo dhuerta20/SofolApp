@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SofolApp.MVVM.Models;
+using SofolApp.Services;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Microsoft.Maui.Storage;
-using SofolApp.Services;
 
 namespace SofolApp.MVVM.ViewModels
 {
@@ -15,6 +14,12 @@ namespace SofolApp.MVVM.ViewModels
 
         [ObservableProperty]
         private ObservableCollection<string> _references;
+
+        [ObservableProperty]
+        private string _newReferenceEmail;
+
+        [ObservableProperty]
+        private bool _canAddReference;
 
         public ReferencesPageVM(IFirebaseConnection firebaseConnection)
         {
@@ -30,10 +35,10 @@ namespace SofolApp.MVVM.ViewModels
             {
                 _userData = await _firebaseConnection.ReadUserDataAsync(userId);
                 await DisplayCurrentReferencesAsync();
+                UpdateCanAddReference();
             }
         }
 
-        [RelayCommand]
         private async Task DisplayCurrentReferencesAsync()
         {
             References.Clear();
@@ -44,37 +49,44 @@ namespace SofolApp.MVVM.ViewModels
             }
         }
 
-        [RelayCommand]
-        public async Task AddReferenceAsync(string referenceEmail)
+        private void UpdateCanAddReference()
         {
-            if (string.IsNullOrEmpty(referenceEmail))
+            CanAddReference = References.Count < 3;
+        }
+
+        [RelayCommand]
+        public async Task AddReferenceAsync()
+        {
+            if (string.IsNullOrEmpty(NewReferenceEmail))
             {
                 await Shell.Current.DisplayAlert("Error", "Por favor, ingrese un correo de referencia.", "OK");
                 return;
             }
 
-            if (referenceEmail == _userData.Email)
+            if (NewReferenceEmail == _userData.Email)
             {
                 await Shell.Current.DisplayAlert("Error", "No puede referenciarse a sí mismo.", "OK");
                 return;
             }
 
-            var referenceExists = await _firebaseConnection.CheckIfUserExistsAsync(referenceEmail);
+            var referenceExists = await _firebaseConnection.CheckIfUserExistsAsync(NewReferenceEmail);
             if (!referenceExists)
             {
                 await Shell.Current.DisplayAlert("Error", "El correo de referencia no existe.", "OK");
                 return;
             }
 
-            if (References.Contains(referenceEmail))
+            if (References.Contains(NewReferenceEmail))
             {
                 await Shell.Current.DisplayAlert("Error", "Esta referencia ya existe.", "OK");
                 return;
             }
 
-            await _firebaseConnection.AddReferenceAsync(_userData.userId, referenceEmail);
+            await _firebaseConnection.AddReferenceAsync(_userData.userId, NewReferenceEmail);
             await Shell.Current.DisplayAlert("Éxito", "Referencia agregada exitosamente.", "OK");
             await DisplayCurrentReferencesAsync();
+            UpdateCanAddReference();
+            NewReferenceEmail = string.Empty;
         }
 
         [RelayCommand]
@@ -84,4 +96,3 @@ namespace SofolApp.MVVM.ViewModels
         }
     }
 }
-

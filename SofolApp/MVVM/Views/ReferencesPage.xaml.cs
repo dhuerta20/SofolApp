@@ -19,5 +19,14 @@ namespace SofolApp.MVVM.Views
             base.OnAppearing();
             await _viewModel.LoadUserDataAsync();
         }
+
+        protected override bool OnBackButtonPressed()
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await Shell.Current.GoToAsync("//CreditApp");
+            });
+            return true;
+        }
     }
 }

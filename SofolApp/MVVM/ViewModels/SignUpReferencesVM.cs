@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 using Firebase.Database.Query;
-using Firebase.Auth;
 using SofolApp.MVVM.Models;
 
 namespace SofolApp.MVVM.ViewModels
@@ -17,7 +16,13 @@ namespace SofolApp.MVVM.ViewModels
         private string _userId;
 
         [ObservableProperty]
-        private ObservableCollection<string> referenceEmails;
+        private ObservableCollection<string> _referenceEmails;
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CanAddMoreReferences))]
+        private int _maxReferences = 3;
+
+        public bool CanAddMoreReferences => ReferenceEmails.Count < MaxReferences;
 
         public SignUpReferencesVM()
         {
@@ -37,10 +42,10 @@ namespace SofolApp.MVVM.ViewModels
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanAddMoreReferences))]
         private void AddReference()
         {
-            if (ReferenceEmails.Count < 3)
+            if (CanAddMoreReferences)
             {
                 ReferenceEmails.Add("");
             }

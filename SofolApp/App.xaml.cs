@@ -1,5 +1,4 @@
-﻿// App.xaml.cs
-using Microsoft.Maui.Controls;
+﻿using Microsoft.Maui.Controls;
 using SofolApp.MVVM.Views;
 using SofolApp.MVVM.ViewModels;
 using System;
@@ -43,6 +42,7 @@ namespace SofolApp
             try
             {
                 base.OnStart();
+                await HandleAutoLogin();
             }
             catch (Exception ex)
             {
@@ -50,7 +50,7 @@ namespace SofolApp
             }
         }
 
-        /*private async Task HandleAutoLogin()
+        private async Task HandleAutoLogin()
         {
             try
             {
@@ -90,6 +90,6 @@ namespace SofolApp
                 Console.WriteLine($"Error durante el auto-login: {ex.Message}");
                 await Shell.Current.GoToAsync("//SignInForm");
             }
-        }*/
+        }
     }
 }

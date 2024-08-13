@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using SofolApp.MVVM.Models;
 using SofolApp.Services;
 using Microsoft.Maui.Storage;
-using System.Collections.ObjectModel;
 
 namespace SofolApp.MVVM.ViewModels
 {
@@ -15,22 +14,10 @@ namespace SofolApp.MVVM.ViewModels
         [ObservableProperty]
         private UploadFlags _uploadFlags;
 
-        [ObservableProperty]
-        private ObservableCollection<UploadItem> _uploadItems;
-
         public SignUpImgVM(IFirebaseConnection firebaseConnection)
         {
             _firebaseConnection = firebaseConnection;
             UploadFlags = new UploadFlags();
-            UploadItems = new ObservableCollection<UploadItem>
-            {
-                new UploadItem { Type = "face", Label = "Face photo not uploaded", TextColor = Colors.Red },
-                new UploadItem { Type = "id", Label = "ID photo not uploaded", TextColor = Colors.Red },
-                new UploadItem { Type = "address", Label = "Address proof not uploaded", TextColor = Colors.Red },
-                new UploadItem { Type = "income", Label = "Income proof not uploaded", TextColor = Colors.Red },
-                new UploadItem { Type = "payroll", Label = "Payroll not uploaded", TextColor = Colors.Red },
-                new UploadItem { Type = "accountStatus", Label = "Account status not uploaded", TextColor = Colors.Red }
-            };
         }
 
         [RelayCommand]
@@ -59,10 +46,16 @@ namespace SofolApp.MVVM.ViewModels
                 {
                     using (var stream = await filePickerResult.OpenReadAsync())
                     {
-                        string downloadUrl = await _firebaseConnection.UploadImageAsync(_userId, stream, imageType, filePickerResult.FileName);
+                        var user = await _firebaseConnection.ReadUserDataAsync(_userId);
+                        if (user.Images != null && user.Images.ContainsKey(imageType))
+                        {
+                            await Shell.Current.DisplayAlert("Error", $"La imagen que intentas añadir ya existe ", "OK");
+                            return;
+                        }
+
+                        string downloadUrl = await _firebaseConnection.UploadImageAsync(_userId, stream, imageType);
                         UpdateUploadFlags(imageType, true);
 
-                        var user = await _firebaseConnection.ReadUserDataAsync(_userId);
                         if (user.Images == null)
                         {
                             user.Images = new Dictionary<string, string>();
@@ -70,14 +63,14 @@ namespace SofolApp.MVVM.ViewModels
                         user.Images[imageType] = downloadUrl;
                         await _firebaseConnection.UpdateUserDataAsync(_userId, user);
 
-                        await Shell.Current.DisplayAlert("Success", $"{imageType} photo uploaded successfully.", "OK");
+                        await Shell.Current.DisplayAlert("Éxito", "La imagen se agrego correctamente", "OK");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error uploading {imageType} photo: {ex.Message}");
-                await Shell.Current.DisplayAlert("Error", $"Failed to upload {imageType} photo: {ex.Message}", "OK");
+                Console.WriteLine($"Error al añadir la imagen : {ex.Message}");
+                await Shell.Current.DisplayAlert("Error", $"No se pudo agregar la foto: {ex.Message}", "OK");
             }
         }
 
@@ -102,10 +95,16 @@ namespace SofolApp.MVVM.ViewModels
                 {
                     using (var stream = await fileResult.OpenReadAsync())
                     {
-                        string downloadUrl = await _firebaseConnection.UploadImageAsync(_userId, stream, "accountStatus", fileResult.FileName);
+                        var user = await _firebaseConnection.ReadUserDataAsync(_userId);
+                        if (user.Images != null && user.Images.ContainsKey("accountStatus"))
+                        {
+                            await Shell.Current.DisplayAlert("Error", "Este archivo ya se agrego correctamente.", "OK");
+                            return;
+                        }
+
+                        string downloadUrl = await _firebaseConnection.UploadImageAsync(_userId, stream, "accountStatus");
                         UpdateUploadFlags("accountStatus", true);
 
-                        var user = await _firebaseConnection.ReadUserDataAsync(_userId);
                         if (user.Images == null)
                         {
                             user.Images = new Dictionary<string, string>();
@@ -113,27 +112,36 @@ namespace SofolApp.MVVM.ViewModels
                         user.Images["accountStatus"] = downloadUrl;
                         await _firebaseConnection.UpdateUserDataAsync(_userId, user);
 
-                        await Shell.Current.DisplayAlert("Success", "Account statement PDF uploaded successfully.", "OK");
+                        await Shell.Current.DisplayAlert("Éxito", "El estado de cuenta se subio correctamente.", "OK");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error uploading account status PDF: {ex.Message}");
-                await Shell.Current.DisplayAlert("Error", $"Failed to upload account statement PDF: {ex.Message}", "OK");
+                Console.WriteLine($"Error al tratar de agregar el PDF: {ex.Message}");
+                await Shell.Current.DisplayAlert("Error", $"No se logro agregar el PDF: {ex.Message}", "OK");
             }
         }
 
         [RelayCommand]
         private async Task NavigateToReferences()
         {
-            if (AllUploadsCompleted())
+            try
             {
-                await Shell.Current.GoToAsync("//SignUpReferences");
+                bool uploadsCompleted = AllUploadsCompleted();
+
+                if (uploadsCompleted)
+                {
+                    await Shell.Current.GoToAsync("//SignUpReferences");
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Error", "Porfavor agrega todas las imagenes anteriores antes de subir el archivo.", "OK");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", "Please upload all images and PDF files before continuing.", "OK");
+                await Shell.Current.DisplayAlert("Error de navegación", $"Fallo al tratar de navegar a la página de referencias: {ex.Message}", "OK");
             }
         }
 
@@ -146,19 +154,12 @@ namespace SofolApp.MVVM.ViewModels
             }
             else
             {
-                await Shell.Current.DisplayAlert("Error", "Please upload all images and PDF files before continuing.", "OK");
+                await Shell.Current.DisplayAlert("Error", "Porfavor agrega todas las imágenes antes de finalizar.", "OK");
             }
         }
 
         private void UpdateUploadFlags(string imageType, bool isUploaded)
         {
-            var item = UploadItems.FirstOrDefault(i => i.Type == imageType);
-            if (item != null)
-            {
-                item.Label = isUploaded ? $"{char.ToUpper(imageType[0]) + imageType.Substring(1)} uploaded successfully" : $"{char.ToUpper(imageType[0]) + imageType.Substring(1)} not uploaded";
-                item.TextColor = isUploaded ? Colors.Green : Colors.Red;
-            }
-
             switch (imageType)
             {
                 case "face": UploadFlags.FaceUploaded = isUploaded; break;
@@ -179,17 +180,6 @@ namespace SofolApp.MVVM.ViewModels
                    UploadFlags.PayrollUploaded &&
                    UploadFlags.AccountStatusUploaded;
         }
-    }
-
-    public partial class UploadItem : ObservableObject
-    {
-        public string Type { get; set; }
-
-        [ObservableProperty]
-        private string _label;
-
-        [ObservableProperty]
-        private Color _textColor;
     }
 
     public partial class UploadFlags : ObservableObject

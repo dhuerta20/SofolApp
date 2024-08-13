@@ -37,7 +37,7 @@ namespace SofolApp.MVVM.ViewModels
             await OnStatus();
         });
 
-        public ICommand IWhatsAppCommand => new Command(async () =>
+       /* public ICommand IWhatsAppCommand => new Command(async () =>
         {
             await OnWhatsApp();
         });
@@ -46,7 +46,7 @@ namespace SofolApp.MVVM.ViewModels
         public ICommand PhoneCallCommand => new Command(async () =>
         {
             await OnPhone();
-        });
+        });*/
 
         public ICommand SendEmailCommand => new Command(async () =>
         {
@@ -132,7 +132,7 @@ namespace SofolApp.MVVM.ViewModels
             }
         }
 
-        [RelayCommand]
+/*        [RelayCommand]
         public async Task OnWhatsApp()
         {
             try
@@ -163,7 +163,7 @@ namespace SofolApp.MVVM.ViewModels
                 await Shell.Current.DisplayAlert("Error", "No se pudo realizar la llamada", "OK");
             }
         }
-
+*/
         [RelayCommand]
         public async Task OnEmail()
         {

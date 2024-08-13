@@ -59,10 +59,4 @@
         Route="Status"
         />
 
-    <ShellContent 
-    Title="Página de reseteo de contraseña"
-    ContentTemplate="{DataTemplate local:ForgotPass}"
-    Route="ForgotPass"
-    />
-
 </Shell>

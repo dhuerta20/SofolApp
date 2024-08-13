@@ -24,7 +24,8 @@ namespace SofolApp
                     {
                         fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                         fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                        fonts.AddFont("Free-Solid-900.otf", "FAS");
+                        fonts.AddFont("FontAwesomeSolid-900", "FAS");
+
                     });
 
                 // Sentry configuration
@@ -38,7 +39,7 @@ namespace SofolApp
 
                 // Dependency injection setup
                 builder.Services.AddSingleton<IFirebaseConnection, FirebaseConnection>();
-                //builder.Services.AddTransient<SessionManager>();
+                builder.Services.AddTransient<SessionManager>();
                 builder.Services.AddTransient<SignInVM>();
                 builder.Services.AddTransient<SignInForm>();
                 builder.Services.AddTransient<SignUpVM>();
