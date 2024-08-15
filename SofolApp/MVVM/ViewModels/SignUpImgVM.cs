@@ -36,15 +36,11 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
-                var filePickerResult = await FilePicker.Default.PickAsync(new PickOptions
-                {
-                    PickerTitle = $"Select {imageType} photo",
-                    FileTypes = FilePickerFileType.Images
-                });
+                var photoResult = await MediaPicker.CapturePhotoAsync();
 
-                if (filePickerResult != null)
+                if (photoResult != null)
                 {
-                    using (var stream = await filePickerResult.OpenReadAsync())
+                    using (var stream = await photoResult.OpenReadAsync())
                     {
                         var user = await _firebaseConnection.ReadUserDataAsync(_userId);
                         if (user.Images != null && user.Images.ContainsKey(imageType))
@@ -73,6 +69,7 @@ namespace SofolApp.MVVM.ViewModels
                 await Shell.Current.DisplayAlert("Error", $"No se pudo agregar la foto: {ex.Message}", "OK");
             }
         }
+
 
         [RelayCommand]
         private async Task UploadAccountStatus()

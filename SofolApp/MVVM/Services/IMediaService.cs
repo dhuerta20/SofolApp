@@ -10,5 +10,7 @@ namespace SofolApp.MVVM.Services
     public interface IMediaService
     {
         Task<FileResult> PickPhotoAsync();
+        Task<FileResult> CapturePhotoAsync();
+
     }
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Media;
 using SofolApp.MVVM.Models;
 using SofolApp.MVVM.Services;
 using SofolApp.Services;
@@ -50,12 +51,12 @@ namespace SofolApp.MVVM.ViewModels
             await LoadUserData();
         }
 
-        [RelayCommand]        
+        [RelayCommand]
         private async Task UpdatePhoto(string imageType)
         {
             try
             {
-                var photo = await _mediaService.PickPhotoAsync();
+                var photo = await MediaPicker.Default.CapturePhotoAsync();
                 if (photo != null)
                 {
                     var url = await UploadImage(photo, imageType);
@@ -77,7 +78,6 @@ namespace SofolApp.MVVM.ViewModels
                 await Shell.Current.DisplayAlert("Error", $"Failed to update photo: {ex.Message}", "OK");
             }
         }
-
 
         [RelayCommand]
         private async Task SaveChanges()
@@ -152,6 +152,5 @@ namespace SofolApp.MVVM.ViewModels
             }
             return null;
         }
-
     }
 }
