@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Google.Type;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Media;
 using SofolApp.MVVM.Models;
@@ -38,6 +39,18 @@ namespace SofolApp.MVVM.ViewModels
         [ObservableProperty]
         private ImageSource _accountStatusPhotoSource;
 
+        [ObservableProperty]
+        private string _firstName;
+
+        [ObservableProperty]
+        private string _lastName;
+
+        [ObservableProperty]
+        private string _email;
+
+        [ObservableProperty]
+        private string _phoneNumber;
+
         public PersonalDataPageVM(IFirebaseConnection firebaseConnection, IMediaService mediaService)
         {
             _firebaseConnection = firebaseConnection;
@@ -65,7 +78,6 @@ namespace SofolApp.MVVM.ViewModels
                         if (CurrentUser.Images == null)
                             CurrentUser.Images = new Dictionary<string, string>();
 
-                        // Actualizar la URL de la imagen existente
                         CurrentUser.Images[imageType] = url;
 
                         await LoadUserImages();
@@ -84,12 +96,31 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
+                // Validar que los campos no sean nulos o estén vacíos
+                if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) || string.IsNullOrWhiteSpace(PhoneNumber))
+                {
+                    await Shell.Current.DisplayAlert("Error", "Todos los campos son obligatorios.", "OK");
+                    return;
+                }
+
+                // Validar que el número de teléfono tenga 10 dígitos
+                if (PhoneNumber.Length != 10 || !PhoneNumber.All(char.IsDigit))
+                {
+                    await Shell.Current.DisplayAlert("Error", "El número de teléfono debe tener 10 dígitos.", "OK");
+                    return;
+                }
+
+                CurrentUser.FirstName = FirstName;
+                CurrentUser.LastName = LastName;
+                CurrentUser.PhoneNumber = PhoneNumber;
+                // No actualizamos el Email ya que no debe cambiar
+
                 await _firebaseConnection.UpdateUserDataAsync(_userId, CurrentUser);
                 await Shell.Current.DisplayAlert("Éxito", "Los datos del usuario se han actualizado correctamente", "OK");
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"Failed to save changes: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"Error al guardar los cambios: {ex.Message}", "OK");
             }
         }
 
@@ -104,6 +135,10 @@ namespace SofolApp.MVVM.ViewModels
             try
             {
                 CurrentUser = await _firebaseConnection.ReadUserDataAsync(_userId);
+                FirstName = CurrentUser.FirstName;
+                LastName = CurrentUser.LastName;
+                Email = CurrentUser.Email;
+                PhoneNumber = CurrentUser.PhoneNumber;
                 await LoadUserImages();
             }
             catch (Exception ex)
