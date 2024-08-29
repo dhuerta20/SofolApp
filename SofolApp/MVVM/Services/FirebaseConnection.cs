@@ -11,7 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SofolApp.MVVM.ViewModels
+namespace SofolApp.Services
 {
     public class FirebaseConnection : IFirebaseConnection
     {
@@ -68,9 +68,11 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
-                // Clear user data from SecureStorage
+ 
+                //Clear user data from SecureStorage
                 SecureStorage.Remove("userId");
                 SecureStorage.Remove("userToken");
+                
             }
             catch (Exception ex)
             {
@@ -249,6 +251,19 @@ namespace SofolApp.MVVM.ViewModels
             catch (Exception ex)
             {
                 throw new Exception("Error inesperado al enviar correo de restablecimiento de contraseña", ex);
+            }
+        }
+
+        public async Task SendPasswordResetEmailAsync(string email)
+        {
+            try
+            {
+                var client = ConnectToFirebase();
+                await client.ResetEmailPasswordAsync(email);
+            }
+            catch (FirebaseAuthException ex)
+            {
+                throw new Exception($"Error al enviar correo de restablecimiento: {ex.Reason}", ex);
             }
         }
     }

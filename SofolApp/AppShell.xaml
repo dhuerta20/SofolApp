@@ -13,50 +13,10 @@
     <Shell.TitleView>
         <Label Text="Proxcredit" />
     </Shell.TitleView>
-    
-    
+
     <ShellContent
         Title="Formulario de registro"
         ContentTemplate="{DataTemplate local:SignInForm}"
         Route="SignInForm" />
-    
-    <ShellContent
-        Title="Imagenes de registro"
-        ContentTemplate="{DataTemplate local:SignUpImg}"
-        Route="SignUpImg" />
-
-    <ShellContent 
-        Title="Referencias del usuario"
-        ContentTemplate="{DataTemplate local:SignUpReferences}"
-        Route="SignUpReferences"
-        />
-
-    <ShellContent
-        Title="Inicio de sesion"
-        ContentTemplate="{DataTemplate local:SignUpForm}"
-        Route="SignUpForm" />
-
-    <ShellContent
-        Title="Página principal"
-        ContentTemplate="{DataTemplate local:CreditPage}"
-        Route="CreditApp" />
-
-    <ShellContent
-        Title="Página de confirmacion de identidad"
-        ContentTemplate="{DataTemplate local:IdConfirmPage}"
-        Route="IdConfirm"
-        />
-
-    <ShellContent
-        Title="Página para ver datos personales"
-        ContentTemplate="{DataTemplate local:PersonalDataPage}"
-        Route="PersonalData"
-        />
-
-    <ShellContent 
-        Title="Página de referencias llamada estatus"
-        ContentTemplate="{DataTemplate local:ReferencesPage}"
-        Route="Status"
-        />
 
 </Shell>

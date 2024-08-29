@@ -62,7 +62,7 @@ namespace SofolApp.MVVM.ViewModels
                 {
                     case "approved":
                         StatusImage = "aproved.png";
-                        StatusLabel = "Aprobado";
+                        StatusLabel = "Pre aprobado";
                         StatusColor = Colors.Green;
                         break;
                     case "disapproved":

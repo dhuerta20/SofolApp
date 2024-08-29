@@ -7,7 +7,7 @@ using Google.Type;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Media;
 using SofolApp.MVVM.Models;
-using SofolApp.MVVM.Services;
+using SofolApp.MVVM.Views;
 using SofolApp.Services;
 
 namespace SofolApp.MVVM.ViewModels
@@ -15,7 +15,6 @@ namespace SofolApp.MVVM.ViewModels
     public partial class PersonalDataPageVM : ObservableObject
     {
         private readonly IFirebaseConnection _firebaseConnection;
-        private readonly IMediaService _mediaService;
         private string _userId;
 
         [ObservableProperty]
@@ -51,10 +50,9 @@ namespace SofolApp.MVVM.ViewModels
         [ObservableProperty]
         private string _phoneNumber;
 
-        public PersonalDataPageVM(IFirebaseConnection firebaseConnection, IMediaService mediaService)
+        public PersonalDataPageVM(IFirebaseConnection firebaseConnection)
         {
             _firebaseConnection = firebaseConnection;
-            _mediaService = mediaService;
         }
 
         [RelayCommand]
@@ -127,7 +125,7 @@ namespace SofolApp.MVVM.ViewModels
         [RelayCommand]
         private async Task GoBack()
         {
-            await Shell.Current.GoToAsync("//CreditApp");
+            await Shell.Current.GoToAsync(nameof(CreditPage));
         }
 
         private async Task LoadUserData()

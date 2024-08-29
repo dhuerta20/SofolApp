@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SofolApp.Services;
 using Sentry;
+using SofolApp.MVVM.Views;
 
 namespace SofolApp.MVVM.ViewModels
 {
@@ -14,7 +15,7 @@ namespace SofolApp.MVVM.ViewModels
 
         #region Commands
 
-        public ICommand CreateAccountPageCommand => new Command(() => Shell.Current.GoToAsync("//SignUpForm"));
+        public ICommand CreateAccountPageCommand => new Command(() => Shell.Current.GoToAsync(nameof(SignUpForm)));
 
         #endregion
 
@@ -57,14 +58,16 @@ namespace SofolApp.MVVM.ViewModels
                 {
                     scope.SetTag("email", Email);
                 });
+
                 var credentials = await _firebaseConnection.SignInAsync(Email, Password);
                 var currentUser = credentials.User;
+
                 if (currentUser != null)
                 {
                     var userEmail = currentUser.Info.Email;
                     await SecureStorage.SetAsync("userEmail", userEmail);
                 }
-                await Shell.Current.GoToAsync("//CreditApp");
+                await Shell.Current.GoToAsync(nameof(CreditPage));
                 Console.WriteLine("Navigation to CreditApp completed");
             }
             catch (Exception ex)
@@ -72,18 +75,19 @@ namespace SofolApp.MVVM.ViewModels
                 SentrySdk.CaptureException(ex); // Captura la excepción en Sentry
                 await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
             }
-        }
+        }    
+
 
         [RelayCommand]
         private async Task NavigateToForgotPassword()
         {
-            await Shell.Current.GoToAsync("//ForgotPass");
+            await Shell.Current.GoToAsync(nameof(ForgotPass));
         }
 
         [RelayCommand]
         private async Task NavigateToSignUp()
         {
-            await Shell.Current.GoToAsync("//SignUpForm");
+            await Shell.Current.GoToAsync(nameof(SignUpForm));
         }
 
         private bool IsValidEmail(string email)

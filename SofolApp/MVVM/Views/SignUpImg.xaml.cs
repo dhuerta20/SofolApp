@@ -18,9 +18,9 @@ namespace SofolApp.MVVM.Views
 
         protected override bool OnBackButtonPressed()
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            Dispatcher.Dispatch(async () =>
             {
-                await Shell.Current.GoToAsync("//SignUpForm");
+                await Shell.Current.GoToAsync(nameof(SignInForm));
             });
             return true;
         }

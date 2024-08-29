@@ -3,31 +3,81 @@ using CommunityToolkit.Mvvm.Input;
 using SofolApp.MVVM.Models;
 using SofolApp.Services;
 using Microsoft.Maui.Storage;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using System.Text.Json;
+using SofolApp.MVVM.Views;
 
 namespace SofolApp.MVVM.ViewModels
 {
     public partial class SignUpImgVM : ObservableObject
     {
         private readonly IFirebaseConnection _firebaseConnection;
-        private string _userId;
+        private readonly IAzureFaceService _azureFaceService;
+        private readonly IRegistrationStateService _registrationStateService;
+        private Users _currentUser;
 
         [ObservableProperty]
         private UploadFlags _uploadFlags;
 
-        public SignUpImgVM(IFirebaseConnection firebaseConnection)
+        public SignUpImgVM(IFirebaseConnection firebaseConnection, IAzureFaceService azureFaceService, IRegistrationStateService registrationStateService)
         {
             _firebaseConnection = firebaseConnection;
+            _azureFaceService = azureFaceService;
+            _registrationStateService = registrationStateService;
             UploadFlags = new UploadFlags();
         }
 
         [RelayCommand]
         private async Task Initialize()
         {
-            _userId = await SecureStorage.GetAsync("userId");
-            if (string.IsNullOrEmpty(_userId))
+            await LoadUserData();
+            if (_currentUser == null || string.IsNullOrEmpty(_currentUser.userId))
             {
                 await Shell.Current.DisplayAlert("Error", "User is not authenticated.", "OK");
-                await Shell.Current.GoToAsync("//Login");
+                await Shell.Current.GoToAsync(nameof(SignInForm));
+            }
+            else
+            {
+                UpdateUploadFlags();
+                await _registrationStateService.SaveRegistrationStateAsync("SignUpImg");
+            }
+        }
+
+
+        private async Task LoadUserData()
+        {
+            string userJson = await SecureStorage.GetAsync("UserData");
+            if (!string.IsNullOrEmpty(userJson))
+            {
+                _currentUser = JsonSerializer.Deserialize<Users>(userJson);
+            }
+            else
+            {
+                string userId = await SecureStorage.GetAsync("UserId");
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    _currentUser = await _firebaseConnection.ReadUserDataAsync(userId);
+                    if (_currentUser != null)
+                    {
+                        await SecureStorage.SetAsync("UserData", JsonSerializer.Serialize(_currentUser));
+                    }
+                }
+            }
+        }
+
+        private void UpdateUploadFlags()
+        {
+            if (_currentUser?.Images != null)
+            {
+                UploadFlags.FaceUploaded = _currentUser.Images.ContainsKey("face");
+                UploadFlags.IdUploaded = _currentUser.Images.ContainsKey("id");
+                UploadFlags.AddressUploaded = _currentUser.Images.ContainsKey("address");
+                UploadFlags.IncomeUploaded = _currentUser.Images.ContainsKey("income");
+                UploadFlags.PayrollUploaded = _currentUser.Images.ContainsKey("payroll");
+                UploadFlags.AccountStatusUploaded = _currentUser.Images.ContainsKey("accountStatus");
             }
         }
 
@@ -40,36 +90,44 @@ namespace SofolApp.MVVM.ViewModels
 
                 if (photoResult != null)
                 {
-                    using (var stream = await photoResult.OpenReadAsync())
+                    using (var originalStream = await photoResult.OpenReadAsync())
                     {
-                        var user = await _firebaseConnection.ReadUserDataAsync(_userId);
-                        if (user.Images != null && user.Images.ContainsKey(imageType))
+                        MemoryStream memoryStream = new MemoryStream();
+                        await originalStream.CopyToAsync(memoryStream);
+
+                        originalStream.Position = 0;
+                        memoryStream.Position = 0;
+
+                        if (imageType == "face")
+                        {
+                            if (!await VerifyFace(originalStream))
+                                return;
+                            memoryStream.Position = 0;
+                        }
+
+                        if (_currentUser.Images.ContainsKey(imageType))
                         {
                             await Shell.Current.DisplayAlert("Error", $"La imagen que intentas añadir ya existe ", "OK");
                             return;
                         }
 
-                        string downloadUrl = await _firebaseConnection.UploadImageAsync(_userId, stream, imageType);
-                        UpdateUploadFlags(imageType, true);
+                        string downloadUrl = await _firebaseConnection.UploadImageAsync(_currentUser.userId, memoryStream, imageType);
+                        _currentUser.Images[imageType] = downloadUrl;
+                        await _firebaseConnection.UpdateUserDataAsync(_currentUser.userId, _currentUser);
 
-                        if (user.Images == null)
-                        {
-                            user.Images = new Dictionary<string, string>();
-                        }
-                        user.Images[imageType] = downloadUrl;
-                        await _firebaseConnection.UpdateUserDataAsync(_userId, user);
+                        UpdateUploadFlags();
+                        await UpdateLocalUserData();
 
-                        await Shell.Current.DisplayAlert("Éxito", "La imagen se agrego correctamente", "OK");
+                        await Shell.Current.DisplayAlert("Éxito", "La imagen se agregó correctamente", "OK");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error al añadir la imagen : {ex.Message}");
+                Console.WriteLine($"Error al añadir la imagen: {ex.Message}");
                 await Shell.Current.DisplayAlert("Error", $"No se pudo agregar la foto: {ex.Message}", "OK");
             }
         }
-
 
         [RelayCommand]
         private async Task UploadAccountStatus()
@@ -92,53 +150,66 @@ namespace SofolApp.MVVM.ViewModels
                 {
                     using (var stream = await fileResult.OpenReadAsync())
                     {
-                        var user = await _firebaseConnection.ReadUserDataAsync(_userId);
-                        if (user.Images != null && user.Images.ContainsKey("accountStatus"))
+                        if (_currentUser.Images != null && _currentUser.Images.ContainsKey("accountStatus"))
                         {
-                            await Shell.Current.DisplayAlert("Error", "Este archivo ya se agrego correctamente.", "OK");
+                            await Shell.Current.DisplayAlert("Error", "Este archivo ya se agregó correctamente.", "OK");
                             return;
                         }
 
-                        string downloadUrl = await _firebaseConnection.UploadImageAsync(_userId, stream, "accountStatus");
-                        UpdateUploadFlags("accountStatus", true);
+                        string downloadUrl = await _firebaseConnection.UploadImageAsync(_currentUser.userId, stream, "accountStatus");
 
-                        if (user.Images == null)
+                        if (_currentUser.Images == null)
                         {
-                            user.Images = new Dictionary<string, string>();
+                            _currentUser.Images = new Dictionary<string, string>();
                         }
-                        user.Images["accountStatus"] = downloadUrl;
-                        await _firebaseConnection.UpdateUserDataAsync(_userId, user);
+                        _currentUser.Images["accountStatus"] = downloadUrl;
+                        await _firebaseConnection.UpdateUserDataAsync(_currentUser.userId, _currentUser);
 
-                        await Shell.Current.DisplayAlert("Éxito", "El estado de cuenta se subio correctamente.", "OK");
+                        UpdateUploadFlags();
+                        await UpdateLocalUserData();
+
+                        await Shell.Current.DisplayAlert("Éxito", "El estado de cuenta se subió correctamente.", "OK");
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error al tratar de agregar el PDF: {ex.Message}");
-                await Shell.Current.DisplayAlert("Error", $"No se logro agregar el PDF: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", $"No se logró agregar el PDF: {ex.Message}", "OK");
             }
+        }
+
+        private async Task<bool> VerifyFace(Stream imageStream)
+        {
+            Console.WriteLine("Iniciando verificación de rostro con Azure Face API");
+            bool isFace = await _azureFaceService.VerifyFaceAsync(imageStream);
+            Console.WriteLine($"Resultado de la verificación de rostro: {isFace}");
+
+            if (!isFace)
+            {
+                await Shell.Current.DisplayAlert("Error", "No se detectó un rostro humano en la imagen. Por favor, intenta de nuevo.", "OK");
+                return false;
+            }
+            return true;
+        }
+
+        private async Task UpdateLocalUserData()
+        {
+            string userJson = JsonSerializer.Serialize(_currentUser);
+            await SecureStorage.SetAsync("UserData", userJson);
         }
 
         [RelayCommand]
         private async Task NavigateToReferences()
         {
-            try
+            if (AllUploadsCompleted())
             {
-                bool uploadsCompleted = AllUploadsCompleted();
-
-                if (uploadsCompleted)
-                {
-                    await Shell.Current.GoToAsync("//SignUpReferences");
-                }
-                else
-                {
-                    await Shell.Current.DisplayAlert("Error", "Porfavor agrega todas las imagenes anteriores antes de subir el archivo.", "OK");
-                }
+                await _registrationStateService.SaveRegistrationStateAsync("SignUpReferences");
+                await Shell.Current.GoToAsync(nameof(SignUpReferences));
             }
-            catch (Exception ex)
+            else
             {
-                await Shell.Current.DisplayAlert("Error de navegación", $"Fallo al tratar de navegar a la página de referencias: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Error", "Por favor, sube todas las imágenes antes de continuar.", "OK");
             }
         }
 
@@ -147,24 +218,12 @@ namespace SofolApp.MVVM.ViewModels
         {
             if (AllUploadsCompleted())
             {
-                await Shell.Current.GoToAsync("//CreditApp");
+                await _registrationStateService.ClearRegistrationStateAsync();
+                await Shell.Current.GoToAsync(nameof(CreditPage));
             }
             else
             {
-                await Shell.Current.DisplayAlert("Error", "Porfavor agrega todas las imágenes antes de finalizar.", "OK");
-            }
-        }
-
-        private void UpdateUploadFlags(string imageType, bool isUploaded)
-        {
-            switch (imageType)
-            {
-                case "face": UploadFlags.FaceUploaded = isUploaded; break;
-                case "id": UploadFlags.IdUploaded = isUploaded; break;
-                case "address": UploadFlags.AddressUploaded = isUploaded; break;
-                case "income": UploadFlags.IncomeUploaded = isUploaded; break;
-                case "payroll": UploadFlags.PayrollUploaded = isUploaded; break;
-                case "accountStatus": UploadFlags.AccountStatusUploaded = isUploaded; break;
+                await Shell.Current.DisplayAlert("Error", "Por favor, sube todas las imágenes antes de finalizar.", "OK");
             }
         }
 
@@ -182,21 +241,21 @@ namespace SofolApp.MVVM.ViewModels
     public partial class UploadFlags : ObservableObject
     {
         [ObservableProperty]
-        private bool _faceUploaded;
+        private bool faceUploaded;
 
         [ObservableProperty]
-        private bool _idUploaded;
+        private bool idUploaded;
 
         [ObservableProperty]
-        private bool _addressUploaded;
+        private bool addressUploaded;
 
         [ObservableProperty]
-        private bool _incomeUploaded;
+        private bool incomeUploaded;
 
         [ObservableProperty]
-        private bool _payrollUploaded;
+        private bool payrollUploaded;
 
         [ObservableProperty]
-        private bool _accountStatusUploaded;
+        private bool accountStatusUploaded;
     }
 }

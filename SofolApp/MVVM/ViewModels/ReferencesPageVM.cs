@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SofolApp.MVVM.Models;
+using SofolApp.MVVM.Views;
 using SofolApp.Services;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -92,7 +93,7 @@ namespace SofolApp.MVVM.ViewModels
         [RelayCommand]
         public async Task GoBackAsync()
         {
-            await Shell.Current.GoToAsync("//CreditApp");
+            await Shell.Current.GoToAsync(nameof(CreditPage));
         }
     }
 }

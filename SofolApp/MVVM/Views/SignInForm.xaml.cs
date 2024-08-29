@@ -10,5 +10,6 @@ namespace SofolApp.MVVM.Views
             InitializeComponent();
             BindingContext = viewModel;
         }
+
     }
 }

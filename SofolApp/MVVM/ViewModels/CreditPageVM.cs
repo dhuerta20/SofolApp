@@ -6,6 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Sentry;
 using System.Windows.Input;
+using SofolApp.MVVM.Views;
 
 namespace SofolApp.MVVM.ViewModels
 {
@@ -81,7 +82,8 @@ namespace SofolApp.MVVM.ViewModels
             try
             {
                 await _firebaseConnection.SignOutAsync();
-                await Shell.Current.GoToAsync("//SignInForm");
+                await Shell.Current.GoToAsync($"//{nameof(SignInForm)}");
+
             }
             catch (Exception ex)
             {
@@ -95,7 +97,7 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
-                await Shell.Current.GoToAsync("//IdConfirm");
+                await Shell.Current.GoToAsync(nameof(IdConfirmPage));
             }
             catch (Exception ex)
             {
@@ -109,7 +111,7 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
-                await Shell.Current.GoToAsync("//PersonalData");
+                await Shell.Current.GoToAsync(nameof(PersonalDataPage));
             }
             catch (Exception ex)
             {
@@ -123,7 +125,7 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
-                await Shell.Current.GoToAsync("//Status");
+                await Shell.Current.GoToAsync(nameof(ReferencesPage));
             }
             catch (Exception ex)
             {
@@ -137,7 +139,7 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
-                var phoneNumber = "+528130520634";
+                var phoneNumber = "";
                 var message = "Hola, me gustaría obtener más información.";
                 var url = $"https://wa.me/{phoneNumber}?text={Uri.EscapeDataString(message)}";
                 await Launcher.OpenAsync(new Uri(url));
@@ -154,7 +156,7 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
-                var phoneNumber = "+528130520634";
+                var phoneNumber = "";
                 PhoneDialer.Open(phoneNumber);
             }
             catch (Exception ex)

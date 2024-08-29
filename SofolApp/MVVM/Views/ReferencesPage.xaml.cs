@@ -22,9 +22,9 @@ namespace SofolApp.MVVM.Views
 
         protected override bool OnBackButtonPressed()
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            Dispatcher.Dispatch(async () =>
             {
-                await Shell.Current.GoToAsync("//CreditApp");
+                await Shell.Current.GoToAsync(nameof(CreditPage));
             });
             return true;
         }

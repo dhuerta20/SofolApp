@@ -112,7 +112,7 @@
                         Text="Inicia sesión"
                         TextColor="#FBF6FD" />
 
-                    <!--  Olvidar contraseña y crear cuenta  
+                    <!--Olvidar contraseña y crear cuenta-->
                     <Button
                         BackgroundColor="Transparent"
                         Command="{Binding NavigateToForgotPasswordCommand}"
@@ -121,7 +121,7 @@
                         Text="¿Olvidaste tu contraseña?"
                         TextColor="{AppThemeBinding Dark=White,
                                                     Light=Black}" />
-                    -->
+                    
                     <Button
                         Margin="0,30,0,0"
                         BackgroundColor="#FBF6FD"

@@ -1,158 +1,148 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Maui.Controls;
-using Firebase.Database.Query;
 using SofolApp.MVVM.Models;
+using SofolApp.MVVM.Views;
+using SofolApp.Services;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace SofolApp.MVVM.ViewModels
 {
     public partial class SignUpReferencesVM : ObservableObject
     {
-        private readonly FirebaseConnection _firebaseConnection;
-        private string _userId;
+        private readonly IFirebaseConnection _firebaseConnection;
+        private readonly IRegistrationStateService _registrationStateService;
+        private Users _userData;
 
         [ObservableProperty]
-        private ObservableCollection<string> _referenceEmails;
+        private ObservableCollection<string> _references;
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(CanAddMoreReferences))]
-        private int _maxReferences = 3;
+        private string _newReferenceEmail;
 
-        public bool CanAddMoreReferences => ReferenceEmails.Count < MaxReferences;
+        [ObservableProperty]
+        private bool _canAddReference;
 
-        public SignUpReferencesVM()
+        [ObservableProperty]
+        private bool _canNavigateAway;
+
+        public SignUpReferencesVM(IFirebaseConnection firebaseConnection, IRegistrationStateService registrationStateService)
         {
-            _firebaseConnection = new FirebaseConnection();
-            ReferenceEmails = new ObservableCollection<string>();
-
-            InitializeUserId();
+            _firebaseConnection = firebaseConnection;
+            _registrationStateService = registrationStateService;
+            References = new ObservableCollection<string>();
+            CanNavigateAway = false;
         }
 
-        private async Task InitializeUserId()
+        [RelayCommand]
+        public async Task InitializeAsync()
         {
-            _userId = await SecureStorage.GetAsync("userId");
-            if (string.IsNullOrEmpty(_userId))
+            var userId = await SecureStorage.GetAsync("userId");
+            if (!string.IsNullOrEmpty(userId))
             {
-                await Shell.Current.DisplayAlert("Error", "No se encontró el id del usuario. Ingrese de nuevo, por favor.", "OK");
-                await Shell.Current.GoToAsync("//SignUp");
-            }
-        }
-
-        [RelayCommand(CanExecute = nameof(CanAddMoreReferences))]
-        private void AddReference()
-        {
-            if (CanAddMoreReferences)
-            {
-                ReferenceEmails.Add("");
+                _userData = await _firebaseConnection.ReadUserDataAsync(userId);
+                await DisplayCurrentReferencesAsync();
+                UpdateCanAddReference();
             }
             else
             {
-                Shell.Current.DisplayAlert("Límite alcanzado", "Solo se permiten 3 referencias", "OK");
+                await Shell.Current.DisplayAlert("Error", "No se encontró el id del usuario. Ingrese de nuevo, por favor.", "OK");
+                await Shell.Current.GoToAsync(nameof(SignUpForm));
             }
+        }
+
+        private async Task DisplayCurrentReferencesAsync()
+        {
+            References.Clear();
+            if (_userData != null)
+            {
+                if (!string.IsNullOrEmpty(_userData.FirstReference))
+                    References.Add(_userData.FirstReference);
+                if (!string.IsNullOrEmpty(_userData.SecondReference))
+                    References.Add(_userData.SecondReference);
+                if (!string.IsNullOrEmpty(_userData.ThirdReference))
+                    References.Add(_userData.ThirdReference);
+            }
+        }
+
+        private void UpdateCanAddReference()
+        {
+            CanAddReference = References.Count < 3;
         }
 
         [RelayCommand]
-        private async Task ValidateReference(int index)
+        public async Task AddReferenceAsync()
         {
-            string email = ReferenceEmails[index].Trim();
-            if (string.IsNullOrWhiteSpace(email)) return;
-
-            if (await IsCurrentUserReference(email))
+            if (string.IsNullOrEmpty(NewReferenceEmail))
             {
-                await Shell.Current.DisplayAlert("Error", "No puedes referenciarte a ti mismo", "OK");
-                ReferenceEmails[index] = "";
+                await Shell.Current.DisplayAlert("Error", "Por favor, ingrese un correo de referencia.", "OK");
                 return;
             }
 
-            if (!await IsValidUserReference(email))
+            if (NewReferenceEmail == _userData.Email)
             {
-                await Shell.Current.DisplayAlert("Referencia no válida", $"El usuario con el email: {email} no existe en la app o no está aprobado", "OK");
-                ReferenceEmails[index] = "";
+                await Shell.Current.DisplayAlert("Error", "No puede referenciarse a sí mismo.", "OK");
                 return;
             }
 
-            if (IsDuplicateReference(email))
+            var referenceExists = await _firebaseConnection.CheckIfUserExistsAsync(NewReferenceEmail);
+            if (!referenceExists)
             {
-                await Shell.Current.DisplayAlert("Referencia duplicada", $"El usuario con el email: {email} ya ha sido agregado como referencia", "OK");
-                ReferenceEmails[index] = "";
-            }
-        }
-
-        private bool IsDuplicateReference(string email)
-        {
-            return ReferenceEmails.Count(e => e.Equals(email, StringComparison.OrdinalIgnoreCase)) > 1;
-        }
-
-        private async Task<bool> IsCurrentUserReference(string email)
-        {
-            string currentUserEmail = await SecureStorage.GetAsync("userEmail");
-            return email.Equals(currentUserEmail, StringComparison.OrdinalIgnoreCase);
-        }
-
-        private async Task<bool> IsValidUserReference(string email)
-        {
-            bool userExists = await _firebaseConnection.CheckIfUserExistsAsync(email);
-            if (!userExists)
-            {
-                return false;
+                await Shell.Current.DisplayAlert("Error", "El correo de referencia no existe.", "OK");
+                return;
             }
 
-            var client = FirebaseConnection.GetDatabaseClient();
-            var user = (await client.Child("users")
-                .OrderBy("Email")
-                .EqualTo(email)
-                .OnceAsync<Users>())
-                .FirstOrDefault();
+            if (References.Contains(NewReferenceEmail))
+            {
+                await Shell.Current.DisplayAlert("Error", "Esta referencia ya existe.", "OK");
+                return;
+            }
 
-            return user?.Object?.IsValid == "approved";
-        }
+            References.Add(NewReferenceEmail);
+            UpdateUserReferences();
 
-        [RelayCommand]
-        private async Task SaveReferences()
-        {
             try
             {
-                var currentUser = await _firebaseConnection.ReadUserDataAsync(_userId);
-
-                for (int i = 0; i < ReferenceEmails.Count; i++)
-                {
-                    string email = ReferenceEmails[i].Trim();
-                    if (!string.IsNullOrWhiteSpace(email))
-                    {
-                        switch (i)
-                        {
-                            case 0:
-                                currentUser.FirstReference = email;
-                                break;
-                            case 1:
-                                currentUser.SecondReference = email;
-                                break;
-                            case 2:
-                                currentUser.ThirdReference = email;
-                                break;
-                        }
-                    }
-                }
-
-                await _firebaseConnection.UpdateUserDataAsync(_userId, currentUser);
-
-                await Shell.Current.DisplayAlert("Éxito", "Las referencias se guardaron correctamente!", "OK");
-                await Shell.Current.GoToAsync("//SignUpImg");
+                await _firebaseConnection.UpdateUserDataAsync(_userData.userId, _userData);
+                await Shell.Current.DisplayAlert("Éxito", "La referencia se agregó y guardó correctamente.", "OK");
+                CanNavigateAway = true;
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Error", $"No se pudo guardar las referencias: {ex.Message}", "OK");
+                Console.WriteLine($"Error en AddReferenceAsync: {ex.Message}");
+                await Shell.Current.DisplayAlert("Error", "Ocurrió un error al guardar la referencia. Por favor, intente nuevamente.", "OK");
+                References.Remove(NewReferenceEmail);
+                UpdateUserReferences();
+                CanNavigateAway = false;
             }
+
+            UpdateCanAddReference();
+            NewReferenceEmail = string.Empty;
+        }
+
+        private void UpdateUserReferences()
+        {
+            _userData.FirstReference = References.Count > 0 ? References[0] : null;
+            _userData.SecondReference = References.Count > 1 ? References[1] : null;
+            _userData.ThirdReference = References.Count > 2 ? References[2] : null;
         }
 
         [RelayCommand]
-        private async Task ReturnToRegister()
+        public async Task ReturnToRegisterAsync()
         {
-            await Shell.Current.GoToAsync("//SignUpImg");
+            if (CanNavigateAway)
+            {
+                await _registrationStateService.ClearRegistrationStateAsync();
+                await Shell.Current.GoToAsync(nameof(SignUpImg));
+            }
+            else
+            {
+                bool answer = await Shell.Current.DisplayAlert("Advertencia", "No has guardado las referencias. ¿Estás seguro de que quieres volver sin guardar?", "Sí", "No");
+                if (answer)
+                {
+                    await Shell.Current.GoToAsync(nameof(SignUpImg));
+                }
+            }
         }
     }
 }

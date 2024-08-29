@@ -20,5 +20,6 @@ namespace SofolApp.Services
         Task<List<string>> GetReferencesAsync(string userId);
         Task UpdateReferencesAsync(string userId, string firstReference, string secondReference, string thirdReference);
         Task ResetPasswordAsync(string email);
+        Task SendPasswordResetEmailAsync(string email);
     }
 }

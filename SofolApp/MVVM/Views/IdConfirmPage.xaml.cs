@@ -25,7 +25,7 @@ namespace SofolApp.MVVM.Views
 
         private async void NavigateBack()
         {
-            await Shell.Current.GoToAsync("//CreditApp");
+            await Shell.Current.GoToAsync(nameof(CreditPage));
         }
     }
 }

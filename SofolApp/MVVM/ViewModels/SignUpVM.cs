@@ -1,70 +1,46 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SofolApp.MVVM.ViewModels;
+using SofolApp.MVVM.Views;
+using SofolApp.MVVM.Models;
+using SofolApp.Services;
 using System.Text.RegularExpressions;
+using System.Text.Json;
 
 namespace SofolApp.MVVM.ViewModels
 {
     public partial class SignUpVM : ObservableObject
     {
-        private readonly FirebaseConnection _firebaseConnection;
+        private readonly IFirebaseConnection _firebaseConnection;
 
         [ObservableProperty]
         private string firstName;
-
         [ObservableProperty]
         private string lastName;
-
         [ObservableProperty]
         private string email;
-
         [ObservableProperty]
         private string phone;
-
         [ObservableProperty]
         private string password;
 
-        public SignUpVM()
+        public SignUpVM(IFirebaseConnection firebaseConnection)
         {
-            _firebaseConnection = new FirebaseConnection();
+            _firebaseConnection = firebaseConnection;
         }
 
         [RelayCommand]
         private async Task SignUpAsync()
         {
-            if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) ||
-                string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Phone) ||
-                string.IsNullOrWhiteSpace(Password))
-            {
-                await Shell.Current.DisplayAlert("Error", "Por favor, complete todos los campos", "OK");
+            if (!ValidateInput())
                 return;
-            }
-
-            if (!IsValidEmail(Email))
-            {
-                await Shell.Current.DisplayAlert("Error", "Por favor, ingrese un correo válido", "OK");
-                return;
-            }
-
-            if (!IsValidPassword(Password))
-            {
-                await Shell.Current.DisplayAlert("Error", "La contraseña debe tener al menos 8 caracteres, incluir mayúsculas, minúsculas, números y al menos un carácter especial", "OK");
-                return;
-            }
-
-            if (!IsValidPhoneNumber(Phone))
-            {
-                await Shell.Current.DisplayAlert("Error", "Por favor, ingrese un número de teléfono válido de 10 dígitos", "OK");
-                return;
-            }
 
             try
             {
                 var userCredential = await _firebaseConnection.CreateUserAsync(Email, Password, FirstName, LastName, Phone);
                 if (userCredential != null && !string.IsNullOrEmpty(userCredential.User.Uid))
                 {
-                    await SecureStorage.SetAsync("userEmail", Email);
-                    await Shell.Current.GoToAsync("//SignUpImg");
+                    await SaveUserProgress(userCredential.User.Uid);
+                    await Shell.Current.GoToAsync(nameof(SignUpImg));
                     await Shell.Current.DisplayAlert("Éxito", "Usuario registrado correctamente", "OK");
                 }
                 else
@@ -77,6 +53,40 @@ namespace SofolApp.MVVM.ViewModels
                 Console.WriteLine($"Error detallado: {ex}");
                 await Shell.Current.DisplayAlert("Error", $"Error al registrar: {ex.Message}", "OK");
             }
+        }
+
+        private async Task SaveUserProgress(string userId)
+        {
+            var user = new Users
+            {
+                userId = userId,
+                FirstName = FirstName,
+                LastName = LastName,
+                Email = Email,
+                PhoneNumber = Phone,
+                IsValid = "pending",
+                IsAdmin = false
+            };
+
+            string userJson = JsonSerializer.Serialize(user);
+            await SecureStorage.SetAsync("UserData", userJson);
+            await SecureStorage.SetAsync("UserId", userId);
+        }
+
+        private bool ValidateInput()
+        {
+            if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) ||
+                string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Phone) ||
+                string.IsNullOrWhiteSpace(Password))
+            {
+                Shell.Current.DisplayAlert("Error", "Por favor, complete todos los campos", "OK");
+                return false;
+            }
+
+            if (!IsValidEmail(Email) || !IsValidPassword(Password) || !IsValidPhoneNumber(Phone))
+                return false;
+
+            return true;
         }
 
         private bool IsValidEmail(string email)

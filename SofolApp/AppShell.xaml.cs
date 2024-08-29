@@ -6,25 +6,21 @@ namespace SofolApp
     {
         public AppShell()
         {
-            try
-            {
-                InitializeComponent();
-                }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error en AppShell constructor: {ex}");
-                throw;
-            }
+            InitializeComponent();
+            RegisterRoutes();
+        }
 
-            Routing.RegisterRoute("SignInForm", typeof(SignInForm));
-            Routing.RegisterRoute("SignUpImg", typeof(SignUpImg));
-            Routing.RegisterRoute("SignUpReferences", typeof(SignUpReferences));
-            Routing.RegisterRoute("SignUpForm", typeof(SignUpForm));
-            Routing.RegisterRoute("CreditApp", typeof(CreditPage));
-            Routing.RegisterRoute("IdConfirm", typeof(IdConfirmPage));
-            Routing.RegisterRoute("PersonalData", typeof(PersonalDataPage));
-            Routing.RegisterRoute("Status", typeof(ReferencesPage));
-            //Routing.RegisterRoute("ForgotPass", typeof(ForgotPass));
+        private void RegisterRoutes()
+        {
+            Routing.RegisterRoute(nameof(SignInForm), typeof(SignInForm));
+            Routing.RegisterRoute(nameof(SignUpImg), typeof(SignUpImg));
+            Routing.RegisterRoute(nameof(SignUpReferences), typeof(SignUpReferences));
+            Routing.RegisterRoute(nameof(SignUpForm), typeof(SignUpForm));
+            Routing.RegisterRoute(nameof(CreditPage), typeof(CreditPage));
+            Routing.RegisterRoute(nameof(IdConfirmPage), typeof(IdConfirmPage));
+            Routing.RegisterRoute(nameof(PersonalDataPage), typeof(PersonalDataPage));
+            Routing.RegisterRoute(nameof(ReferencesPage), typeof(ReferencesPage));
+            Routing.RegisterRoute(nameof(ForgotPass), typeof(ForgotPass));
         }
     }
 }

@@ -79,7 +79,7 @@
                 <!-- Payroll Photo -->
                 <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
                     <StackLayout>
-                        <Image Source="{Binding PayrollPhotoSource}" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Image Source="{Binding PayrollPhotoSource}" HeightRequest="75" WidthRequest="75" Aspect="AspectFill"/>
                         <Button Text="Actualizar comprobante de nómina" 
                                 Command="{Binding UpdatePhotoCommand}"
                                 CommandParameter="payroll"
@@ -95,7 +95,7 @@
                 <!-- Account Status Photo -->
                 <Frame CornerRadius="15" HasShadow="True" Padding="10" Background="{AppThemeBinding Dark=#768086, Light=White}">
                     <StackLayout>
-                        <Image Source="{Binding AccountStatusPhotoSource}" HeightRequest="150" WidthRequest="150" Aspect="AspectFill"/>
+                        <Image Source="{Binding AccountStatusPhotoSource}" HeightRequest="75" WidthRequest="75" Aspect="AspectFill"/>
                         <Button Text="Actualizar comprobante de Cuenta" 
                                 Command="{Binding UpdatePhotoCommand}"
                                 CommandParameter="accountStatus"

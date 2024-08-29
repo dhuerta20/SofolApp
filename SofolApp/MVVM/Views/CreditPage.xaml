@@ -98,102 +98,112 @@
 
                             <!-- CONFIRMACION DE IDENTIDAD -->
                             <Frame
-                                Grid.Row="1"
-                                Padding="0"
-                                BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}"
-                                BorderColor="Transparent"
-                                CornerRadius="30"
-                                HasShadow="True"
-                                HorizontalOptions="Fill">
+                            Grid.Row="1"
+                            Padding="0"
+                            BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}"
+                            BorderColor="Transparent"
+                            CornerRadius="30"
+                            HasShadow="True"
+                            HorizontalOptions="Fill">
                                 <Grid Padding="10,5" ColumnDefinitions="Auto,*">
                                     <Frame
-                                        Grid.Column="0"
-                                        Padding="5"
-                                        BackgroundColor="LightGray"
-                                        CornerRadius="10"
-                                        HeightRequest="50"
-                                        WidthRequest="50">
+                                    Grid.Column="0"
+                                    Padding="5"
+                                    BackgroundColor="LightGray"
+                                    CornerRadius="10"
+                                    HeightRequest="50"
+                                    WidthRequest="50">
                                         <Image Aspect="AspectFit" Source="confirmacion_de_identidad.png" />
                                     </Frame>
-                                    <Button
-                                        Grid.Column="1"
+                                    <Grid Grid.Column="1">
+                                        <Button
                                         BackgroundColor="Transparent"
                                         Command="{Binding IdentityConfirmationCommand}"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Fill" />
+                                        <Label
                                         FontAttributes="Bold"
                                         FontSize="18"
-                                        HorizontalOptions="StartAndExpand"
-                                        LineBreakMode="WordWrap"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Center"
                                         Text="Confirmación de info"
-                                        TextColor="{AppThemeBinding Dark=White, Light=#000000}"
-                                        VerticalOptions="Center" />
+                                        TextColor="{AppThemeBinding Dark=White, Light=#000000}" />
+                                    </Grid>
                                 </Grid>
                             </Frame>
 
                             <!-- DATOS PERSONALES -->
                             <Frame
-                                Grid.Row="2"
-                                Padding="0"
-                                BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}"
-                                BorderColor="Transparent"
-                                CornerRadius="30"
-                                HasShadow="True"
-                                HorizontalOptions="Fill">
+                            Grid.Row="2"
+                            Padding="0"
+                            BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}"
+                            BorderColor="Transparent"
+                            CornerRadius="30"
+                            HasShadow="True"
+                            HorizontalOptions="Fill">
                                 <Grid Padding="10,5" ColumnDefinitions="Auto,*">
                                     <Frame
-                                        Grid.Column="0"
-                                        Padding="5"
-                                        BackgroundColor="LightGray"
-                                        CornerRadius="10"
-                                        HeightRequest="50"
-                                        WidthRequest="50">
+                                    Grid.Column="0"
+                                    Padding="5"
+                                    BackgroundColor="LightGray"
+                                    CornerRadius="10"
+                                    HeightRequest="50"
+                                    WidthRequest="50">
                                         <Image Aspect="AspectFit" Source="informacion_personal.png" />
                                     </Frame>
-                                    <Button
-                                        Grid.Column="1"
+                                    <Grid Grid.Column="1">
+                                        <Button
                                         BackgroundColor="Transparent"
                                         Command="{Binding PersonalProfileDataCommand}"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Fill" />
+                                        <Label
                                         FontAttributes="Bold"
                                         FontSize="18"
-                                        HorizontalOptions="StartAndExpand"
-                                        LineBreakMode="WordWrap"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Center"
                                         Text="Datos personales"
-                                        TextColor="{AppThemeBinding Dark=White, Light=#000000}"
-                                        VerticalOptions="Center" />
+                                        TextColor="{AppThemeBinding Dark=White, Light=#000000}" />
+                                    </Grid>
                                 </Grid>
                             </Frame>
 
                             <!-- ESTATUS -->
                             <Frame
-                                Grid.Row="3"
-                                Padding="0"
-                                BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}"
-                                BorderColor="Transparent"
-                                CornerRadius="30"
-                                HasShadow="True"
-                                HorizontalOptions="Fill">
+                            Grid.Row="3"
+                            Padding="0"
+                            BackgroundColor="{AppThemeBinding Dark=#616a70, Light=#58ce74}"
+                            BorderColor="Transparent"
+                            CornerRadius="30"
+                            HasShadow="True"
+                            HorizontalOptions="Fill">
                                 <Grid Padding="10,5" ColumnDefinitions="Auto,*">
                                     <Frame
-                                        Grid.Column="0"
-                                        Padding="5"
-                                        BackgroundColor="LightGray"
-                                        CornerRadius="10"
-                                        HeightRequest="50"
-                                        WidthRequest="50">
+                                    Grid.Column="0"
+                                    Padding="5"
+                                    BackgroundColor="LightGray"
+                                    CornerRadius="10"
+                                    HeightRequest="50"
+                                    WidthRequest="50">
                                         <Image Aspect="AspectFit" Source="estatus.png" />
                                     </Frame>
-                                    <Button
-                                        Grid.Column="1"
+                                    <Grid Grid.Column="1">
+                                        <Button
                                         BackgroundColor="Transparent"
                                         Command="{Binding StatusRequestCommand}"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Fill" />
+                                        <Label
                                         FontAttributes="Bold"
                                         FontSize="18"
                                         HorizontalOptions="Start"
-                                        LineBreakMode="WordWrap"
+                                        VerticalOptions="Center"
                                         Text="Estatus"
-                                        TextColor="{AppThemeBinding Dark=White, Light=#000000}"
-                                        VerticalOptions="Center" />
+                                        TextColor="{AppThemeBinding Dark=White, Light=#000000}" />
+                                    </Grid>
                                 </Grid>
                             </Frame>
+
 
                             <!-- CONTÁCTANOS -->
                             <Label

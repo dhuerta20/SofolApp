@@ -6,7 +6,9 @@ using SofolApp.Services;
 using SofolApp.MVVM.ViewModels;
 using Firebase.Auth.Repository;
 using CommunityToolkit.Maui;
-using SofolApp.MVVM.Services;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
+using Microsoft.Extensions.Configuration;
 
 namespace SofolApp
 {
@@ -25,30 +27,50 @@ namespace SofolApp
                         fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                         fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                         fonts.AddFont("FontAwesomeSolid-900", "FAS");
-
                     });
+
+                // Configuration setup
+                builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+                // Azure Key Vault setup
+                string keyVaultUri = builder.Configuration["KeyVaultUri"] ?? "Error en la carga de azure key vault";
+                var secretClient = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
+
+                // Dependency injection setup
+                builder.Services.AddSingleton<IAzureKeyVaultService>(sp => new AzureKeyVaultService(builder.Configuration));
+                builder.Services.AddSingleton<IFirebaseConnection, FirebaseConnection>();
+
+                builder.Services.AddSingleton<IAzureFaceService>(sp =>
+                {
+                    var keyVaultService = sp.GetRequiredService<IAzureKeyVaultService>();
+                    var azureApiKey = keyVaultService.GetSecretAsync("AzureFaceApiKey").GetAwaiter().GetResult();
+                    var azureEndpoint = keyVaultService.GetSecretAsync("AzureFaceEndpoint").GetAwaiter().GetResult();
+                    return new AzureFaceService(azureApiKey, azureEndpoint);
+                });
 
                 // Sentry configuration
                 builder.UseSentry(options =>
                 {
-                    options.Dsn = "https://dc0c8f4310e3b92ff936fd999ffdc39c@o4507742264819712.ingest.us.sentry.io/4507742266785792";
+                    options.Dsn = secretClient.GetSecret("SentryDsn").Value.Value;
                     options.Debug = true;
                     options.TracesSampleRate = 1.0;
-                    // Other Sentry options can be set here
                 });
 
-                // Dependency injection setup
-                builder.Services.AddSingleton<IFirebaseConnection, FirebaseConnection>();
+                // Other service registrations
+                builder.Services.AddSingleton<IRegistrationStateService, RegistrationStateService>();
                 builder.Services.AddTransient<SessionManager>();
+
+                // View and ViewModel registrations
                 builder.Services.AddTransient<SignInVM>();
                 builder.Services.AddTransient<SignInForm>();
+                builder.Services.AddTransient<ForgotPassVM>();
+                builder.Services.AddTransient<ForgotPass>();
                 builder.Services.AddTransient<SignUpVM>();
                 builder.Services.AddTransient<SignUpForm>();
                 builder.Services.AddTransient<SignUpImgVM>();
                 builder.Services.AddTransient<SignUpImg>();
                 builder.Services.AddTransient<SignUpReferencesVM>();
                 builder.Services.AddTransient<SignUpReferences>();
-                builder.Services.AddSingleton<IMediaService, MediaService>();
                 builder.Services.AddTransient<PersonalDataPageVM>();
                 builder.Services.AddTransient<PersonalDataPage>();
                 builder.Services.AddTransient<ReferencesPageVM>();
