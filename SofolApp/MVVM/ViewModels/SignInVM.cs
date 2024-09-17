@@ -7,19 +7,12 @@ using CommunityToolkit.Mvvm.Input;
 using SofolApp.Services;
 using Sentry;
 using SofolApp.MVVM.Views;
+using Firebase.Auth;
 
 namespace SofolApp.MVVM.ViewModels
 {
     public partial class SignInVM : ObservableObject
     {
-
-        #region Commands
-
-        public ICommand CreateAccountPageCommand => new Command(() => Shell.Current.GoToAsync(nameof(SignUpForm)));
-
-        #endregion
-
-
         private readonly IFirebaseConnection _firebaseConnection;
 
         [ObservableProperty]
@@ -27,6 +20,9 @@ namespace SofolApp.MVVM.ViewModels
 
         [ObservableProperty]
         private string password;
+
+        [ObservableProperty]
+        private bool isLoading;
 
         public SignInVM(IFirebaseConnection firebaseConnection)
         {
@@ -38,19 +34,24 @@ namespace SofolApp.MVVM.ViewModels
         {
             if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
             {
-                await Shell.Current.DisplayAlert("Error", "Por favor, ingrese un email y contraseña", "OK");
+                await ShowAlert("Error", "Por favor, ingrese un email y contraseña");
                 return;
             }
+
             if (!IsValidEmail(Email))
             {
-                await Shell.Current.DisplayAlert("Error", "Por favor, ingrese un email válido", "OK");
+                await ShowAlert("Error", "Por favor, ingrese un email válido");
                 return;
             }
+
             if (!IsValidPassword(Password))
             {
-                await Shell.Current.DisplayAlert("Error", "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales", "OK");
+                await ShowAlert("Error de Contraseña", "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales");
                 return;
             }
+
+            IsLoading = true;
+
             try
             {
                 SentrySdk.AddBreadcrumb("Attempting to sign in", "info");
@@ -66,17 +67,51 @@ namespace SofolApp.MVVM.ViewModels
                 {
                     var userEmail = currentUser.Info.Email;
                     await SecureStorage.SetAsync("userEmail", userEmail);
+                    await Shell.Current.GoToAsync(nameof(CreditPage));
+                    Console.WriteLine("Navigation to CreditApp completed");
                 }
-                await Shell.Current.GoToAsync(nameof(CreditPage));
-                Console.WriteLine("Navigation to CreditApp completed");
+                else
+                {
+                    await ShowAlert("Error", "No se pudo obtener la información del usuario");
+                }
+            }
+            catch (FirebaseAuthException authEx)
+            {
+                SentrySdk.CaptureException(authEx);
+                await HandleFirebaseAuthException(authEx);
             }
             catch (Exception ex)
             {
-                SentrySdk.CaptureException(ex); // Captura la excepción en Sentry
-                await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+                SentrySdk.CaptureException(ex);
+                await ShowAlert("Error", "Ocurrió un error inesperado. Por favor, intente de nuevo más tarde.");
             }
-        }    
+            finally
+            {
+                IsLoading = false;
+            }
+        }
 
+        private async Task HandleFirebaseAuthException(FirebaseAuthException authEx)
+        {
+            switch (authEx.Reason)
+            {
+                case AuthErrorReason.InvalidEmailAddress:
+                    await ShowAlert("Error de Email", "La dirección de email no es válida");
+                    break;
+                case AuthErrorReason.WrongPassword:
+                    await ShowAlert("Error de Contraseña", "La contraseña es incorrecta");
+                    break;
+                case AuthErrorReason.UserNotFound:
+                    await ShowAlert("Error de Usuario", "No se encontró ningún usuario con este email");
+                    break;
+                case AuthErrorReason.TooManyAttemptsTryLater:
+                    await ShowAlert("Demasiados Intentos", "Ha realizado demasiados intentos. Por favor, intente más tarde");
+                    break;
+                default:
+                    await ShowAlert("Error de Autenticación", "Ocurrió un error durante la autenticación. Por favor, intente de nuevo");
+                    break;
+            }
+        }
 
         [RelayCommand]
         private async Task NavigateToForgotPassword()
@@ -100,6 +135,11 @@ namespace SofolApp.MVVM.ViewModels
         {
             string passwordPattern = @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$";
             return Regex.IsMatch(password, passwordPattern);
+        }
+
+        private async Task ShowAlert(string title, string message)
+        {
+            await Shell.Current.DisplayAlert(title, message, "OK");
         }
     }
 }

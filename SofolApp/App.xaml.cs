@@ -13,14 +13,20 @@ namespace SofolApp
         private readonly IFirebaseConnection _firebaseConnection;
         private readonly IRegistrationStateService _registrationStateService;
         private readonly IAzureFaceService _azureFaceService;
+        private readonly ILoadingService _loadingService;
 
-        public App()
+        public App(IFirebaseConnection firebaseConnection,
+                   IRegistrationStateService registrationStateService, IAzureFaceService azureFaceService,
+                   ILoadingService loadingService)
         {
             try
             {
                 InitializeComponent();
-                _firebaseConnection = new FirebaseConnection();
-                _registrationStateService = new RegistrationStateService();
+                InitializeSecretsAsync();
+                _firebaseConnection = firebaseConnection;
+                _registrationStateService = registrationStateService;
+                _azureFaceService = azureFaceService;
+                _loadingService = loadingService;
                 MainPage = new AppShell();
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
                 TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
@@ -30,6 +36,11 @@ namespace SofolApp
                 Console.WriteLine($"Error en App constructor: {ex}");
                 throw;
             }
+        }
+
+        private async void InitializeSecretsAsync()
+        {
+            await CustomSecretsManager.Instance.InitializeSecretsAsync();
         }
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -57,23 +68,28 @@ namespace SofolApp
 
         private async Task HandleStartup()
         {
-            var registrationState = await _registrationStateService.GetRegistrationStateAsync();
-
-            if (!string.IsNullOrEmpty(registrationState))
+            try
             {
-                // El usuario estaba en medio del proceso de registro
-                if (registrationState == "SignUpImg")
+                _loadingService.ShowLoadingAsync();
+                var registrationState = await _registrationStateService.GetRegistrationStateAsync();
+
+                if (!string.IsNullOrEmpty(registrationState))
                 {
-                    await Shell.Current.GoToAsync(nameof(SignUpImg));
-                    return;
+                    if (registrationState == "SignUpImg")
+                    {
+                        await Shell.Current.GoToAsync(nameof(SignUpImg));
+                        return;
+                    }
+                    // Añadir más estados según sea necesario
                 }
-                // Añadir más estados según sea necesario
+
+                await HandleAutoLogin();
             }
-
-            // Si no hay estado de registro, proceder con el auto-login normal
-            await HandleAutoLogin();
+            finally
+            {
+                _loadingService.HideLoadingAsync();
+            }
         }
-
 
         private async Task HandleAutoLogin()
         {

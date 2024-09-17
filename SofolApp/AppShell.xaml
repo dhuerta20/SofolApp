@@ -18,5 +18,4 @@
         Title="Formulario de registro"
         ContentTemplate="{DataTemplate local:SignInForm}"
         Route="SignInForm" />
-
 </Shell>

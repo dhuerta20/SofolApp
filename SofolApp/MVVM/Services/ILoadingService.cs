@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace SofolApp.Services
 {
-    public interface IAzureKeyVaultService
+    public interface ILoadingService
     {
-        Task<string> GetSecretAsync(string secretName);
+        Task ShowLoadingAsync();
+        Task HideLoadingAsync();
     }
 }

@@ -89,12 +89,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="appsettings.json" />
 		<None Remove="Resources\AppIcon\proxcredit_app_icon.svg" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Content Include="appsettings.json" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -102,6 +97,7 @@
 		<PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.6.0" />
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+		<PackageReference Include="FirebaseAdmin" Version="3.0.0" />
 		<PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
 		<PackageReference Include="FirebaseDatabase.net" Version="4.2.0" />
 		<PackageReference Include="FirebaseStorage.net" Version="1.0.3" />

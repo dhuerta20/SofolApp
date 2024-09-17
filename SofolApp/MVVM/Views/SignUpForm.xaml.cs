@@ -14,7 +14,7 @@ namespace SofolApp.MVVM.Views
         {
             Dispatcher.Dispatch(async () =>
             {
-                await Shell.Current.GoToAsync("//SignInForm");
+                await Shell.Current.GoToAsync(nameof(SignInForm));
             });
             return true;
         }

@@ -8,20 +8,32 @@ namespace SofolApp.Services
 {
     public class AzureFaceService : IAzureFaceService
     {
-        private readonly IFaceClient _faceClient;
+        private IFaceClient _faceClient;
 
-        public AzureFaceService(string apiKey, string endpoint)
+        public AzureFaceService()
         {
-            _faceClient = new FaceClient(new ApiKeyServiceClientCredentials(apiKey))
+            // No necesitamos inyectar CustomSecretsManager aquí
+        }
+
+        private async Task InitializeAsync()
+        {
+            if (_faceClient == null)
             {
-                Endpoint = endpoint
-            };
+                var secretsManager = CustomSecretsManager.Instance;
+                var apiKey = await secretsManager.GetAzureFaceApiKeyAsync();
+                var endpoint = await secretsManager.GetAzureFaceEndpointAsync();
+                _faceClient = new FaceClient(new ApiKeyServiceClientCredentials(apiKey))
+                {
+                    Endpoint = endpoint
+                };
+            }
         }
 
         public async Task<bool> VerifyFaceAsync(Stream imageStream)
         {
             try
             {
+                await InitializeAsync();
                 Console.WriteLine("Llamando a Azure Face API");
                 var detectedFaces = await _faceClient.Face.DetectWithStreamAsync(imageStream);
                 Console.WriteLine($"Rostros detectados: {detectedFaces.Count}");

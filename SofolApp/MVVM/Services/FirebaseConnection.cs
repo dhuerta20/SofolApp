@@ -3,6 +3,7 @@ using Firebase.Auth.Providers;
 using Firebase.Database;
 using Firebase.Database.Query;
 using Firebase.Storage;
+using Microsoft.Maui.ApplicationModel;
 using SofolApp.MVVM.Models;
 using SofolApp.Services;
 using System;
@@ -15,40 +16,58 @@ namespace SofolApp.Services
 {
     public class FirebaseConnection : IFirebaseConnection
     {
-        private const string ApiKey = "AIzaSyBUqYQowXYaMJYpnLM4wu5b4YNk7Iw8LDk";
-        private const string AuthDomain = "creditapptest-c8a1d.firebaseapp.com";
-        private const string DatabaseUrl = "https://creditapptest-c8a1d-default-rtdb.firebaseio.com/";
-        private const string StorageBucket = "creditapptest-c8a1d.appspot.com";
+        private readonly CustomSecretsManager _secretsManager;
+        private FirebaseAuthClient _authClient;
+        private FirebaseClient _databaseClient;
+
+        public FirebaseConnection()
+        {
+            _secretsManager = CustomSecretsManager.Instance;
+        }
 
         // Firebase Authentication
-        public FirebaseAuthClient ConnectToFirebase()
+        public async Task<FirebaseAuthClient> ConnectToFirebaseAsync()
         {
-            var config = new FirebaseAuthConfig
+            if (_authClient == null)
             {
-                ApiKey = ApiKey,
-                AuthDomain = AuthDomain,
-                Providers = new FirebaseAuthProvider[]
+                var config = new FirebaseAuthConfig
                 {
-                    new GoogleProvider().AddScopes("email"),
-                    new EmailProvider()
-                },
-            };
-
-            return new FirebaseAuthClient(config);
+                    ApiKey = await _secretsManager.GetFirebaseApiKeyAsync(),
+                    AuthDomain = await _secretsManager.GetFirebaseAuthDomainAsync(),
+                    Providers = new FirebaseAuthProvider[]
+                    {
+                        new GoogleProvider().AddScopes("email"),
+                        new EmailProvider()
+                    },
+                };
+                _authClient = new FirebaseAuthClient(config);
+            }
+            return _authClient;
         }
 
-        // ---------------------------Firebase Realtime Database------------------------------
-        public static FirebaseClient GetDatabaseClient()
+        // Firebase Realtime Database
+        public async Task<FirebaseClient> GetDatabaseClientAsync()
         {
-            return new FirebaseClient(DatabaseUrl);
+            if (_databaseClient == null)
+            {
+                var databaseUrl = await _secretsManager.GetFirebaseDbUrlAsync();
+                _databaseClient = new FirebaseClient(databaseUrl);
+            }
+            return _databaseClient;
         }
 
-        // ----------------------------------Authentication Methods---------------------------
+        // Firebase Storage
+        public async Task<string> GetStorageBucketAsync()
+        {
+            return await _secretsManager.GetFirebaseStorageBucketAsync();
+        }
+
+        // Authentication Methods
         public async Task<UserCredential> SignInAsync(string email, string password)
         {
             try
             {
-                var client = ConnectToFirebase();
+                var client = await ConnectToFirebaseAsync();
                 var userCredential = await client.SignInWithEmailAndPasswordAsync(email, password);
                 await SecureStorage.SetAsync("userId", userCredential.User.Uid);
                 await SecureStorage.SetAsync("userToken", await userCredential.User.GetIdTokenAsync());
@@ -68,11 +87,8 @@ namespace SofolApp.Services
         {
             try
             {
- 
-                //Clear user data from SecureStorage
                 SecureStorage.Remove("userId");
                 SecureStorage.Remove("userToken");
-                
             }
             catch (Exception ex)
             {
@@ -84,7 +100,7 @@ namespace SofolApp.Services
         {
             try
             {
-                var client = ConnectToFirebase();
+                var client = await ConnectToFirebaseAsync();
                 var userCredential = await client.CreateUserWithEmailAndPasswordAsync(email, password, $"{firstName} {lastName}");
                 await SecureStorage.SetAsync("userId", userCredential.User.Uid);
                 await SecureStorage.SetAsync("userToken", await userCredential.User.GetIdTokenAsync());
@@ -96,13 +112,13 @@ namespace SofolApp.Services
                     LastName = lastName,
                     Email = email,
                     PhoneNumber = phoneNumber,
-                    IsValid = "pending", // Set to "pending" by default
+                    IsValid = "pending",
                     IsAdmin = false,
                     Images = new Dictionary<string, string>(),
                     FirstReference = "",
                     SecondReference = "",
                     ThirdReference = "",
-                    AdminNotes = "" // Initialize AdminNotes as an empty string
+                    AdminNotes = ""
                 };
                 await CreateUserDataAsync(userCredential.User.Uid, userData);
 
@@ -118,28 +134,28 @@ namespace SofolApp.Services
             }
         }
 
-        // -------------------------------Database Operations------------------------
+        // Database Operations
         public async Task CreateUserDataAsync(string userId, Users userData)
         {
-            var client = GetDatabaseClient();
+            var client = await GetDatabaseClientAsync();
             await client.Child("users").Child(userId).PutAsync(userData);
         }
 
         public async Task<Users> ReadUserDataAsync(string userId)
         {
-            var client = GetDatabaseClient();
+            var client = await GetDatabaseClientAsync();
             return await client.Child("users").Child(userId).OnceSingleAsync<Users>();
         }
 
         public async Task UpdateUserDataAsync(string userId, Users userData)
         {
-            var client = GetDatabaseClient();
+            var client = await GetDatabaseClientAsync();
             await client.Child("users").Child(userId).PutAsync(userData);
         }
 
         public async Task<bool> CheckIfUserExistsAsync(string email)
         {
-            var client = GetDatabaseClient();
+            var client = await GetDatabaseClientAsync();
             var users = await client.Child("users")
                 .OrderBy("Email")
                 .EqualTo(email)
@@ -148,18 +164,17 @@ namespace SofolApp.Services
             return users.Any();
         }
 
-        // --------------------------Image Upload-------------------------
-
+        // Image Upload
         private string SanitizeFileName(string fileName)
         {
-            // Replace invalid characters with underscores
             return System.Text.RegularExpressions.Regex.Replace(fileName, @"[^\w\-]", "_");
         }
 
         public async Task<string> UploadImageAsync(string userId, Stream imageStream, string imageType)
         {
-            var fileName = $"{imageType}.jpg"; // Usar un nombre de archivo fijo basado en el tipo de imagen
-            var storage = new FirebaseStorage(StorageBucket, new FirebaseStorageOptions
+            var fileName = $"{imageType}.jpg";
+            var storageBucket = await GetStorageBucketAsync();
+            var storage = new FirebaseStorage(storageBucket, new FirebaseStorageOptions
             {
                 AuthTokenAsyncFactory = () => SecureStorage.GetAsync("userToken")
             });
@@ -171,10 +186,12 @@ namespace SofolApp.Services
 
             return imageUrl;
         }
+
         public async Task<string> UploadPdfAsync(string userId, Stream pdfStream, string fileName)
         {
             var sanitizedFileName = SanitizeFileName(fileName);
-            var storage = new FirebaseStorage(StorageBucket, new FirebaseStorageOptions
+            var storageBucket = await GetStorageBucketAsync();
+            var storage = new FirebaseStorage(storageBucket, new FirebaseStorageOptions
             {
                 AuthTokenAsyncFactory = () => SecureStorage.GetAsync("userToken")
             });
@@ -188,8 +205,7 @@ namespace SofolApp.Services
             return pdfUrl;
         }
 
-        //--------------------REFERENCES-------------------------
-
+        // References
         public async Task AddReferenceAsync(string userId, string referenceEmail)
         {
             var user = await ReadUserDataAsync(userId);
@@ -240,7 +256,7 @@ namespace SofolApp.Services
         {
             try
             {
-                var client = ConnectToFirebase();
+                var client = await ConnectToFirebaseAsync();
                 await client.ResetEmailPasswordAsync(email);
                 Console.WriteLine("Correo de restablecimiento de contraseña enviado.");
             }
@@ -258,7 +274,7 @@ namespace SofolApp.Services
         {
             try
             {
-                var client = ConnectToFirebase();
+                var client = await ConnectToFirebaseAsync();
                 await client.ResetEmailPasswordAsync(email);
             }
             catch (FirebaseAuthException ex)

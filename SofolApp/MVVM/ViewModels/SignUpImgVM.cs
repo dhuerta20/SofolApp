@@ -9,6 +9,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Text.Json;
 using SofolApp.MVVM.Views;
+using Microsoft.Extensions.Logging;
 
 namespace SofolApp.MVVM.ViewModels
 {
@@ -17,35 +18,55 @@ namespace SofolApp.MVVM.ViewModels
         private readonly IFirebaseConnection _firebaseConnection;
         private readonly IAzureFaceService _azureFaceService;
         private readonly IRegistrationStateService _registrationStateService;
+        private readonly ILoadingService _loadingService;
         private Users _currentUser;
+
+        [ObservableProperty]
+        private bool isBusy;
 
         [ObservableProperty]
         private UploadFlags _uploadFlags;
 
-        public SignUpImgVM(IFirebaseConnection firebaseConnection, IAzureFaceService azureFaceService, IRegistrationStateService registrationStateService)
+        public SignUpImgVM(IFirebaseConnection firebaseConnection,
+                           IAzureFaceService azureFaceService,
+                           IRegistrationStateService registrationStateService,
+                           ILoadingService loadingService)
         {
             _firebaseConnection = firebaseConnection;
             _azureFaceService = azureFaceService;
             _registrationStateService = registrationStateService;
+            _loadingService = loadingService;
             UploadFlags = new UploadFlags();
         }
 
         [RelayCommand]
         private async Task Initialize()
         {
-            await LoadUserData();
-            if (_currentUser == null || string.IsNullOrEmpty(_currentUser.userId))
+            try
             {
-                await Shell.Current.DisplayAlert("Error", "User is not authenticated.", "OK");
-                await Shell.Current.GoToAsync(nameof(SignInForm));
+                IsBusy = true;
+                await LoadUserData();
+                if (_currentUser == null || string.IsNullOrEmpty(_currentUser.userId))
+                {
+                    await Shell.Current.DisplayAlert("Error", "User is not authenticated.", "OK");
+                    await Shell.Current.GoToAsync(nameof(SignInForm));
+                }
+                else
+                {
+                    UpdateUploadFlags();
+                    await _registrationStateService.SaveRegistrationStateAsync("SignUpImg");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                UpdateUploadFlags();
-                await _registrationStateService.SaveRegistrationStateAsync("SignUpImg");
+                Console.WriteLine($"Error during initialization: {ex.Message}");
+                await Shell.Current.DisplayAlert("Error", $"Initialization failed: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
-
 
         private async Task LoadUserData()
         {
@@ -86,6 +107,9 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
+                IsBusy = true;
+                await _loadingService.ShowLoadingAsync();
+
                 var photoResult = await MediaPicker.CapturePhotoAsync();
 
                 if (photoResult != null)
@@ -107,7 +131,7 @@ namespace SofolApp.MVVM.ViewModels
 
                         if (_currentUser.Images.ContainsKey(imageType))
                         {
-                            await Shell.Current.DisplayAlert("Error", $"La imagen que intentas añadir ya existe ", "OK");
+                            await Shell.Current.DisplayAlert("Error", $"La imagen que intentas añadir ya existe", "OK");
                             return;
                         }
 
@@ -127,6 +151,11 @@ namespace SofolApp.MVVM.ViewModels
                 Console.WriteLine($"Error al añadir la imagen: {ex.Message}");
                 await Shell.Current.DisplayAlert("Error", $"No se pudo agregar la foto: {ex.Message}", "OK");
             }
+            finally
+            {
+                await _loadingService.HideLoadingAsync();
+                IsBusy = false;
+            }
         }
 
         [RelayCommand]
@@ -134,6 +163,7 @@ namespace SofolApp.MVVM.ViewModels
         {
             try
             {
+                IsBusy = true;
                 var fileResult = await FilePicker.PickAsync(new PickOptions
                 {
                     FileTypes = new FilePickerFileType(new Dictionary<DevicePlatform, IEnumerable<string>>
@@ -176,6 +206,10 @@ namespace SofolApp.MVVM.ViewModels
             {
                 Console.WriteLine($"Error al tratar de agregar el PDF: {ex.Message}");
                 await Shell.Current.DisplayAlert("Error", $"No se logró agregar el PDF: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 

@@ -16,6 +16,6 @@
                 BackgroundColor="#5dd684"
                 Command="{Binding SendCodeToEmailCommand}"
                 IsEnabled="{Binding IsNotBusy}"/>
-        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#5dd684"/>
     </VerticalStackLayout>
 </ContentPage>

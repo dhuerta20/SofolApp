@@ -1,31 +1,45 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using SofolApp.MVVM.Views;
 using SofolApp.MVVM.Models;
+using SofolApp.MVVM.Views;
 using SofolApp.Services;
+using System;
 using System.Text.RegularExpressions;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace SofolApp.MVVM.ViewModels
 {
     public partial class SignUpVM : ObservableObject
     {
         private readonly IFirebaseConnection _firebaseConnection;
+        private readonly ILoadingService _loadingService;
 
         [ObservableProperty]
         private string firstName;
+
         [ObservableProperty]
         private string lastName;
+
         [ObservableProperty]
         private string email;
+
         [ObservableProperty]
         private string phone;
+
         [ObservableProperty]
         private string password;
 
-        public SignUpVM(IFirebaseConnection firebaseConnection)
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsNotBusy))]
+        private bool isBusy;
+
+        public bool IsNotBusy => !IsBusy;
+
+        public SignUpVM(IFirebaseConnection firebaseConnection, ILoadingService loadingService)
         {
             _firebaseConnection = firebaseConnection;
+            _loadingService = loadingService;
         }
 
         [RelayCommand]
@@ -34,8 +48,12 @@ namespace SofolApp.MVVM.ViewModels
             if (!ValidateInput())
                 return;
 
+            IsBusy = true;
+
             try
             {
+                await _loadingService.ShowLoadingAsync();
+
                 var userCredential = await _firebaseConnection.CreateUserAsync(Email, Password, FirstName, LastName, Phone);
                 if (userCredential != null && !string.IsNullOrEmpty(userCredential.User.Uid))
                 {
@@ -50,8 +68,12 @@ namespace SofolApp.MVVM.ViewModels
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error detallado: {ex}");
                 await Shell.Current.DisplayAlert("Error", $"Error al registrar: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
+                await _loadingService.HideLoadingAsync();
             }
         }
 
@@ -67,7 +89,6 @@ namespace SofolApp.MVVM.ViewModels
                 IsValid = "pending",
                 IsAdmin = false
             };
-
             string userJson = JsonSerializer.Serialize(user);
             await SecureStorage.SetAsync("UserData", userJson);
             await SecureStorage.SetAsync("UserId", userId);

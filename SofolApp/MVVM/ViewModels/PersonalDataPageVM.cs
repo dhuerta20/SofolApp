@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -50,6 +51,9 @@ namespace SofolApp.MVVM.ViewModels
         [ObservableProperty]
         private string _phoneNumber;
 
+        [ObservableProperty]
+        private bool _isBusy;
+
         public PersonalDataPageVM(IFirebaseConnection firebaseConnection)
         {
             _firebaseConnection = firebaseConnection;
@@ -58,13 +62,22 @@ namespace SofolApp.MVVM.ViewModels
         [RelayCommand]
         private async Task InitializeAsync()
         {
-            _userId = await SecureStorage.GetAsync("userId");
-            await LoadUserData();
+            IsBusy = true;
+            try
+            {
+                _userId = await SecureStorage.GetAsync("userId");
+                await LoadUserData();
+            }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         [RelayCommand]
         private async Task UpdatePhoto(string imageType)
         {
+            IsBusy = true;
             try
             {
                 var photo = await MediaPicker.Default.CapturePhotoAsync();
@@ -87,21 +100,24 @@ namespace SofolApp.MVVM.ViewModels
             {
                 await Shell.Current.DisplayAlert("Error", $"Failed to update photo: {ex.Message}", "OK");
             }
+            finally
+            {
+                IsBusy = false;
+            }
         }
 
         [RelayCommand]
         private async Task SaveChanges()
         {
+            IsBusy = true;
             try
             {
-                // Validar que los campos no sean nulos o estén vacíos
                 if (string.IsNullOrWhiteSpace(FirstName) || string.IsNullOrWhiteSpace(LastName) || string.IsNullOrWhiteSpace(PhoneNumber))
                 {
                     await Shell.Current.DisplayAlert("Error", "Todos los campos son obligatorios.", "OK");
                     return;
                 }
 
-                // Validar que el número de teléfono tenga 10 dígitos
                 if (PhoneNumber.Length != 10 || !PhoneNumber.All(char.IsDigit))
                 {
                     await Shell.Current.DisplayAlert("Error", "El número de teléfono debe tener 10 dígitos.", "OK");
@@ -111,7 +127,6 @@ namespace SofolApp.MVVM.ViewModels
                 CurrentUser.FirstName = FirstName;
                 CurrentUser.LastName = LastName;
                 CurrentUser.PhoneNumber = PhoneNumber;
-                // No actualizamos el Email ya que no debe cambiar
 
                 await _firebaseConnection.UpdateUserDataAsync(_userId, CurrentUser);
                 await Shell.Current.DisplayAlert("Éxito", "Los datos del usuario se han actualizado correctamente", "OK");
@@ -119,6 +134,10 @@ namespace SofolApp.MVVM.ViewModels
             catch (Exception ex)
             {
                 await Shell.Current.DisplayAlert("Error", $"Error al guardar los cambios: {ex.Message}", "OK");
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 

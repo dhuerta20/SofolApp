@@ -125,11 +125,16 @@
                     <Button
                         Margin="0,30,0,0"
                         BackgroundColor="#FBF6FD"
-                        Command="{Binding CreateAccountPageCommand}"
+                        Command="{Binding NavigateToSignUpCommand}"
                         HeightRequest="60"
                         HorizontalOptions="FillAndExpand"
                         Text="Crea una cuenta"
                         TextColor="Black" />
+
+                    <ActivityIndicator IsRunning="{Binding IsLoading}" 
+                           IsVisible="{Binding IsLoading}"
+                           Color="#5dd684"/>
+
                 </VerticalStackLayout>
             </Grid>
         </Grid>

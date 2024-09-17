@@ -9,9 +9,10 @@ using CommunityToolkit.Maui;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SofolApp
-{
+    {
     public static class MauiProgram
     {
         public static MauiApp CreateMauiApp()
@@ -29,38 +30,18 @@ namespace SofolApp
                         fonts.AddFont("FontAwesomeSolid-900", "FAS");
                     });
 
-                // Configuration setup
-                builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-                // Azure Key Vault setup
-                string keyVaultUri = builder.Configuration["KeyVaultUri"] ?? "Error en la carga de azure key vault";
-                var secretClient = new SecretClient(new Uri(keyVaultUri), new DefaultAzureCredential());
-
-                // Dependency injection setup
-                builder.Services.AddSingleton<IAzureKeyVaultService>(sp => new AzureKeyVaultService(builder.Configuration));
+                // Registrar FirebaseConnection
                 builder.Services.AddSingleton<IFirebaseConnection, FirebaseConnection>();
 
-                builder.Services.AddSingleton<IAzureFaceService>(sp =>
-                {
-                    var keyVaultService = sp.GetRequiredService<IAzureKeyVaultService>();
-                    var azureApiKey = keyVaultService.GetSecretAsync("AzureFaceApiKey").GetAwaiter().GetResult();
-                    var azureEndpoint = keyVaultService.GetSecretAsync("AzureFaceEndpoint").GetAwaiter().GetResult();
-                    return new AzureFaceService(azureApiKey, azureEndpoint);
-                });
+                // Registrar AzureFaceService
+                builder.Services.AddSingleton<IAzureFaceService, AzureFaceService>();
 
-                // Sentry configuration
-                builder.UseSentry(options =>
-                {
-                    options.Dsn = secretClient.GetSecret("SentryDsn").Value.Value;
-                    options.Debug = true;
-                    options.TracesSampleRate = 1.0;
-                });
-
-                // Other service registrations
+                // Otros servicios
                 builder.Services.AddSingleton<IRegistrationStateService, RegistrationStateService>();
-                builder.Services.AddTransient<SessionManager>();
+                builder.Services.AddSingleton<ILoadingService, LoadingService>();
 
-                // View and ViewModel registrations
+                // Carga de las Vistas y los ViewModels
+                builder.Services.AddTransient<SessionManager>();
                 builder.Services.AddTransient<SignInVM>();
                 builder.Services.AddTransient<SignInForm>();
                 builder.Services.AddTransient<ForgotPassVM>();
@@ -85,13 +66,13 @@ namespace SofolApp
                 builder.Logging.AddDebug();
 #endif
 
-                return builder.Build();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error en CreateMauiApp: {ex}");
-                throw;
+                    return builder.Build();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error en CreateMauiApp: {ex}");
+                    throw;
+                }
             }
         }
     }
-}
